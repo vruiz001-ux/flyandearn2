@@ -1,5 +1,6 @@
 import prisma from './lib/prisma.js';
 import { getSessionToken, verifyToken, jsonResponse } from './lib/auth.js';
+import { sendEmail, verificationEmail, welcomeEmail } from './lib/email.js';
 import crypto from 'crypto';
 
 // Token expiry: 24 hours
@@ -78,27 +79,11 @@ async function sendVerification(event) {
     const host = event.headers.host || 'flyandearn.eu';
     const verifyUrl = `${protocol}://${host}/verify-email?token=${token}`;
 
-    // Log the verification URL for development
+    // Send verification email
     console.log(`Email verification requested for ${user.email}`);
-    console.log(`Verification URL: ${verifyUrl}`);
-
-    // TODO: Send email via email service (SendGrid, SES, etc.)
-    // For now, we'll just log it. In production, uncomment and configure:
-    /*
-    await sendEmail({
-      to: user.email,
-      subject: 'Verify Your FlyAndEarn Email',
-      html: `
-        <h2>Email Verification</h2>
-        <p>Hi ${user.name || 'there'},</p>
-        <p>Please click the link below to verify your email address:</p>
-        <p><a href="${verifyUrl}">Verify Email</a></p>
-        <p>This link will expire in ${TOKEN_EXPIRY_HOURS} hours.</p>
-        <p>If you didn't create an account with us, you can safely ignore this email.</p>
-        <p>Best,<br>The FlyAndEarn Team</p>
-      `,
-    });
-    */
+    const baseUrl = `${protocol}://${host}`;
+    const emailData = verificationEmail(user.name, token, baseUrl);
+    await sendEmail({ to: user.email, ...emailData });
 
     return jsonResponse(200, {
       success: true,
@@ -165,6 +150,20 @@ async function verifyEmail(event) {
     ]);
 
     console.log(`Email verified for ${verificationToken.user.email}`);
+
+    // Send welcome email (non-blocking)
+    try {
+      const user = await prisma.user.findUnique({
+        where: { id: verificationToken.userId },
+        select: { name: true, email: true },
+      });
+      if (user) {
+        const emailData = welcomeEmail(user.name);
+        await sendEmail({ to: user.email, ...emailData });
+      }
+    } catch (welcomeErr) {
+      console.error('Failed to send welcome email:', welcomeErr);
+    }
 
     return jsonResponse(200, {
       success: true,

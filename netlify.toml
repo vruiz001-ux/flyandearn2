@@ -21,5 +21,36 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["@prisma/client", ".prisma"]
+  included_files = ["node_modules/.prisma/**", "node_modules/@prisma/client/**", "prisma/schema.prisma"]
+
 # Netlify automatically serves 404.html for missing pages
 # Functions at /.netlify/functions/* are handled by Netlify automatically
+
+# SEO Route Pages
+[[redirects]]
+  from = "/routes/warsaw-dubai"
+  to = "/routes/warsaw-dubai.html"
+  status = 200
+
+[[redirects]]
+  from = "/routes/warsaw-istanbul"
+  to = "/routes/warsaw-istanbul.html"
+  status = 200
+
+[[redirects]]
+  from = "/routes/london-singapore"
+  to = "/routes/london-singapore.html"
+  status = 200
+
+[[redirects]]
+  from = "/routes/frankfurt-dubai"
+  to = "/routes/frankfurt-dubai.html"
+  status = 200
+
+[[redirects]]
+  from = "/routes/paris-bangkok"
+  to = "/routes/paris-bangkok.html"
+  status = 200

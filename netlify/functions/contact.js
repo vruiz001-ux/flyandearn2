@@ -1,5 +1,6 @@
 import { jsonResponse } from './lib/auth.js';
 import { rateLimit, getRateLimitHeaders, getClientIp } from './lib/rate-limit.js';
+import { sendEmail, contactConfirmationEmail } from './lib/email.js';
 
 export async function handler(event) {
   if (event.httpMethod !== 'POST') {
@@ -47,24 +48,13 @@ export async function handler(event) {
       ip: event.headers['x-forwarded-for'] || event.headers['client-ip'],
     });
 
-    // TODO: In production, integrate with email service to send to support
-    // Options: SendGrid, AWS SES, Postmark, etc.
-    /*
-    await sendEmail({
-      to: 'support@flyandearn.eu',
-      from: 'noreply@flyandearn.eu',
-      replyTo: email,
-      subject: `[Contact Form] ${subject}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>From:</strong> ${name} (${email})</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        ${orderId ? `<p><strong>Order/Request ID:</strong> ${orderId}</p>` : ''}
-        <hr>
-        <p>${message}</p>
-      `,
-    });
-    */
+    // Send confirmation email to user
+    try {
+      const emailData = contactConfirmationEmail(name, subject);
+      await sendEmail({ to: email, ...emailData });
+    } catch (emailErr) {
+      console.error('Failed to send contact confirmation email:', emailErr);
+    }
 
     return jsonResponse(200, {
       success: true,

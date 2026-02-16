@@ -1,6 +1,7 @@
 import prisma from './lib/prisma.js';
 import { jsonResponse, hashPassword, validatePassword } from './lib/auth.js';
 import { rateLimit, getRateLimitHeaders, getClientIp } from './lib/rate-limit.js';
+import { sendEmail, passwordResetEmail } from './lib/email.js';
 import crypto from 'crypto';
 
 // Token expiry: 1 hour
@@ -96,29 +97,11 @@ async function requestReset(event) {
     // Get the base URL from the request
     const protocol = 'https';
     const host = event.headers.host || 'flyandearn.eu';
-    const resetUrl = `${protocol}://${host}/reset-password?token=${token}`;
-
-    // Log the reset URL for development (in production, this would send an email)
+    // Send password reset email
     console.log(`Password reset requested for ${user.email}`);
-    console.log(`Reset URL: ${resetUrl}`);
-
-    // TODO: Send email via email service (SendGrid, SES, etc.)
-    // For now, we'll just log it. In production, uncomment and configure:
-    /*
-    await sendEmail({
-      to: user.email,
-      subject: 'Reset Your FlyAndEarn Password',
-      html: `
-        <h2>Password Reset Request</h2>
-        <p>Hi ${user.name || 'there'},</p>
-        <p>We received a request to reset your password. Click the link below to set a new password:</p>
-        <p><a href="${resetUrl}">Reset Password</a></p>
-        <p>This link will expire in ${TOKEN_EXPIRY_HOURS} hour(s).</p>
-        <p>If you didn't request this, you can safely ignore this email.</p>
-        <p>Best,<br>The FlyAndEarn Team</p>
-      `,
-    });
-    */
+    const baseUrl = `${protocol}://${host}`;
+    const emailData = passwordResetEmail(user.name, token, baseUrl, TOKEN_EXPIRY_HOURS);
+    await sendEmail({ to: user.email, ...emailData });
 
     return jsonResponse(200, {
       success: true,

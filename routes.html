@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0b">
+    <meta id="meta-title" name="title" content="Duty-Free Route Deals | FlyAndEarn">
+    <meta id="meta-desc" name="description" content="Find the best duty-free deals on this route. Save 20-40% on spirits, perfume & electronics.">
+    <meta name="robots" content="index, follow">
+    <meta id="og-title" property="og:title" content="Duty-Free Route Deals | FlyAndEarn">
+    <meta id="og-desc" property="og:description" content="Find the best duty-free deals on this route.">
+    <meta property="og:type" content="website">
+    <meta id="og-url" property="og:url" content="https://flyandearn2.netlify.app/routes">
+    <title id="page-title">Duty-Free Route Deals | FlyAndEarn</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        :root { --bg: #0a0a0b; --card: #18181b; --border: #27272a; --gold: #d4a853; --text: #fafafa; --text-secondary: #a1a1aa; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+        a { color: var(--gold); text-decoration: none; }
+        .container { max-width: 900px; margin: 0 auto; padding: 2rem 1rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.5rem; color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1.5rem; }
+        .back-link:hover { color: var(--gold); }
+        .route-header { text-align: center; margin-bottom: 2.5rem; }
+        .route-header h1 { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .route-header h1 span { color: var(--gold); }
+        .route-header p { color: var(--text-secondary); font-size: 1.1rem; }
+        .badge { display: inline-block; background: rgba(212,168,83,0.15); color: var(--gold); padding: 0.25rem 0.75rem; border-radius: 999px; font-size: 0.8rem; font-weight: 600; margin-bottom: 1rem; }
+        .section { margin-bottom: 2rem; }
+        .section h2 { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem; }
+        .price-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid var(--border); }
+        .price-row:last-child { border-bottom: none; }
+        .price-row .name { font-weight: 500; }
+        .price-row .savings { color: #4ade80; font-weight: 600; }
+        .price-row .prices { text-align: right; }
+        .price-row .duty-free { color: var(--gold); font-weight: 600; }
+        .price-row .retail { color: var(--text-secondary); text-decoration: line-through; font-size: 0.85rem; }
+        .traveler-card { display: flex; justify-content: space-between; align-items: center; }
+        .traveler-info .name { font-weight: 500; }
+        .traveler-info .date { color: var(--text-secondary); font-size: 0.85rem; }
+        .traveler-rating { color: var(--gold); }
+        .empty-state { text-align: center; padding: 2rem; color: var(--text-secondary); }
+        .cta-section { text-align: center; padding: 2.5rem 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 16px; margin-top: 2rem; }
+        .cta-section h2 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .cta-section p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .btn-gold { display: inline-block; background: var(--gold); color: #0a0a0b; padding: 0.75rem 2rem; border-radius: 8px; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; font-family: inherit; }
+        .btn-gold:hover { opacity: 0.9; }
+        .btn-outline { display: inline-block; border: 1px solid var(--border); color: var(--text); padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; margin-left: 0.75rem; }
+        .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; text-align: center; }
+        .stat-card .number { font-size: 1.75rem; font-weight: 700; color: var(--gold); }
+        .stat-card .label { color: var(--text-secondary); font-size: 0.85rem; margin-top: 0.25rem; }
+        .loading { text-align: center; padding: 3rem; color: var(--text-secondary); }
+        @media (max-width: 640px) {
+            .route-header h1 { font-size: 1.5rem; }
+            .stats { grid-template-columns: 1fr; }
+            .btn-outline { margin-left: 0; margin-top: 0.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/" class="back-link">← Back to FlyAndEarn</a>
+        <div class="route-header">
+            <div class="badge">✈️ Popular Route</div>
+            <h1 id="route-title"><span>Loading</span> → <span>Route...</span></h1>
+            <p id="route-subtitle">Duty-Free Deals & Savings</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="number" id="stat-savings">20-40%</div><div class="label">Average Savings</div></div>
+            <div class="stat-card"><div class="number" id="stat-travelers">—</div><div class="label">Active Travelers</div></div>
+            <div class="stat-card"><div class="number" id="stat-requests">—</div><div class="label">Open Requests</div></div>
+        </div>
+
+        <div class="section">
+            <h2>💰 Top Savings on This Route</h2>
+            <div class="card" id="prices-container">
+                <div class="loading">Loading prices...</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧳 Available Travelers</h2>
+            <div id="travelers-container">
+                <div class="card"><div class="empty-state">Loading travelers...</div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📋 Current Requests</h2>
+            <div id="requests-container">
+                <div class="card"><div class="empty-state">Loading requests...</div></div>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Need something from this route? 🛫</h2>
+            <p>Create a request and a traveler will bring it for you at duty-free prices.</p>
+            <a href="/dashboard" class="btn-gold" id="cta-button">Create a Request</a>
+            <a href="/" class="btn-outline">Browse All Routes</a>
+        </div>
+    </div>
+
+    <script>
+    const AIRPORTS = {
+        WAW: 'Warsaw', DXB: 'Dubai', IST: 'Istanbul', LHR: 'London', SIN: 'Singapore',
+        FRA: 'Frankfurt', CDG: 'Paris', BKK: 'Bangkok', AMS: 'Amsterdam', JFK: 'New York',
+        ZRH: 'Zurich', VIE: 'Vienna', BCN: 'Barcelona', MUC: 'Munich', ATH: 'Athens'
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const from = params.get('from') || 'WAW';
+    const to = params.get('to') || 'DXB';
+    const fromCity = AIRPORTS[from] || from;
+    const toCity = AIRPORTS[to] || to;
+
+    document.getElementById('route-title').innerHTML = `<span>${fromCity}</span> → <span>${toCity}</span>`;
+    document.getElementById('route-subtitle').textContent = `Duty-Free Deals from ${fromCity} to ${toCity}`;
+    
+    const titleText = `Duty-Free Deals: ${fromCity} → ${toCity} | Save 20-40% | FlyAndEarn`;
+    document.getElementById('page-title').textContent = titleText;
+    document.getElementById('meta-title').content = titleText;
+    document.getElementById('og-title').content = titleText;
+    const descText = `Save 20-40% on duty-free spirits, perfume & electronics on the ${fromCity} to ${toCity} route. Connect with verified travelers on FlyAndEarn.`;
+    document.getElementById('meta-desc').content = descText;
+    document.getElementById('og-desc').content = descText;
+
+    // Fetch prices
+    fetch('/api/prices').then(r => r.json()).then(data => {
+        const items = Array.isArray(data) ? data : (data.prices || data.items || []);
+        const container = document.getElementById('prices-container');
+        if (items.length === 0) {
+            container.innerHTML = '<div class="empty-state">No price data available yet. Check back soon!</div>';
+            return;
+        }
+        const top = items.slice(0, 6);
+        container.innerHTML = top.map(item => {
+            const name = item.name || item.product || 'Product';
+            const df = item.dutyFreePrice || item.duty_free_price || item.price || 0;
+            const retail = item.retailPrice || item.retail_price || item.marketPrice || 0;
+            const saving = retail > 0 ? Math.round((1 - df/retail) * 100) : 0;
+            return `<div class="price-row">
+                <div class="name">${name}</div>
+                <div class="prices">
+                    <div class="duty-free">€${df}</div>
+                    <div class="retail">€${retail}</div>
+                </div>
+                <div class="savings">-${saving}%</div>
+            </div>`;
+        }).join('');
+    }).catch(() => {
+        document.getElementById('prices-container').innerHTML = '<div class="empty-state">Price data coming soon for this route.</div>';
+    });
+
+    // Fetch travelers
+    fetch(`/api/offers?from=${from}&to=${to}`).then(r => r.json()).then(data => {
+        const items = Array.isArray(data) ? data : (data.offers || data.travelers || []);
+        const container = document.getElementById('travelers-container');
+        document.getElementById('stat-travelers').textContent = items.length;
+        if (items.length === 0) {
+            container.innerHTML = '<div class="card"><div class="empty-state">No travelers currently on this route. Be the first!</div></div>';
+            return;
+        }
+        container.innerHTML = items.slice(0, 5).map(t => `<div class="card traveler-card">
+            <div class="traveler-info">
+                <div class="name">${t.userName || t.user || 'Verified Traveler'}</div>
+                <div class="date">✈️ ${t.date || t.flightDate || 'Upcoming'}</div>
+            </div>
+            <div class="traveler-rating">⭐ ${t.rating || '4.8'}</div>
+        </div>`).join('');
+    }).catch(() => {
+        document.getElementById('travelers-container').innerHTML = '<div class="card"><div class="empty-state">Check back for available travelers on this route.</div></div>';
+        document.getElementById('stat-travelers').textContent = '0';
+    });
+
+    // Fetch requests
+    fetch(`/api/requests?from=${from}&to=${to}`).then(r => r.json()).then(data => {
+        const items = Array.isArray(data) ? data : (data.requests || []);
+        const container = document.getElementById('requests-container');
+        document.getElementById('stat-requests').textContent = items.length;
+        if (items.length === 0) {
+            container.innerHTML = '<div class="card"><div class="empty-state">No open requests for this route yet. Create one!</div></div>';
+            return;
+        }
+        container.innerHTML = items.slice(0, 5).map(r => `<div class="card">
+            <div style="font-weight:500">${r.product || r.item || 'Duty-free item'}</div>
+            <div style="color:var(--text-secondary);font-size:0.85rem;margin-top:0.25rem">Budget: €${r.budget || r.maxPrice || '—'}</div>
+        </div>`).join('');
+    }).catch(() => {
+        document.getElementById('requests-container').innerHTML = '<div class="card"><div class="empty-state">No requests found. Be the first to request!</div></div>';
+        document.getElementById('stat-requests').textContent = '0';
+    });
+    </script>
+</body>
+</html>

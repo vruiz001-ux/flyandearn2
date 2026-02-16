@@ -1,5 +1,7 @@
 import bcrypt from 'bcryptjs';
+import crypto from 'crypto';
 import prisma from './lib/prisma.js';
+import { sendEmail, verificationEmail } from './lib/email.js';
 import {
   createToken,
   createSessionCookie,
@@ -135,6 +137,29 @@ export async function handler(event) {
         createdAt: true,
       },
     });
+
+    // Send verification email (non-blocking — don't fail registration if email fails)
+    try {
+      const verifyToken = crypto.randomBytes(32).toString('hex');
+      const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24h
+
+      await prisma.emailVerificationToken.create({
+        data: {
+          userId: user.id,
+          token: verifyToken,
+          expiresAt,
+        },
+      });
+
+      const protocol = 'https';
+      const host = event.headers?.host || 'flyandearn.eu';
+      const baseUrl = `${protocol}://${host}`;
+      const emailData = verificationEmail(user.name, verifyToken, baseUrl);
+      await sendEmail({ to: user.email, ...emailData });
+    } catch (emailErr) {
+      console.error('Failed to send verification email:', emailErr);
+      // Don't fail registration
+    }
 
     // Create JWT token
     const token = await createToken({
