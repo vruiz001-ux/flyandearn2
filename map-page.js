@@ -17,15 +17,15 @@
 
     // Colors
     const COLORS = {
-        TRAVELER: '#3b82f6',  // blue
-        BUYER: '#22c55e',     // green
+        TRAVELER: '#d4a853',  // gold
+        BUYER: '#2dd4bf',     // teal
         CURRENT: '#ef4444',   // red
         NEARBY: '#f59e0b',    // amber
     };
 
-    // Default center (Warsaw, Poland)
-    const DEFAULT_CENTER = [52.2297, 21.0122];
-    const DEFAULT_ZOOM = 6;
+    // Default center (Europe)
+    const DEFAULT_CENTER = [50, 10];
+    const DEFAULT_ZOOM = 5;
 
     // DOM Elements
     const elements = {
@@ -85,7 +85,7 @@
             const params = new URLSearchParams(window.location.search);
             const userId = params.get('userId');
 
-            const response = await fetch(`/.netlify/functions/map-users?radiusKm=${radiusKm}${userId ? `&userId=${userId}` : ''}`, {
+            const response = await fetch(`/.netlify/functions/map-users?showAll=true&radiusKm=${radiusKm}${userId ? `&userId=${userId}` : ''}`, {
                 credentials: 'include',
             });
 
@@ -230,12 +230,20 @@
             ? `<div class="popup-distance">${user.distance.toFixed(1)} km away</div>`
             : '';
 
+        const gmapsEmbedUrl = `https://maps.google.com/maps?q=${user.latitude},${user.longitude}&z=12&output=embed`;
+        const gmapsLinkUrl = `https://www.google.com/maps?q=${user.latitude},${user.longitude}`;
+
         marker.bindPopup(`
             <div class="popup-name">${user.name}${isCurrentUser ? ' (You)' : ''}</div>
             <span class="popup-role" style="background: ${roleColor}; color: white;">${roleLabel}</span>
             <div class="popup-location">${user.city || ''}${user.city && user.country ? ', ' : ''}${user.country || ''}</div>
             ${distanceHtml}
-        `);
+            <iframe width="220" height="120" frameborder="0" style="border:0;border-radius:8px;margin-top:8px;" src="${gmapsEmbedUrl}" allowfullscreen loading="lazy"></iframe>
+            <div style="margin-top:6px;display:flex;gap:6px;">
+                <a href="${gmapsLinkUrl}" target="_blank" rel="noopener" style="font-size:0.75rem;color:#d4a853;text-decoration:none;">📍 View on Google Maps</a>
+                <a href="/dashboard" style="font-size:0.75rem;color:#2dd4bf;text-decoration:none;">💬 Contact</a>
+            </div>
+        `, { maxWidth: 260 });
 
         return marker;
     }

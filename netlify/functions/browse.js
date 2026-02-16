@@ -34,6 +34,8 @@ export async function handler(event) {
               name: true,
               city: true,
               country: true,
+              latitude: true,
+              longitude: true,
             },
           },
         },
