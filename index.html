@@ -3334,6 +3334,8 @@
                 <a href="#" onclick="openCookieSettings(); return false;" data-i18n="footer.cookies">Cookies</a>
                 <a href="#" onclick="openWithdrawalModal(); return false;" data-i18n="footer.withdrawal">Withdrawal Rights</a>
                 <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener">EU ODR Platform ↗</a>
+                <a href="#" onclick="exportMyData(); return false;">📥 Export My Data</a>
+                <a href="#" onclick="document.getElementById('deleteAccountModal').classList.add('show'); return false;">🗑️ Delete My Account</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -3562,6 +3564,70 @@
             </div>
         </div>
     </div>
+
+    <!-- Delete Account Modal (GDPR) -->
+    <div class="cookie-modal" id="deleteAccountModal">
+        <div class="cookie-modal-content" style="max-width: 500px;">
+            <div class="cookie-modal-header">
+                <h3>🗑️ Delete My Account</h3>
+                <button class="cookie-modal-close" onclick="document.getElementById('deleteAccountModal').classList.remove('show')">×</button>
+            </div>
+            <div style="padding: 1rem 0;">
+                <div style="background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem;">
+                    <p style="color: #ef4444; font-weight: 600; margin-bottom: 0.5rem;">⚠️ Warning: This action is permanent!</p>
+                    <ul style="color: #fca5a5; font-size: 0.875rem; margin: 0; padding-left: 1.25rem; line-height: 1.8;">
+                        <li>Your profile will be anonymized</li>
+                        <li>Your messages will be deleted</li>
+                        <li>Active subscriptions will be cancelled</li>
+                        <li>Order/transaction records are kept for legal compliance</li>
+                        <li>You will not be able to recover your account</li>
+                    </ul>
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <label style="display: block; font-size: 0.875rem; color: #a1a1aa; margin-bottom: 0.5rem;">Confirm your password</label>
+                    <input type="password" id="deletePassword" placeholder="Enter your password" style="width: 100%; padding: 0.875rem 1rem; background: #111113; border: 1px solid #27272a; border-radius: 8px; color: #fafafa; font-size: 1rem;">
+                </div>
+                <div style="display: flex; gap: 1rem;">
+                    <button onclick="document.getElementById('deleteAccountModal').classList.remove('show')" class="btn btn-outline" style="flex: 1;">Cancel</button>
+                    <button onclick="deleteMyAccount()" style="flex: 1; padding: 0.875rem; background: #ef4444; color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">Permanently Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GDPR Functions -->
+    <script>
+    async function exportMyData() {
+        var res = await fetch('/api/gdpr?action=export', { credentials: 'include' });
+        if (res.ok) {
+            var blob = await res.blob();
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.href = url; a.download = 'flyandearn-my-data.json'; a.click();
+            URL.revokeObjectURL(url);
+        } else {
+            alert('Please log in first');
+        }
+    }
+    async function deleteMyAccount() {
+        var password = document.getElementById('deletePassword').value;
+        if (!password) return alert('Please enter your password');
+        if (!confirm('This action is PERMANENT. Are you sure?')) return;
+        var res = await fetch('/api/gdpr?action=delete', {
+            method: 'DELETE',
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+            body: JSON.stringify({ password: password })
+        });
+        var data = await res.json();
+        if (res.ok) {
+            alert('Account deleted. We are sorry to see you go.');
+            window.location.href = '/';
+        } else {
+            alert(data.error || 'Failed to delete account');
+        }
+    }
+    </script>
 
     <!-- Main App Logic (kept separate for compatibility) -->
     <script src="main-app.js" defer></script>
