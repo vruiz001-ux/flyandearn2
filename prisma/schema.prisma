@@ -1,0 +1,724 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String         @id @default(cuid())
+  email                  String         @unique
+  passwordHash           String
+  name                   String
+  role                   Role           @default(BUYER) // Legacy field, use isTraveler/isBuyer
+  isTraveler             Boolean        @default(false)
+  isBuyer                Boolean        @default(true)
+  emailVerified          Boolean        @default(false)
+  emailVerifiedAt        DateTime?
+  isBanned               Boolean        @default(false)
+  bannedAt               DateTime?
+  bannedReason           String?
+  lastLoginAt            DateTime?
+  phone                  String?
+  street                 String?        // Street address
+  postalCode             String?        // Postal/ZIP code
+  city                   String?
+  country                String?
+  latitude               Float?
+  longitude              Float?
+
+  // Locale Preferences (i18n)
+  preferredLocale        String?        // Full locale e.g., "fr-FR", "en-GB"
+  preferredLanguage      String?        // Language code e.g., "fr", "en"
+  preferredCountry       String?        // Country code e.g., "FR", "GB" (for formatting)
+  timezone               String?        // IANA timezone e.g., "Europe/Paris"
+
+  stripeCustomerId       String?        @unique // For Stripe payments
+
+  // Stripe Connect for Travellers (receive payouts)
+  stripeConnectAccountId String?        @unique // Express account ID
+  connectOnboardingComplete Boolean     @default(false)
+  connectPayoutsEnabled  Boolean        @default(false)
+
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  buyerConversations     Conversation[] @relation("BuyerConversations")
+  travellerConversations Conversation[] @relation("TravellerConversations")
+  sentMessages           Message[]
+  offers                 Offer[]        @relation("TravelerOffers")
+  ratingsGiven           Rating[]       @relation("RatingsGiven")
+  ratingsReceived        Rating[]       @relation("RatingsReceived")
+  requests               Request[]
+  trips                  Trip[]
+  wallet                 Wallet?
+  buyerOrders            Order[]        @relation("BuyerOrders")
+  travelerOrders         Order[]        @relation("TravelerOrders")
+  subscriptions          Subscription[]
+  passwordResetTokens    PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+
+  @@index([email])
+  @@index([role])
+  @@index([isBanned])
+}
+
+model Trip {
+  id            String         @id @default(cuid())
+  travellerId   String
+  fromAirport   String
+  fromCity      String
+  toAirport     String
+  toCity        String
+  departureDate DateTime
+  returnDate    DateTime?
+  availableKg   Float?
+  categories    String[]       @default([])
+  note          String?
+  status        String         @default("upcoming")
+
+  // Outside Duty-Free Shopping Preferences
+  // "Have a shopper at the end of the world for your purchases"
+  outsideDutyFreeOptIn     Boolean   @default(false)  // Willing to shop outside duty-free?
+  outsideDutyFreeTimeBudget Int?      // Minutes available for shopping (0-240)
+  outsideDutyFreeMaxStops   Int?      // Maximum number of store stops (1-5)
+  outsideDutyFreeCategories String[]  @default([])    // Categories willing to buy: fashion, electronics, cosmetics, pharmacy, groceries, baby, gifts, other
+  outsideDutyFreeConstraints String?  // Special constraints: "no liquids", "no large boxes", etc.
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  conversations Conversation[]
+  traveller     User           @relation(fields: [travellerId], references: [id], onDelete: Cascade)
+
+  @@index([travellerId])
+  @@index([toCity])
+  @@index([departureDate])
+  @@index([status])
+  @@index([outsideDutyFreeOptIn])
+}
+
+model Conversation {
+  id          String             @id @default(cuid())
+  tripId      String
+  buyerId     String
+  travellerId String
+  status      ConversationStatus @default(ACTIVE)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  buyer       User               @relation("BuyerConversations", fields: [buyerId], references: [id])
+  traveller   User               @relation("TravellerConversations", fields: [travellerId], references: [id])
+  trip        Trip               @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  ratings     Rating[]
+
+  @@unique([tripId, buyerId])
+  @@index([buyerId])
+  @@index([travellerId])
+  @@index([status])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  senderId       String
+  text           String
+  read           Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  sender         User         @relation(fields: [senderId], references: [id])
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+}
+
+model Rating {
+  id               String       @id @default(cuid())
+  conversationId   String
+  fromUserId       String
+  toUserId         String
+  responseScore    Int
+  punctualityScore Int
+  conformityScore  Int
+  deliveryScore    Int
+  overallScore     Float
+  feedback         String?
+  createdAt        DateTime     @default(now())
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  fromUser         User         @relation("RatingsGiven", fields: [fromUserId], references: [id])
+  toUser           User         @relation("RatingsReceived", fields: [toUserId], references: [id])
+
+  @@unique([conversationId, fromUserId])
+  @@index([toUserId])
+  @@index([createdAt])
+}
+
+model Request {
+  id            String        @id @default(cuid())
+  buyerId       String
+
+  // Request type determines what kind of items are requested
+  requestType   RequestType   @default(DUTY_FREE)
+
+  // Outside Duty-Free Preferences (for matching with willing travelers)
+  // "Have a shopper at the end of the world for your purchases"
+  allowOutsideDutyFree      Boolean   @default(false)  // Allow purchase outside duty-free
+  storeTypePreference       String?   // any, brand_store, mall, supermarket, pharmacy, electronics, other
+  itemFlexibility           String?   // exact_item or acceptable_alternatives
+
+  // Legacy single-item fields (kept for backward compatibility)
+  product       String?       // @deprecated - use items relation
+  category      String?       // @deprecated - use items relation
+  description   String?       // @deprecated - use items relation
+  dutyFreePrice Float?        // @deprecated - use items relation
+  serviceFee    Float?        // @deprecated - use items relation
+  orderType     OrderType     @default(DUTY_FREE)  // @deprecated - use requestType
+
+  // Common fields
+  currency      String        @default("EUR")
+  fromAirport   String
+  fromCity      String
+  toAirport     String
+  toCity        String
+  neededBy      DateTime?
+
+  // Totals (computed from items)
+  totalBudget   Float?        // Sum of all item budgets
+  totalItems    Int           @default(1)
+
+  // Buyer's maximum price - the max they're willing to pay (includes service fee)
+  maxPrice      Float?
+
+  // Notes for traveler
+  generalNotes  String?
+
+  status        RequestStatus @default(OPEN)
+
+  // Deposit Payment (€20 upfront, auto-transfer on acceptance)
+  depositAmount               Float?         // Fixed €20 or PLN equivalent
+  depositCurrency             String?        // EUR or PLN
+  depositStatus               DepositStatus  @default(NONE)
+  stripeDepositPaymentIntentId String?       @unique
+  depositIdempotencyKey       String?        @unique  // For idempotent payment creation
+  depositPaidAt               DateTime?      // When payment was captured
+  depositTransferredAt        DateTime?      // When transferred to Traveller
+  stripeDepositTransferId     String?        @unique  // Stripe Transfer ID
+
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  items         RequestItem[]
+  offers        Offer[]
+  order         Order?
+  buyer         User          @relation(fields: [buyerId], references: [id], onDelete: Cascade)
+
+  @@index([buyerId])
+  @@index([status])
+  @@index([toCity])
+  @@index([requestType])
+  @@index([createdAt])
+  @@index([depositStatus])
+  @@index([allowOutsideDutyFree])
+}
+
+model RequestItem {
+  id              String      @id @default(cuid())
+  requestId       String
+
+  // Item details
+  itemName        String
+  quantity        Int         @default(1)
+  budgetPrice     Float?      // Maximum price willing to pay
+  currency        String      @default("EUR")
+  category        String?
+
+  // Item source
+  itemSource      ItemSource  @default(DUTY_FREE)
+
+  // Specifications
+  notes           String?     // Size, color, model, specs
+  preferredBrand  String?
+
+  // Outside duty-free specific fields
+  storeUrl        String?     // Product URL or store website
+  storeName       String?     // Store name (e.g., "Zara", "Amazon")
+  buyRegion       String?     // Country/region where to buy
+  acceptAlternatives Boolean  @default(false)
+  alternativeNotes String?    // What alternatives are acceptable
+
+  // Duty-free specific fields
+  dutyFreeStore   String?     // Preferred duty-free store
+  terminal        String?     // Airport terminal preference
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  request         Request     @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+  @@index([itemSource])
+}
+
+model Offer {
+  id         String   @id @default(cuid())
+  requestId  String
+  travelerId String
+  message    String?
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  request    Request  @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  traveler   User     @relation("TravelerOffers", fields: [travelerId], references: [id])
+
+  @@unique([requestId, travelerId])
+  @@index([travelerId])
+}
+
+enum Role {
+  TRAVELLER
+  BUYER
+}
+
+enum ConversationStatus {
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum RequestStatus {
+  OPEN
+  MATCHED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// Deposit payment state machine
+enum DepositStatus {
+  NONE              // No deposit created yet
+  CREATED           // PaymentIntent created, awaiting payment
+  REQUIRES_ACTION   // 3DS or BLIK confirmation required
+  CAPTURED          // Payment captured, awaiting match
+  TRANSFERRED       // Transferred to Traveller on acceptance
+  REFUNDED          // Refunded (request cancelled/expired)
+  FAILED            // Payment failed
+}
+
+enum OrderType {
+  DUTY_FREE    // Duty-free purchases - 15% traveller service fee
+  OTHER        // Non-duty-free purchases - 20% service fee
+}
+
+enum RequestType {
+  DUTY_FREE           // Only duty-free items
+  OUTSIDE_DUTY_FREE   // Only items from regular stores
+  BOTH                // Mixed - some duty-free, some regular
+}
+
+enum ItemSource {
+  DUTY_FREE           // Item from duty-free shop
+  OUTSIDE_DUTY_FREE   // Item from regular store/online
+}
+
+// ==========================================
+// WALLET SYSTEM - Double-Entry Ledger
+// ==========================================
+
+enum WalletStatus {
+  ACTIVE
+  FROZEN
+  CLOSED
+}
+
+enum AccountType {
+  AVAILABLE        // Withdrawable balance
+  PENDING          // Funds held until order completion
+  FROZEN           // Disputed/chargeback funds
+  PLATFORM_FEES    // Platform revenue
+  PLATFORM_ESCROW  // Incoming deposits before allocation
+}
+
+enum LedgerEntryType {
+  DEPOSIT          // Buyer pays into platform
+  FEE_ALLOCATION   // Service fee to platform
+  TRAVELER_CREDIT  // Allocate to traveler pending
+  RELEASE          // Move pending to available
+  WITHDRAWAL       // Payout to bank
+  REFUND           // Return funds to buyer
+  FREEZE           // Move to frozen (dispute)
+  UNFREEZE         // Release from frozen
+  ADJUSTMENT       // Manual admin adjustment
+  CHARGEBACK       // Lost dispute debit
+}
+
+enum LedgerEntryStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  IN_PROGRESS
+  COMPLETED
+  REFUNDED
+  DISPUTED
+  CANCELLED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum PayoutMethodStatus {
+  PENDING_VERIFICATION
+  VERIFIED
+  FAILED
+  DISABLED
+}
+
+// ==========================================
+// SUBSCRIPTION SYSTEM
+// ==========================================
+
+enum SubscriptionTier {
+  SILVER
+  GOLD
+  PLATINUM
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  PENDING_PAYMENT
+}
+
+model SubscriptionPlan {
+  id                  String           @id @default(cuid())
+  tier                SubscriptionTier @unique
+  name                String           // "Silver", "Gold", "Platinum"
+  priceEur            Float            // Price in EUR
+  pricePln            Float            // Price in PLN
+  purchaseLimit       Int?             // null = unlimited
+  description         String?
+  features            String[]         @default([])
+  isActive            Boolean          @default(true)
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+  subscriptions       Subscription[]
+
+  @@index([tier])
+  @@index([isActive])
+}
+
+model Subscription {
+  id                      String             @id @default(cuid())
+  userId                  String
+  planId                  String
+  status                  SubscriptionStatus @default(PENDING_PAYMENT)
+
+  // Billing period
+  startDate               DateTime?
+  endDate                 DateTime?
+
+  // Purchase tracking
+  purchasesUsed           Int                @default(0)
+  purchaseLimit           Int?               // Copied from plan at subscription time
+
+  // Stripe
+  stripeSubscriptionId    String?            @unique
+  stripeCustomerId        String?
+  stripePriceId           String?
+
+  // Currency used for this subscription
+  currency                String             @default("EUR")
+  amountPaid              Float?
+  fxRateUsed              Float?             // FX rate at time of purchase
+
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+  cancelledAt             DateTime?
+
+  user                    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  plan                    SubscriptionPlan   @relation(fields: [planId], references: [id])
+
+  @@index([userId])
+  @@index([status])
+  @@index([endDate])
+}
+
+// ==========================================
+// FX RATES
+// ==========================================
+
+model FxRate {
+  id            String   @id @default(cuid())
+  fromCurrency  String   // e.g., "EUR"
+  toCurrency    String   // e.g., "PLN"
+  rate          Float    // e.g., 4.32 (1 EUR = 4.32 PLN)
+  source        String?  // e.g., "ECB", "manual"
+  validFrom     DateTime @default(now())
+  validUntil    DateTime?
+  createdAt     DateTime @default(now())
+
+  @@unique([fromCurrency, toCurrency, validFrom])
+  @@index([fromCurrency, toCurrency])
+  @@index([validFrom])
+}
+
+model Wallet {
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  currency      String         @default("EUR")
+  status        WalletStatus   @default(ACTIVE)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accounts      WalletAccount[]
+  payoutMethods PayoutMethod[]
+  payoutRequests PayoutRequest[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model WalletAccount {
+  id            String         @id @default(cuid())
+  walletId      String
+  type          AccountType
+  balance       Float          @default(0) // Cached balance, reconciled from ledger
+  currency      String         @default("EUR")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  wallet        Wallet         @relation(fields: [walletId], references: [id], onDelete: Cascade)
+  debits        LedgerEntry[]  @relation("DebitAccount")
+  credits       LedgerEntry[]  @relation("CreditAccount")
+
+  @@unique([walletId, type])
+  @@index([walletId])
+  @@index([type])
+}
+
+model LedgerEntry {
+  id               String            @id @default(cuid())
+  type             LedgerEntryType
+  status           LedgerEntryStatus @default(COMPLETED)
+  amount           Float
+  currency         String            @default("EUR")
+
+  debitAccountId   String            // Account being debited (reduced)
+  creditAccountId  String            // Account being credited (increased)
+
+  referenceType    String?           // ORDER, PAYOUT, REFUND, ADJUSTMENT
+  referenceId      String?           // ID of the related entity
+
+  idempotencyKey   String            @unique // Prevents duplicate entries
+  providerEventId  String?           @unique // Stripe event ID for webhooks
+
+  description      String?
+  metadata         Json?
+
+  createdAt        DateTime          @default(now())
+  createdBy        String?           // Admin user ID for adjustments
+
+  debitAccount     WalletAccount     @relation("DebitAccount", fields: [debitAccountId], references: [id])
+  creditAccount    WalletAccount     @relation("CreditAccount", fields: [creditAccountId], references: [id])
+
+  @@index([debitAccountId])
+  @@index([creditAccountId])
+  @@index([referenceType, referenceId])
+  @@index([createdAt])
+  @@index([type])
+}
+
+model Order {
+  id                String       @id @default(cuid())
+  requestId         String       @unique
+  buyerId           String
+  travelerId        String
+
+  // Order type
+  orderType         OrderType    @default(DUTY_FREE)
+
+  // Amounts - New fee structure
+  goodsValue        Float        // Price of goods (duty-free or retail)
+  platformFee       Float        // 5% of goodsValue - platform revenue
+  travellerServiceFee Float      // 15% (duty-free) or 20% (other) of goodsValue - traveller fee
+  totalAmount       Float        // Total buyer pays (goodsValue + platformFee + travellerServiceFee)
+  travelerAmount    Float        // Amount traveler receives (travellerServiceFee)
+  currency          String       @default("EUR")
+
+  // Legacy fields (for backward compatibility during migration)
+  productPrice      Float?       // @deprecated - use goodsValue
+  serviceFee        Float?       // @deprecated - use travellerServiceFee
+
+  // FX tracking
+  fxRateUsed        Float?       // Exchange rate at time of transaction
+  originalCurrency  String?      // Original currency if converted
+
+  // Status
+  status            OrderStatus  @default(PENDING_PAYMENT)
+  paymentStatus     String?      // Stripe payment status
+
+  // Stripe
+  stripePaymentIntentId   String?  @unique
+  stripeRefundId          String?
+
+  // Timing
+  paidAt            DateTime?
+  completedAt       DateTime?
+  releaseAt         DateTime?    // When funds auto-release
+  refundedAt        DateTime?
+
+  // Idempotency
+  idempotencyKey    String       @unique
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  request           Request      @relation(fields: [requestId], references: [id])
+  buyer             User         @relation("BuyerOrders", fields: [buyerId], references: [id])
+  traveler          User         @relation("TravelerOrders", fields: [travelerId], references: [id])
+
+  @@index([buyerId])
+  @@index([travelerId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PayoutRequest {
+  id                String       @id @default(cuid())
+  walletId          String
+  amount            Float
+  currency          String       @default("EUR")
+  status            PayoutStatus @default(PENDING)
+
+  // Stripe payout
+  stripePayoutId    String?      @unique
+  stripeTransferId  String?
+
+  // Failure info
+  failureReason     String?
+  failureCode       String?
+
+  // Idempotency
+  idempotencyKey    String       @unique
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  completedAt       DateTime?
+
+  wallet            Wallet       @relation(fields: [walletId], references: [id])
+
+  @@index([walletId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model PayoutMethod {
+  id                      String             @id @default(cuid())
+  walletId                String
+
+  // Stripe Connect
+  stripeConnectedAccountId String?           @unique
+  stripeAccountStatus      String?           // onboarding status
+
+  // Bank details (masked)
+  type                    String             @default("bank_account") // bank_account, card
+  last4                   String?
+  bankName                String?
+  country                 String?
+  currency                String             @default("EUR")
+
+  status                  PayoutMethodStatus @default(PENDING_VERIFICATION)
+  isDefault               Boolean            @default(false)
+
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
+
+  wallet                  Wallet             @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  @@index([walletId])
+  @@index([status])
+}
+
+// Platform wallet for fees and escrow (special system wallet)
+model PlatformAccount {
+  id            String         @id @default(cuid())
+  type          AccountType
+  balance       Float          @default(0)
+  currency      String         @default("EUR")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@unique([type, currency])
+}
+
+// ==========================================
+// ADMIN & AUDIT SYSTEM
+// ==========================================
+
+// Audit log for tracking admin and system actions
+model AuditLog {
+  id            String         @id @default(cuid())
+  adminId       String?        // User ID of admin who performed action (null for system)
+  action        String         // CREATE, UPDATE, DELETE, FREEZE, REFUND, etc.
+  entityType    String         // USER, ORDER, WALLET, SUBSCRIPTION, etc.
+  entityId      String         // ID of the affected entity
+  oldValue      Json?          // Previous state (for updates)
+  newValue      Json?          // New state (for updates)
+  metadata      Json?          // Additional context
+  ipAddress     String?        // Request IP address
+  userAgent     String?        // Browser/client info
+  createdAt     DateTime       @default(now())
+
+  @@index([adminId])
+  @@index([entityType, entityId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ==========================================
+// PASSWORD RESET & EMAIL VERIFICATION
+// ==========================================
+
+// Token for password reset requests
+model PasswordResetToken {
+  id            String         @id @default(cuid())
+  userId        String
+  token         String         @unique
+  expiresAt     DateTime
+  usedAt        DateTime?
+  createdAt     DateTime       @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+}
+
+// Token for email verification
+model EmailVerificationToken {
+  id            String         @id @default(cuid())
+  userId        String
+  token         String         @unique
+  expiresAt     DateTime
+  verifiedAt    DateTime?
+  createdAt     DateTime       @default(now())
+
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+}

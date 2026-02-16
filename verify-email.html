@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verify Email – FlyAndEarn</title>
+  <meta name="description" content="Verify your FlyAndEarn email address" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .auth-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+    }
+    .auth-card {
+      background: rgba(26, 26, 26, 0.95);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 16px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 420px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    }
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .auth-logo a {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+    }
+    .auth-logo span {
+      color: #d4af37;
+    }
+    .auth-title {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      font-size: 1.5rem;
+    }
+    .auth-subtitle {
+      text-align: center;
+      color: #888;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 1rem;
+      background: linear-gradient(135deg, #d4af37 0%, #b8962e 100%);
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+      display: block;
+      text-align: center;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+    .auth-links {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #888;
+    }
+    .auth-links a {
+      color: #d4af37;
+      text-decoration: none;
+    }
+    .auth-links a:hover {
+      text-decoration: underline;
+    }
+    .hidden {
+      display: none;
+    }
+    .status-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .status-icon.success {
+      background: rgba(34, 197, 94, 0.1);
+    }
+    .status-icon.success svg {
+      width: 40px;
+      height: 40px;
+      color: #22c55e;
+    }
+    .status-icon.error {
+      background: rgba(239, 68, 68, 0.1);
+    }
+    .status-icon.error svg {
+      width: 40px;
+      height: 40px;
+      color: #ef4444;
+    }
+    .loading {
+      text-align: center;
+      padding: 2rem 0;
+    }
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(212, 175, 55, 0.2);
+      border-top-color: #d4af37;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1.5rem;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .lang-selector {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+    .lang-btn {
+      background: none;
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #888;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+    .lang-btn:hover { color: #fff; }
+    .lang-btn.active { color: #d4af37; border-color: #d4af37; }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <div class="lang-selector">
+      <button class="lang-btn" onclick="setLang('en')" data-lang="en">EN</button>
+      <button class="lang-btn" onclick="setLang('pl')" data-lang="pl">PL</button>
+      <button class="lang-btn" onclick="setLang('fr')" data-lang="fr">FR</button>
+      <button class="lang-btn" onclick="setLang('de')" data-lang="de">DE</button>
+    </div>
+
+    <div class="auth-card">
+      <div class="auth-logo">
+        <a href="/">Fly<span>&</span>Earn</a>
+      </div>
+
+      <!-- Loading State -->
+      <div id="loading-view">
+        <div class="loading">
+          <div class="spinner"></div>
+          <h1 class="auth-title" data-i18n="verify.verifying">Verifying Email</h1>
+          <p class="auth-subtitle" data-i18n="verify.pleaseWait">Please wait while we verify your email address...</p>
+        </div>
+      </div>
+
+      <!-- Success View -->
+      <div id="success-view" class="hidden">
+        <div class="status-icon success">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        <h1 class="auth-title" data-i18n="verify.success">Email Verified!</h1>
+        <p class="auth-subtitle" data-i18n="verify.successMessage">
+          Your email address has been successfully verified.
+          You can now access all features of your account.
+        </p>
+        <a class='btn-primary' data-i18n='verify.goToDashboard' href='/dashboard'>
+          Go to Dashboard
+        </a>
+      </div>
+
+      <!-- Already Verified View -->
+      <div id="already-verified-view" class="hidden">
+        <div class="status-icon success">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h1 class="auth-title" data-i18n="verify.alreadyVerified">Already Verified</h1>
+        <p class="auth-subtitle" data-i18n="verify.alreadyVerifiedMessage">
+          Your email address is already verified. You're all set!
+        </p>
+        <a class='btn-primary' data-i18n='verify.goToDashboard' href='/dashboard'>
+          Go to Dashboard
+        </a>
+      </div>
+
+      <!-- Error View -->
+      <div id="error-view" class="hidden">
+        <div class="status-icon error">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+        </div>
+        <h1 class="auth-title" data-i18n="verify.failed">Verification Failed</h1>
+        <p class="auth-subtitle" id="error-message" data-i18n="verify.invalidLink">
+          This verification link is invalid or has expired.
+        </p>
+        <div class="auth-links">
+          <p data-i18n="verify.needNewLink">Need a new verification link?</p>
+          <p><a data-i18n='verify.loginAndRequest' href='/dashboard'>Log in and request a new one</a></p>
+        </div>
+      </div>
+
+      <!-- No Token View -->
+      <div id="no-token-view" class="hidden">
+        <div class="status-icon error">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h1 class="auth-title" data-i18n="verify.noToken">No Verification Token</h1>
+        <p class="auth-subtitle" data-i18n="verify.noTokenMessage">
+          No verification token was provided. Please check your email for the verification link.
+        </p>
+        <a class='btn-primary' data-i18n='verify.goToDashboard' href='/dashboard'>
+          Go to Dashboard
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script>
+    function setLang(lang) {
+      T.setLanguage(lang);
+      T.updatePage();
+      updateLangButtons();
+    }
+
+    function updateLangButtons() {
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === T.currentLang);
+      });
+    }
+
+    const loadingView = document.getElementById('loading-view');
+    const successView = document.getElementById('success-view');
+    const alreadyVerifiedView = document.getElementById('already-verified-view');
+    const errorView = document.getElementById('error-view');
+    const noTokenView = document.getElementById('no-token-view');
+    const errorMessageEl = document.getElementById('error-message');
+
+    // Get token from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    async function verifyEmail() {
+      if (!token) {
+        loadingView.classList.add('hidden');
+        noTokenView.classList.remove('hidden');
+        return;
+      }
+
+      try {
+        const response = await fetch('/.netlify/functions/email-verification/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ token }),
+        });
+
+        const data = await response.json();
+
+        loadingView.classList.add('hidden');
+
+        if (response.ok) {
+          if (data.alreadyVerified) {
+            alreadyVerifiedView.classList.remove('hidden');
+          } else {
+            successView.classList.remove('hidden');
+          }
+        } else {
+          errorMessageEl.textContent = data.error || T.t('verify.invalidLink');
+          errorView.classList.remove('hidden');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        loadingView.classList.add('hidden');
+        errorMessageEl.textContent = 'Network error. Please try again.';
+        errorView.classList.remove('hidden');
+      }
+    }
+
+    // Initialize
+    T.init();
+    T.updatePage();
+    updateLangButtons();
+
+    // Verify email on page load
+    verifyEmail();
+  </script>
+</body>
+</html>

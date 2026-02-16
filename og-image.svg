@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a0b"/>
+      <stop offset="100%" style="stop-color:#18181b"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#d4a853"/>
+      <stop offset="50%" style="stop-color:#f0d78c"/>
+      <stop offset="100%" style="stop-color:#d4a853"/>
+    </linearGradient>
+    <linearGradient id="tealGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#2dd4bf"/>
+      <stop offset="100%" style="stop-color:#14b8a6"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+  
+  <!-- Decorative grid pattern -->
+  <pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
+    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="#27272a" stroke-width="1"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)" opacity="0.3"/>
+  
+  <!-- Logo Icon -->
+  <g transform="translate(100, 180)">
+    <rect x="0" y="0" width="140" height="140" rx="35" fill="url(#goldGrad)"/>
+    <rect x="10" y="10" width="120" height="120" rx="28" fill="#0a0a0b"/>
+    <g transform="translate(70, 78) rotate(-25) scale(1.4)">
+      <path d="M-22,7 L-8,7 L5,-14 L8,-14 L0,4 L22,4 L26,0 L26,7 L22,9 L0,9 L8,18 L5,18 L-8,10 L-22,10 Z" fill="url(#goldGrad)"/>
+    </g>
+    <circle cx="30" cy="115" r="6" fill="url(#tealGrad)" opacity="0.4"/>
+    <circle cx="50" cy="90" r="7" fill="url(#tealGrad)" opacity="0.6"/>
+    <circle cx="75" cy="60" r="8" fill="url(#tealGrad)" opacity="0.8"/>
+    <circle cx="105" cy="25" r="10" fill="url(#tealGrad)"/>
+  </g>
+  
+  <!-- Text -->
+  <text x="280" y="240" font-family="system-ui, -apple-system, sans-serif" font-size="72" font-weight="800" fill="#fafafa">
+    Fly<tspan fill="url(#goldGrad)">&amp;</tspan>Earn
+  </text>
+  
+  <text x="280" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#a1a1aa">
+    Duty-Free Savings Marketplace
+  </text>
+  
+  <!-- Tagline -->
+  <text x="100" y="420" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="600" fill="#fafafa">
+    Turn Your Duty-Free Allowance Into Cash
+  </text>
+  
+  <text x="100" y="480" font-family="system-ui, -apple-system, sans-serif" font-size="26" fill="#71717a">
+    Save 20-40% on spirits, perfume &amp; electronics • 100% Legal within EU
+  </text>
+  
+  <!-- URL -->
+  <text x="100" y="570" font-family="system-ui, -apple-system, sans-serif" font-size="24" font-weight="600" fill="url(#goldGrad)">
+    flyandearn.eu
+  </text>
+  
+  <!-- Stats boxes -->
+  <g transform="translate(750, 380)">
+    <rect x="0" y="0" width="150" height="90" rx="12" fill="#18181b" stroke="#27272a"/>
+    <text x="75" y="45" font-family="system-ui" font-size="32" font-weight="700" fill="url(#goldGrad)" text-anchor="middle">€2.4M+</text>
+    <text x="75" y="72" font-family="system-ui" font-size="14" fill="#71717a" text-anchor="middle">Saved by buyers</text>
+  </g>
+  
+  <g transform="translate(920, 380)">
+    <rect x="0" y="0" width="150" height="90" rx="12" fill="#18181b" stroke="#27272a"/>
+    <text x="75" y="45" font-family="system-ui" font-size="32" font-weight="700" fill="url(#tealGrad)" text-anchor="middle">12,847</text>
+    <text x="75" y="72" font-family="system-ui" font-size="14" fill="#71717a" text-anchor="middle">Active travelers</text>
+  </g>
+</svg>

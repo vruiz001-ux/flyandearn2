@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#0a0a0b">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="FlyAndEarn">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=yes">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+    <link rel="apple-touch-icon" href="/icons/icon-180x180.png">
+    <title>Wallet | FlyAndEarn - Manage Your Earnings</title>
+    <meta name="description" content="View your FlyAndEarn wallet balance, add funds, withdraw earnings, and track all transactions securely.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta http-equiv="content-language" content="en, pl, fr, de">
+    <link rel="canonical" href="https://flyandearn.eu/wallet">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta property="og:title" content="Wallet | FlyAndEarn">
+    <meta property="og:description" content="Manage your FlyAndEarn wallet and earnings securely.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://flyandearn.eu/wallet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="nav.css">
+    <script src="i18n.js"></script>
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #a1a1aa;
+            --accent-gold: #d4a853;
+            --accent-gold-light: #f0d78c;
+            --accent-teal: #2dd4bf;
+            --accent-green: #22c55e;
+            --accent-red: #ef4444;
+            --accent-blue: #3b82f6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+        
+        /* Header */
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .logo span { font-size: 1.5rem; font-weight: 800; }
+        .fly { color: var(--text-primary); }
+        .amp { color: var(--accent-gold); }
+        .earn { color: var(--accent-teal); }
+        .header-nav { display: flex; align-items: center; gap: 1.5rem; }
+        .header-nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .header-nav a:hover { color: var(--text-primary); }
+        
+        /* Language Dropdown */
+        .lang-dropdown { position: relative; margin-left: 1rem; }
+        .lang-dropdown-btn { display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.6rem; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light)); border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 15px rgba(212, 168, 83, 0.3); }
+        .lang-dropdown-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 168, 83, 0.5); }
+        .lang-dropdown-btn .arrow { font-size: 0.55rem; color: #000; }
+        .lang-dropdown.open .arrow { transform: rotate(180deg); }
+        .flag-img { width: 28px; height: 20px; border-radius: 3px; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+        .lang-dropdown-btn .flag-img { display: none; }
+        .lang-dropdown-menu { position: absolute; top: 100%; right: 0; margin-top: 0.5rem; background: var(--bg-card); border: 2px solid var(--accent-gold); border-radius: 10px; overflow: hidden; opacity: 0; visibility: hidden; transform: translateY(-10px); transition: all 0.2s; z-index: 1000; box-shadow: 0 10px 40px rgba(0,0,0,0.5); }
+        .lang-dropdown.open .lang-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
+        .lang-option { display: flex; align-items: center; justify-content: center; padding: 0.5rem 0.6rem; cursor: pointer; transition: all 0.15s; border-bottom: 1px solid var(--border); }
+        .lang-option:last-child { border-bottom: none; }
+        .lang-option:hover { background: rgba(212, 168, 83, 0.15); }
+        .lang-option:hover .flag-img { transform: scale(1.1); }
+        .lang-option.active { background: rgba(212, 168, 83, 0.25); }
+        
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; font-size: 0.95rem; text-decoration: none; font-family: inherit; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light)); color: #000; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3); }
+        .btn-secondary { background: var(--bg-card); color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-outline { background: transparent; color: var(--text-primary); border: 1px solid var(--border); }
+        .btn-sm { padding: 0.5rem 1rem; font-size: 0.85rem; }
+        .btn:disabled, .btn[disabled] { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+        
+        /* Main */
+        main { max-width: 1200px; margin: 0 auto; padding: 6rem 2rem 2rem; }
+        
+        /* Wallet Card */
+        .wallet-hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); border: 1px solid var(--border); border-radius: 24px; padding: 2.5rem; margin-bottom: 2rem; position: relative; overflow: hidden; }
+        .wallet-hero::before { content: ''; position: absolute; top: -50%; right: -20%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(212, 168, 83, 0.1) 0%, transparent 70%); pointer-events: none; }
+        .wallet-label { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+        .wallet-balance { font-size: 3.5rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .wallet-balance .currency { color: var(--accent-gold); }
+        .wallet-stats { display: flex; gap: 2rem; flex-wrap: wrap; }
+        .wallet-stat { }
+        .wallet-stat-label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.25rem; }
+        .wallet-stat-value { font-size: 1.25rem; font-weight: 600; }
+        .wallet-stat-value.green { color: var(--accent-green); }
+        .wallet-stat-value.gold { color: var(--accent-gold); }
+        
+        /* Actions */
+        .wallet-actions { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; }
+        
+        /* Cards Grid */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        
+        /* Section */
+        .section { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
+        .section-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+        .section-title { font-size: 1.1rem; font-weight: 600; }
+        .section-content { padding: 1.5rem; }
+        
+        /* Transaction List */
+        .transaction-list { display: flex; flex-direction: column; }
+        .transaction-item { display: flex; align-items: center; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--border); }
+        .transaction-item:last-child { border-bottom: none; }
+        .transaction-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.25rem; flex-shrink: 0; }
+        .transaction-icon.credit { background: rgba(34, 197, 94, 0.1); }
+        .transaction-icon.debit { background: rgba(239, 68, 68, 0.1); }
+        .transaction-icon.escrow { background: rgba(212, 168, 83, 0.1); }
+        .transaction-details { flex: 1; min-width: 0; }
+        .transaction-title { font-weight: 500; margin-bottom: 0.125rem; }
+        .transaction-meta { font-size: 0.8rem; color: var(--text-muted); }
+        .transaction-amount { font-weight: 600; text-align: right; }
+        .transaction-amount.credit { color: var(--accent-green); }
+        .transaction-amount.debit { color: var(--accent-red); }
+        
+        /* Quick Actions */
+        .quick-actions { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .quick-action { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; padding: 1.5rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; cursor: pointer; transition: all 0.2s; text-decoration: none; color: var(--text-primary); }
+        .quick-action:hover { border-color: var(--accent-gold); transform: translateY(-2px); }
+        .quick-action-icon { font-size: 1.75rem; }
+        .quick-action-label { font-size: 0.9rem; font-weight: 500; }
+        
+        /* Empty State */
+        .empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+        
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(4px); z-index: 1000; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; width: 100%; max-width: 420px; }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+        .modal-title { font-size: 1.25rem; font-weight: 600; }
+        .modal-close { background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; }
+        .modal-body { padding: 1.5rem; }
+        .modal-footer { display: flex; gap: 1rem; justify-content: flex-end; padding: 1rem 1.5rem; border-top: 1px solid var(--border); }
+        
+        /* Form */
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.875rem; color: var(--text-secondary); margin-bottom: 0.5rem; }
+        .form-input, .form-select { width: 100%; padding: 0.875rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 8px; color: var(--text-primary); font-size: 1rem; font-family: inherit; transition: border-color 0.2s, box-shadow 0.2s; }
+        .form-input:focus, .form-select:focus { outline: none; border-color: var(--accent-gold); box-shadow: 0 0 0 3px rgba(212, 168, 83, 0.15); }
+        .form-input.error, .form-select.error { border-color: var(--accent-red); }
+        .form-input.error:focus, .form-select.error:focus { box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15); }
+        .form-error { font-size: 0.8rem; color: var(--accent-red); margin-top: 0.375rem; }
+        .form-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.375rem; }
+        .form-input:disabled, .form-select:disabled { opacity: 0.6; cursor: not-allowed; background: var(--bg-card); }
+        
+        /* Amount Input */
+        .amount-input-wrapper { position: relative; }
+        .amount-input-wrapper .currency-symbol { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); font-size: 1.25rem; color: var(--text-muted); }
+        .amount-input { padding-left: 2.5rem; font-size: 1.5rem; font-weight: 600; }
+        
+        /* Quick amounts */
+        .quick-amounts { display: flex; gap: 0.5rem; margin-top: 0.75rem; }
+        .quick-amount { padding: 0.5rem 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .quick-amount:hover { border-color: var(--accent-gold); color: var(--accent-gold); }
+        
+        /* Toast */
+        #toastContainer { position: fixed; bottom: 2rem; right: 2rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.75rem; }
+        .toast { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.5rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.3); animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+        .toast-success .toast-icon { color: var(--accent-green); }
+        .toast-error .toast-icon { color: var(--accent-red); }
+        .toast-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.25rem; }
+        
+        /* Not Logged In */
+        .login-prompt { text-align: center; padding: 4rem 2rem; }
+        .login-prompt h2 { margin-bottom: 1rem; }
+        .login-prompt p { color: var(--text-muted); margin-bottom: 2rem; }
+        
+        /* Mobile */
+        @media (max-width: 768px) {
+            main { padding: 5rem 1rem 1rem; }
+            .wallet-hero { padding: 1.5rem; }
+            .wallet-balance { font-size: 2.5rem; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .header-nav { display: none; }
+            #toastContainer { bottom: 1rem; right: 1rem; left: 1rem; }
+            .toast { padding: 0.875rem 1rem; }
+            .modal { max-width: calc(100vw - 2rem); }
+            .modal-body { padding: 1rem; }
+            .wallet-actions { flex-direction: column; }
+            .wallet-actions .btn { width: 100%; }
+            .quick-actions { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .wallet-balance { font-size: 2rem; }
+            .wallet-stats { flex-direction: column; gap: 1rem; }
+            .btn { padding: 0.625rem 1rem; font-size: 0.875rem; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#walletContent" class="skip-link">Skip to main content</a>
+
+    <!-- Site Header Navigation -->
+    <header class="site-header" id="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="main-nav-list" role="menubar">
+                    <li class="nav-item" role="none">
+                        <a href="/" class="nav-link" role="menuitem">Home</a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="/dashboard" class="nav-link" role="menuitem">Dashboard</a>
+                    </li>
+                    <li class="nav-item active" role="none">
+                        <a href="/wallet" class="nav-link active" role="menuitem">Wallet</a>
+                    </li>
+                    <li class="nav-item has-dropdown" role="none">
+                        <a href="#" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                            Help <span class="dropdown-arrow">▼</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <ul class="nav-dropdown-menu" role="menu">
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/faq" class="nav-dropdown-link" role="menuitem">FAQ</a>
+                                </li>
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/contact" class="nav-dropdown-link" role="menuitem">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+
+                <!-- Language Selector -->
+                <div class="lang-selector" id="langDropdown">
+                    <button class="lang-btn-trigger" aria-label="Select language" aria-expanded="false" aria-haspopup="listbox">
+                        <span class="current-flag">
+                            <svg viewBox="0 0 60 40" width="24" height="18"><rect fill="#012169" width="60" height="40"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="6"/></svg>
+                        </span>
+                        <span class="lang-arrow">▼</span>
+                    </button>
+                    <div class="lang-dropdown" role="listbox" aria-label="Language options">
+                        <button class="lang-option active" data-lang="en" role="option" aria-selected="true" title="English">
+                            <svg class="flag-img" viewBox="0 0 60 40"><rect fill="#012169" width="60" height="40"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="6"/></svg>
+                        </button>
+                        <button class="lang-option" data-lang="pl" role="option" aria-selected="false" title="Polski">
+                            <svg class="flag-img" viewBox="0 0 60 40"><rect fill="#fff" width="60" height="20"/><rect fill="#DC143C" y="20" width="60" height="20"/></svg>
+                        </button>
+                        <button class="lang-option" data-lang="fr" role="option" aria-selected="false" title="Français">
+                            <svg class="flag-img" viewBox="0 0 60 40"><rect fill="#002395" width="20" height="40"/><rect fill="#fff" x="20" width="20" height="40"/><rect fill="#ED2939" x="40" width="20" height="40"/></svg>
+                        </button>
+                        <button class="lang-option" data-lang="de" role="option" aria-selected="false" title="Deutsch">
+                            <svg class="flag-img" viewBox="0 0 60 40"><rect fill="#000" width="60" height="13.33"/><rect fill="#DD0000" y="13.33" width="60" height="13.33"/><rect fill="#FFCE00" y="26.66" width="60" height="13.34"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true">
+        <div class="mobile-nav-header">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+            <button class="mobile-nav-close" aria-label="Close menu">×</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="/" class="mobile-nav-link"><span class="mobile-nav-link-icon">🏠</span> Home</a></li>
+            <li><a href="/dashboard" class="mobile-nav-link"><span class="mobile-nav-link-icon">📊</span> Dashboard</a></li>
+            <li><a href="/wallet" class="mobile-nav-link active"><span class="mobile-nav-link-icon">💰</span> Wallet</a></li>
+            <li class="mobile-nav-divider" role="separator"></li>
+            <li><a href="/faq" class="mobile-nav-link"><span class="mobile-nav-link-icon">❓</span> FAQ</a></li>
+            <li><a href="/contact" class="mobile-nav-link"><span class="mobile-nav-link-icon">📧</span> Contact</a></li>
+        </ul>
+        <div class="mobile-lang-section">
+            <div class="mobile-lang-title">Language</div>
+            <div class="mobile-lang-options">
+                <button class="mobile-lang-btn active" data-lang="en" title="English">
+                    <svg viewBox="0 0 60 40"><rect fill="#012169" width="60" height="40"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#fff" stroke-width="6"/><path d="M0,0 L60,40 M60,0 L0,40" stroke="#C8102E" stroke-width="4"/><path d="M30,0 V40 M0,20 H60" stroke="#fff" stroke-width="10"/><path d="M30,0 V40 M0,20 H60" stroke="#C8102E" stroke-width="6"/></svg>
+                    <span>EN</span>
+                </button>
+                <button class="mobile-lang-btn" data-lang="pl" title="Polski">
+                    <svg viewBox="0 0 60 40"><rect fill="#fff" width="60" height="20"/><rect fill="#DC143C" y="20" width="60" height="20"/></svg>
+                    <span>PL</span>
+                </button>
+                <button class="mobile-lang-btn" data-lang="fr" title="Français">
+                    <svg viewBox="0 0 60 40"><rect fill="#002395" width="20" height="40"/><rect fill="#fff" x="20" width="20" height="40"/><rect fill="#ED2939" x="40" width="20" height="40"/></svg>
+                    <span>FR</span>
+                </button>
+                <button class="mobile-lang-btn" data-lang="de" title="Deutsch">
+                    <svg viewBox="0 0 60 40"><rect fill="#000" width="60" height="13.33"/><rect fill="#DD0000" y="13.33" width="60" height="13.33"/><rect fill="#FFCE00" y="26.66" width="60" height="13.34"/></svg>
+                    <span>DE</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Login Prompt (shown when not logged in) -->
+        <div id="loginPrompt" style="display: block;">
+            <div style="text-align: center; padding: 3rem 2rem 2rem;">
+                <div style="font-size: 4rem; margin-bottom: 1rem;">💰</div>
+                <h2 style="font-size: 2rem; margin-bottom: 0.5rem;">Your FlyAndEarn Wallet</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 500px; margin-left: auto; margin-right: auto;">Securely manage your earnings, send money, and withdraw funds — all in one place.</p>
+                <button class="btn btn-primary" onclick="showModal('auth')" style="font-size: 1.1rem; padding: 1rem 2.5rem;">Log In / Sign Up</button>
+            </div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-top: 2rem; opacity: 0.6;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">📊</div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Track Balances</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">View available, pending, and total balance in real time.</p>
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">💸</div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Send & Receive</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Transfer money to other users and request payments easily.</p>
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; text-align: center;">
+                    <div style="font-size: 2rem; margin-bottom: 0.75rem;">🏦</div>
+                    <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Withdraw Anytime</h3>
+                    <p style="color: var(--text-muted); font-size: 0.9rem;">Withdraw earnings to your bank account or PayPal.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Content (shown when logged in) -->
+        <div id="walletContent" style="display: none;">
+            <!-- Wallet Hero -->
+            <div class="wallet-hero">
+                <div class="wallet-label">Available Balance</div>
+                <div class="wallet-balance">
+                    <span class="currency">€</span><span id="availableBalance">0.00</span>
+                </div>
+                <div class="wallet-stats">
+                    <div class="wallet-stat">
+                        <div class="wallet-stat-label">Pending (In Escrow)</div>
+                        <div class="wallet-stat-value gold" id="escrowBalance">€0.00</div>
+                    </div>
+                    <div class="wallet-stat">
+                        <div class="wallet-stat-label">Total Balance</div>
+                        <div class="wallet-stat-value green" id="totalEarned">€0.00</div>
+                    </div>
+                    <div class="wallet-stat">
+                        <div class="wallet-stat-label">Frozen</div>
+                        <div class="wallet-stat-value" id="totalSpent" style="color: var(--accent-red);">€0.00</div>
+                    </div>
+                </div>
+                <div class="wallet-actions">
+                    <button class="btn btn-primary" onclick="showModal('send')">→ Send Money</button>
+                    <button class="btn btn-secondary" onclick="showModal('withdraw')">↓ Withdraw</button>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <!-- Quick Actions -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Quick Actions</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="quick-actions">
+                            <div class="quick-action" onclick="showModal('send')">
+                                <span class="quick-action-icon">→</span>
+                                <span class="quick-action-label">Send Money</span>
+                            </div>
+                            <div class="quick-action" onclick="showModal('request')">
+                                <span class="quick-action-icon">←</span>
+                                <span class="quick-action-label">Request Money</span>
+                            </div>
+                            <a class='quick-action' href='/dashboard#deals'>
+                                <span class="quick-action-icon">🤝</span>
+                                <span class="quick-action-label">My Deals</span>
+                            </a>
+                            <div class="quick-action" onclick="showModal('withdraw')">
+                                <span class="quick-action-icon">↓</span>
+                                <span class="quick-action-label">Withdraw</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="section">
+                    <div class="section-header">
+                        <h2 class="section-title">Recent Transactions</h2>
+                    </div>
+                    <div class="section-content">
+                        <div class="transaction-list" id="transactionList">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📭</div>
+                                <p>No transactions yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Funds Modal -->
+    <div class="modal-overlay" id="modal-addFunds">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Add Funds</h3>
+                <button class="modal-close" onclick="hideModal('addFunds')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency-symbol">€</span>
+                        <input type="number" class="form-input amount-input" id="addAmount" placeholder="0.00" min="1" step="0.01">
+                    </div>
+                    <div class="quick-amounts">
+                        <button class="quick-amount" onclick="setAmount('addAmount', 20)">€20</button>
+                        <button class="quick-amount" onclick="setAmount('addAmount', 50)">€50</button>
+                        <button class="quick-amount" onclick="setAmount('addAmount', 100)">€100</button>
+                        <button class="quick-amount" onclick="setAmount('addAmount', 200)">€200</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Payment Method</label>
+                    <select class="form-select" id="addMethod">
+                        <option value="card">💳 Credit/Debit Card</option>
+                        <option value="blik">📱 BLIK</option>
+                        <option value="transfer">🏦 Bank Transfer</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('addFunds')">Cancel</button>
+                <button class="btn btn-primary" onclick="addFunds()">Add Funds</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdraw Modal -->
+    <div class="modal-overlay" id="modal-withdraw">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Withdraw Funds</h3>
+                <button class="modal-close" onclick="hideModal('withdraw')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency-symbol">€</span>
+                        <input type="number" class="form-input amount-input" id="withdrawAmount" placeholder="0.00" min="1" step="0.01">
+                    </div>
+                    <div class="form-hint">Available: €<span id="withdrawAvailable">0.00</span></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Withdraw To</label>
+                    <select class="form-select" id="withdrawMethod">
+                        <option value="bank">🏦 Bank Account</option>
+                        <option value="paypal">💳 PayPal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Account Details</label>
+                    <input type="text" class="form-input" id="withdrawAccount" placeholder="IBAN or PayPal email">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('withdraw')">Cancel</button>
+                <button class="btn btn-primary" onclick="withdrawFunds()">Withdraw</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Send Money Modal -->
+    <div class="modal-overlay" id="modal-send">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Send Money</h3>
+                <button class="modal-close" onclick="hideModal('send')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Recipient Email</label>
+                    <input type="email" class="form-input" id="sendRecipient" placeholder="recipient@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency-symbol" id="sendCurrencySymbol">€</span>
+                        <input type="number" class="form-input amount-input" id="sendAmount" placeholder="0.00" min="1" step="0.01">
+                    </div>
+                    <div class="form-hint">Available: <span id="sendCurrencyPrefix">€</span><span id="sendAvailable">0.00</span></div>
+                    <div class="quick-amounts" id="sendQuickAmounts">
+                        <button class="quick-amount" onclick="setAmount('sendAmount', 10)">€10</button>
+                        <button class="quick-amount" onclick="setAmount('sendAmount', 25)">€25</button>
+                        <button class="quick-amount" onclick="setAmount('sendAmount', 50)">€50</button>
+                        <button class="quick-amount" onclick="setAmount('sendAmount', 100)">€100</button>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Note (optional)</label>
+                    <input type="text" class="form-input" id="sendNote" placeholder="What's this for?">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('send')">Cancel</button>
+                <button class="btn btn-primary" onclick="sendMoney()">Send Money</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Request Money Modal -->
+    <div class="modal-overlay" id="modal-request">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Request Money</h3>
+                <button class="modal-close" onclick="hideModal('request')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Request From (Email)</label>
+                    <input type="email" class="form-input" id="requestFrom" placeholder="sender@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Amount</label>
+                    <div class="amount-input-wrapper">
+                        <span class="currency-symbol" id="requestCurrencySymbol">€</span>
+                        <input type="number" class="form-input amount-input" id="requestAmount" placeholder="0.00" min="1" step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Note (optional)</label>
+                    <input type="text" class="form-input" id="requestNote" placeholder="What's this for?">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" onclick="hideModal('request')">Cancel</button>
+                <button class="btn btn-primary" onclick="requestMoney()">Send Request</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal-overlay" id="modal-auth">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Log In / Sign Up</h3>
+                <button class="modal-close" onclick="hideModal('auth')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="authEmail" placeholder="your@email.com">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Name (for new accounts)</label>
+                    <input type="text" class="form-input" id="authName" placeholder="Your Name">
+                </div>
+                <button class="btn btn-primary" style="width: 100%;" onclick="handleAuth()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer"></div>
+
+    <!-- Include App JS -->
+    <script src="app.js"></script>
+    <script src="currencies.js"></script>
+
+    <script>
+    // ==========================================
+    // WALLET PAGE LOGIC - Backend API Integration
+    // ==========================================
+
+    const API_BASE = '/.netlify/functions';
+    let currentUser = null;
+    let walletData = null;
+
+    function toggleLangDropdown() {
+        document.getElementById('langDropdown').classList.toggle('open');
+    }
+
+    document.addEventListener('click', function(e) {
+        const dropdown = document.getElementById('langDropdown');
+        if (dropdown && !dropdown.contains(e.target)) {
+            dropdown.classList.remove('open');
+        }
+    });
+
+    function setLang(lang) {
+        T.setLanguage(lang);
+        updateLangDropdown();
+        updateWalletText();
+        document.getElementById('langDropdown').classList.remove('open');
+    }
+
+    function updateLangDropdown() {
+        const lang = T.getLanguage();
+        document.querySelectorAll('.lang-dropdown-btn .flag-img').forEach(img => {
+            img.style.display = img.dataset.lang === lang ? 'block' : 'none';
+        });
+        document.querySelectorAll('.lang-option').forEach(opt => {
+            opt.classList.toggle('active', opt.dataset.lang === lang);
+        });
+    }
+
+    function updateLangButtons() {
+        updateLangDropdown();
+    }
+
+    function updateWalletText() {
+        if (typeof T !== 'undefined') T.updatePage();
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            if (typeof T !== 'undefined') {
+                T.init();
+                updateLangButtons();
+                updateWalletText();
+            }
+            await checkAuth();
+        } catch (e) {
+            console.error('Wallet init error:', e);
+            showLoginPrompt();
+        }
+    });
+
+    // Check authentication status
+    async function checkAuth() {
+        try {
+            const res = await fetch(`${API_BASE}/me`, { credentials: 'include' });
+            const data = await res.json();
+
+            if (data.success && data.user) {
+                currentUser = data.user;
+                await loadWalletData();
+            } else {
+                showLoginPrompt();
+            }
+        } catch (e) {
+            console.error('Auth check failed:', e);
+            showLoginPrompt();
+        }
+    }
+
+    function showLoginPrompt() {
+        document.getElementById('loginPrompt').style.display = 'block';
+        document.getElementById('walletContent').style.display = 'none';
+    }
+
+    // Load wallet data from API
+    async function loadWalletData() {
+        try {
+            const res = await fetch(`${API_BASE}/wallet`, { credentials: 'include' });
+            const data = await res.json();
+
+            if (data.success && data.wallet) {
+                walletData = data.wallet;
+                updateWalletUI();
+                await loadTransactions();
+            } else {
+                toast('Failed to load wallet', 'error');
+            }
+        } catch (e) {
+            console.error('Failed to load wallet:', e);
+            toast('Failed to load wallet data', 'error');
+        }
+    }
+
+    // Load transactions from API
+    async function loadTransactions() {
+        try {
+            const res = await fetch(`${API_BASE}/wallet/transactions?limit=10`, { credentials: 'include' });
+            const data = await res.json();
+
+            if (data.success && data.transactions) {
+                renderTransactions(data.transactions);
+            }
+        } catch (e) {
+            console.error('Failed to load transactions:', e);
+        }
+    }
+
+    // Get currency symbol
+    function getCurrencySymbol(currency) {
+        return currency === 'PLN' ? 'zł' : '€';
+    }
+
+    // Update wallet display
+    function updateWalletUI() {
+        if (!currentUser || !walletData) {
+            showLoginPrompt();
+            return;
+        }
+
+        document.getElementById('loginPrompt').style.display = 'none';
+        document.getElementById('walletContent').style.display = 'block';
+
+        const { balances, currency } = walletData;
+        const symbol = getCurrencySymbol(currency);
+
+        // Update currency symbol in hero
+        document.querySelector('.wallet-balance .currency').textContent = symbol;
+
+        // Update balances
+        document.getElementById('availableBalance').textContent = balances.available.toFixed(2);
+        document.getElementById('escrowBalance').textContent = symbol + balances.pending.toFixed(2);
+        document.getElementById('totalEarned').textContent = symbol + balances.total.toFixed(2);
+        document.getElementById('totalSpent').textContent = symbol + (balances.frozen || 0).toFixed(2);
+        document.getElementById('withdrawAvailable').textContent = balances.withdrawable.toFixed(2);
+
+        // Update currency symbols in modals
+        document.querySelectorAll('.currency-symbol').forEach(el => {
+            el.textContent = symbol;
+        });
+
+        // Update send available balance prefix
+        const sendPrefix = document.getElementById('sendCurrencyPrefix');
+        if (sendPrefix) sendPrefix.textContent = symbol;
+
+        // Update quick amount buttons with correct currency
+        const quickAmounts = currency === 'PLN' ? [50, 100, 200, 500] : [10, 25, 50, 100];
+        const sendQuickAmounts = document.getElementById('sendQuickAmounts');
+        if (sendQuickAmounts) {
+            sendQuickAmounts.innerHTML = quickAmounts.map(amt =>
+                `<button class="quick-amount" onclick="setAmount('sendAmount', ${amt})">${symbol}${amt}</button>`
+            ).join('');
+        }
+
+        // Update wallet status indicator if frozen
+        if (walletData.status === 'FROZEN') {
+            document.querySelector('.wallet-hero').style.borderColor = 'var(--accent-red)';
+            document.querySelector('.wallet-label').innerHTML = 'Available Balance <span style="color: var(--accent-red);">(Wallet Frozen)</span>';
+        }
+
+        // Show currency info
+        const currencyName = currency === 'PLN' ? 'Polish Zloty' : 'Euro';
+        document.querySelector('.wallet-label').innerHTML = `Available Balance <span style="color: var(--text-muted); font-size: 0.8em;">(${currencyName})</span>`;
+    }
+
+    // Render transactions list
+    function renderTransactions(transactions) {
+        const txList = document.getElementById('transactionList');
+
+        if (transactions.length > 0) {
+            txList.innerHTML = transactions.map(tx => {
+                const isCredit = tx.direction === 'credit';
+                const iconClass = tx.type.includes('FREEZE') || tx.type === 'PENDING' ? 'escrow' : (isCredit ? 'credit' : 'debit');
+                const icon = getTransactionIcon(tx.type);
+
+                return `
+                    <div class="transaction-item">
+                        <div class="transaction-icon ${iconClass}">${icon}</div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">${formatTxType(tx.type)}</div>
+                            <div class="transaction-meta">${tx.description || ''} • ${formatDate(tx.createdAt)}</div>
+                        </div>
+                        <div class="transaction-amount ${isCredit ? 'credit' : 'debit'}">
+                            ${isCredit ? '+' : '-'}${getCurrencySymbol(walletData?.currency || 'EUR')}${tx.amount.toFixed(2)}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            txList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📭</div><p>No transactions yet</p></div>';
+        }
+    }
+
+    function getTransactionIcon(type) {
+        const icons = {
+            'DEPOSIT': '↓',
+            'WITHDRAWAL': '↑',
+            'RELEASE': '✓',
+            'TRAVELER_CREDIT': '↓',
+            'FEE_ALLOCATION': '💰',
+            'FREEZE': '🔒',
+            'UNFREEZE': '🔓',
+            'REFUND': '↩',
+            'ADJUSTMENT': '⚙️',
+            'CHARGEBACK': '⚠️'
+        };
+        return icons[type] || '•';
+    }
+
+    function formatTxType(type) {
+        const types = {
+            'DEPOSIT': 'Payment Received',
+            'WITHDRAWAL': 'Withdrawal',
+            'RELEASE': 'Funds Released',
+            'TRAVELER_CREDIT': 'Earnings Credited',
+            'FEE_ALLOCATION': 'Platform Fee',
+            'FREEZE': 'Funds Frozen',
+            'UNFREEZE': 'Funds Unfrozen',
+            'REFUND': 'Refund',
+            'ADJUSTMENT': 'Balance Adjustment',
+            'CHARGEBACK': 'Chargeback'
+        };
+        return types[type] || type;
+    }
+
+    function formatDate(dateStr) {
+        const date = new Date(dateStr);
+        const now = new Date();
+        const diff = now - date;
+
+        if (diff < 60000) return 'Just now';
+        if (diff < 3600000) return Math.floor(diff / 60000) + 'm ago';
+        if (diff < 86400000) return Math.floor(diff / 3600000) + 'h ago';
+        return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    }
+
+    function hideModal(id) {
+        document.getElementById('modal-' + id).classList.remove('show');
+    }
+
+    function setAmount(inputId, amount) {
+        document.getElementById(inputId).value = amount;
+    }
+
+    // Toast
+    function toast(msg, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const t = document.createElement('div');
+        t.className = 'toast toast-' + type;
+        t.innerHTML = `<span class="toast-icon">${type === 'success' ? '✓' : '✕'}</span><span>${msg}</span><button class="toast-close" onclick="this.parentElement.remove()">×</button>`;
+        container.appendChild(t);
+        setTimeout(() => t.remove(), 4000);
+    }
+
+    // Auth - Redirect to login
+    function handleAuth() {
+        window.location.href = 'index.html#login';
+    }
+
+    // Add Funds - Coming soon (requires Stripe Checkout integration)
+    function addFunds() {
+        if (!currentUser) {
+            showModal('auth');
+            return;
+        }
+
+        toast('Payment system coming soon! Funds are added when buyers pay for your deliveries.', 'info');
+        hideModal('addFunds');
+    }
+
+    // Withdraw funds via API
+    async function withdrawFunds() {
+        if (!currentUser) {
+            showModal('auth');
+            return;
+        }
+
+        const amount = parseFloat(document.getElementById('withdrawAmount').value);
+
+        if (!amount || amount <= 0) {
+            toast('Please enter a valid amount', 'error');
+            return;
+        }
+
+        if (amount < 10) {
+            toast('Minimum withdrawal is €10', 'error');
+            return;
+        }
+
+        if (!walletData || amount > walletData.balances.withdrawable) {
+            toast('Insufficient available balance', 'error');
+            return;
+        }
+
+        // Check if user has a payout method
+        if (!walletData.payoutMethods || walletData.payoutMethods.length === 0) {
+            toast('Please add a payout method first', 'error');
+            // Show setup payout method flow
+            showSetupPayoutMethod();
+            return;
+        }
+
+        const verifiedMethod = walletData.payoutMethods.find(m => m.status === 'VERIFIED');
+        if (!verifiedMethod) {
+            toast('Please complete payout method verification first', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/wallet/withdraw`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    amount,
+                    payoutMethodId: verifiedMethod.id
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                hideModal('withdraw');
+                document.getElementById('withdrawAmount').value = '';
+                toast(data.message || `€${amount.toFixed(2)} withdrawal initiated!`);
+                await loadWalletData();
+            } else {
+                toast(data.error || 'Withdrawal failed', 'error');
+            }
+        } catch (e) {
+            console.error('Withdrawal error:', e);
+            toast('Failed to process withdrawal', 'error');
+        }
+    }
+
+    // Setup payout method
+    async function showSetupPayoutMethod() {
+        hideModal('withdraw');
+
+        const confirmed = confirm('You need to set up a payout method to withdraw funds. Would you like to set one up now?');
+        if (!confirmed) return;
+
+        try {
+            const res = await fetch(`${API_BASE}/wallet/payout-method`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include'
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                toast('Payout method setup initiated. Complete verification to enable withdrawals.');
+                await loadWalletData();
+            } else {
+                toast(data.error || 'Failed to setup payout method', 'error');
+            }
+        } catch (e) {
+            console.error('Payout method setup error:', e);
+            toast('Failed to setup payout method', 'error');
+        }
+    }
+
+    // Send Money to another user
+    async function sendMoney() {
+        if (!currentUser) {
+            showModal('auth');
+            return;
+        }
+
+        const recipient = document.getElementById('sendRecipient').value.trim();
+        const amount = parseFloat(document.getElementById('sendAmount').value);
+        const note = document.getElementById('sendNote').value.trim();
+
+        if (!recipient) {
+            toast('Please enter recipient email', 'error');
+            return;
+        }
+
+        if (!amount || amount <= 0) {
+            toast('Please enter a valid amount', 'error');
+            return;
+        }
+
+        if (amount < 1) {
+            toast('Minimum transfer is €1', 'error');
+            return;
+        }
+
+        if (!walletData || amount > walletData.balances.available) {
+            toast('Insufficient available balance', 'error');
+            return;
+        }
+
+        if (recipient.toLowerCase() === currentUser.email.toLowerCase()) {
+            toast('You cannot send money to yourself', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/wallet/transfer`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    recipientEmail: recipient,
+                    amount,
+                    note
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                hideModal('send');
+                document.getElementById('sendRecipient').value = '';
+                document.getElementById('sendAmount').value = '';
+                document.getElementById('sendNote').value = '';
+                toast(data.message || `€${amount.toFixed(2)} sent successfully!`);
+                await loadWalletData();
+            } else {
+                toast(data.error || 'Transfer failed', 'error');
+            }
+        } catch (e) {
+            console.error('Transfer error:', e);
+            toast('Failed to send money', 'error');
+        }
+    }
+
+    // Request Money from another user
+    async function requestMoney() {
+        if (!currentUser) {
+            showModal('auth');
+            return;
+        }
+
+        const fromEmail = document.getElementById('requestFrom').value.trim();
+        const amount = parseFloat(document.getElementById('requestAmount').value);
+        const note = document.getElementById('requestNote').value.trim();
+
+        if (!fromEmail) {
+            toast('Please enter sender email', 'error');
+            return;
+        }
+
+        if (!amount || amount <= 0) {
+            toast('Please enter a valid amount', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch(`${API_BASE}/wallet/request-payment`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify({
+                    fromEmail,
+                    amount,
+                    note
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                hideModal('request');
+                document.getElementById('requestFrom').value = '';
+                document.getElementById('requestAmount').value = '';
+                document.getElementById('requestNote').value = '';
+                toast(data.message || 'Payment request sent!');
+            } else {
+                toast(data.error || 'Request failed', 'error');
+            }
+        } catch (e) {
+            console.error('Request error:', e);
+            toast('Failed to send request', 'error');
+        }
+    }
+
+    // Update send modal available balance when opened
+    function showModal(id) {
+        document.getElementById('modal-' + id).classList.add('show');
+
+        // Update available balance in send modal
+        if (id === 'send' && walletData) {
+            document.getElementById('sendAvailable').textContent = walletData.balances.available.toFixed(2);
+        }
+    }
+    </script>
+
+    <!-- Navigation JavaScript -->
+    <script src="nav.js"></script>
+</body>
+</html>

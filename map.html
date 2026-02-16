@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0b">
+    <title>Find Travelers & Buyers Near You | FlyAndEarn</title>
+    <meta name="description" content="Interactive map to find FlyAndEarn travelers and buyers near your location. Connect with nearby users for duty-free shopping requests.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="leaflet.min.css">
+    
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="nav.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0b;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --accent-gold: #d4a853;
+            --accent-teal: #2dd4bf;
+            --accent-blue: #3b82f6;
+            --accent-green: #22c55e;
+            --accent-amber: #f59e0b;
+            --accent-red: #ef4444;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+        
+        .map-page {
+            padding-top: 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .map-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 2rem;
+        }
+        
+        .map-header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .map-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .map-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        
+        .current-user-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(212, 168, 83, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+        }
+        
+        .user-role-tag {
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            text-transform: uppercase;
+        }
+        
+        .role-traveler {
+            background: var(--accent-blue);
+            color: white;
+        }
+        
+        .role-buyer {
+            background: var(--accent-green);
+            color: white;
+        }
+        
+        .map-container {
+            flex: 1;
+            display: flex;
+            gap: 0;
+        }
+        
+        .map-sidebar {
+            width: 320px;
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem;
+            overflow-y: auto;
+            max-height: calc(100vh - 180px);
+        }
+        
+        .sidebar-section {
+            margin-bottom: 1.5rem;
+        }
+        
+        .sidebar-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
+        }
+        
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+        
+        .filter-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .filter-select {
+            flex: 1;
+            background: var(--bg-dark);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem 0.75rem;
+            color: var(--text-primary);
+            font-family: inherit;
+            font-size: 0.875rem;
+        }
+        
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-gold);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-group input {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--accent-gold);
+        }
+        
+        .checkbox-group label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+        
+        .stats-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-top: 1px solid var(--border);
+            font-size: 0.875rem;
+        }
+        
+        .stats-label {
+            color: var(--text-secondary);
+        }
+        
+        .stats-value {
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+        
+        .legend {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+        
+        .legend-marker {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .nearby-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .nearby-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: var(--bg-dark);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: background 0.2s;
+        }
+        
+        .nearby-item:hover {
+            background: rgba(212, 168, 83, 0.1);
+        }
+        
+        .nearby-info h4 {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.25rem;
+        }
+        
+        .nearby-info p {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .nearby-distance {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--accent-amber);
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 0.25rem 0.5rem;
+            border-radius: 999px;
+        }
+        
+        #map {
+            flex: 1;
+            min-height: 500px;
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            font-family: inherit;
+        }
+        
+        .btn-primary {
+            background: var(--accent-gold);
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            background: #c49a4a;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+        }
+        
+        .btn-secondary:hover {
+            border-color: var(--accent-gold);
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .notice {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--accent-amber);
+            border-radius: 8px;
+            padding: 1rem;
+            font-size: 0.875rem;
+        }
+        
+        .notice-title {
+            font-weight: 600;
+            color: var(--accent-amber);
+            margin-bottom: 0.5rem;
+        }
+        
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+        }
+        
+        .loading::before {
+            content: '';
+            width: 1.5rem;
+            height: 1.5rem;
+            border: 2px solid var(--border);
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 0.75rem;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Leaflet custom styles */
+        .leaflet-popup-content-wrapper {
+            background: var(--bg-card);
+            color: var(--text-primary);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .leaflet-popup-content {
+            margin: 0.75rem 1rem;
+        }
+        
+        .leaflet-popup-tip {
+            background: var(--bg-card);
+        }
+        
+        .popup-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .popup-role {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .popup-location {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+        }
+        
+        .popup-distance {
+            color: var(--accent-amber);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .map-container {
+                flex-direction: column;
+            }
+            
+            .map-sidebar {
+                width: 100%;
+                max-height: none;
+                order: 2;
+            }
+            
+            #map {
+                order: 1;
+                min-height: 400px;
+            }
+            
+            .map-header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation will be injected by nav.js -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <header class="site-header" id="site-header"></header>
+
+    <main class="map-page" id="main-content">
+        <div class="map-header">
+            <div class="map-header-content">
+                <div>
+                    <h1 class="map-title">Find Users Near You</h1>
+                    <p class="map-subtitle">Connect with Travelers and Buyers in your area</p>
+                </div>
+                <div id="current-user-info"></div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <aside class="map-sidebar">
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Proximity Filter</h3>
+                    <div class="filter-group">
+                        <span class="filter-label">Distance:</span>
+                        <select id="radius-select" class="filter-select">
+                            <option value="5">5 km</option>
+                            <option value="10">10 km</option>
+                            <option value="25" selected>25 km</option>
+                            <option value="50">50 km</option>
+                            <option value="100">100 km</option>
+                        </select>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="show-all" />
+                        <label for="show-all">Show all users</label>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="stats-row">
+                        <span class="stats-label">Nearby matches:</span>
+                        <span class="stats-value" id="nearby-count">0</span>
+                    </div>
+                    <div class="stats-row">
+                        <span class="stats-label">Total users:</span>
+                        <span class="stats-value" id="total-count">0</span>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <h3 class="sidebar-title">Legend</h3>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="legend-marker" style="background: var(--accent-red);"></span>
+                            <span>Your location</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-marker" style="background: var(--accent-amber);"></span>
+                            <span>Nearby matches</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-marker" style="background: var(--accent-blue);"></span>
+                            <span>Travelers</span>
+                        </div>
+                        <div class="legend-item">
+                            <span class="legend-marker" style="background: var(--accent-green);"></span>
+                            <span>Buyers</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section" id="nearby-section" style="display: none;">
+                    <h3 class="sidebar-title" id="nearby-title">Nearby Users</h3>
+                    <div class="nearby-list" id="nearby-list"></div>
+                </div>
+                
+                <div class="sidebar-section">
+                    <div class="action-buttons">
+                        <button class="btn btn-primary" id="update-location-btn">
+                            📍 Update My Location
+                        </button>
+                        <button class="btn btn-secondary" id="use-browser-location-btn">
+                            🌐 Use Browser Location
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-section" id="login-notice" style="display: none;">
+                    <div class="notice">
+                        <div class="notice-title">Not logged in</div>
+                        <p>Log in to see personalized nearby matches and update your location.</p>
+                        <a class='btn btn-primary' href='/dashboard' style='margin-top: 0.75rem; width: 100%;'>Log In</a>
+                    </div>
+                </div>
+            </aside>
+            
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="leaflet.min.js"></script>
+    <script src="nav.js"></script>
+    <script src="map-page.js"></script>
+</body>
+</html>

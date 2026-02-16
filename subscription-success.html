@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0a0b">
+    <title>Subscription Activated - FlyAndEarn.eu</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-card: #18181b;
+            --accent-gold: #d4a853;
+            --accent-teal: #2dd4bf;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --border: #27272a;
+            --gradient-gold: linear-gradient(135deg, #d4a853 0%, #f0d78c 50%, #d4a853 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .success-container {
+            max-width: 500px;
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: rgba(45, 212, 191, 0.1);
+            border: 2px solid var(--accent-teal);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2.5rem;
+            color: var(--accent-teal);
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .subscription-details {
+            background: rgba(212, 168, 83, 0.1);
+            border: 1px solid var(--accent-gold);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .subscription-details h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            font-size: 1rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient-gold);
+            color: #0a0a0b;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 168, 83, 0.3);
+        }
+
+        .loading {
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">&#10003;</div>
+        <h1>Subscription Activated!</h1>
+        <p>Welcome to FlyAndEarn! Your subscription is now active and you can start making purchases.</p>
+
+        <div class="subscription-details" id="subscriptionDetails">
+            <h3>Your Subscription</h3>
+            <div class="loading">Loading details...</div>
+        </div>
+
+        <a href="/dashboard" class="btn-primary">Go to Dashboard</a>
+    </div>
+
+    <script>
+        async function loadSubscriptionDetails() {
+            try {
+                const response = await fetch('/.netlify/functions/subscriptions/status');
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.hasActiveSubscription && data.subscription) {
+                        const sub = data.subscription;
+                        const remaining = sub.remainingPurchases === null ? 'Unlimited' : sub.remainingPurchases;
+
+                        document.getElementById('subscriptionDetails').innerHTML = `
+                            <h3>Your Subscription</h3>
+                            <div class="detail-row">
+                                <span class="detail-label">Plan</span>
+                                <span class="detail-value">${sub.planName}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Purchases Available</span>
+                                <span class="detail-value">${remaining}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Valid Until</span>
+                                <span class="detail-value">${new Date(sub.endDate).toLocaleDateString()}</span>
+                            </div>
+                        `;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load subscription:', error);
+            }
+        }
+
+        loadSubscriptionDetails();
+    </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+{
+  "name": "flyandearn-netlify",
+  "version": "1.0.0",
+  "description": "FlyAndEarn frontend with Netlify Functions",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:netlify": "npx netlify-cli dev",
+    "build": "vite build && prisma generate",
+    "build:vite": "vite build && cp main-app.js flyandearn-calculator.js leaflet.min.js leaflet.min.css sw.js robots.txt sitemap.xml dist/ 2>/dev/null; cp -r icons netlify dist/ 2>/dev/null || true",
+    "preview": "vite preview",
+    "lint": "eslint netlify/functions/**/*.js",
+    "lint:fix": "eslint netlify/functions/**/*.js --fix",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:ci": "node --experimental-vm-modules node_modules/jest/bin/jest.js --ci --coverage",
+    "test:e2e": "npx playwright test",
+    "test:e2e:ui": "npx playwright test --ui",
+    "test:all": "npm test && npm run test:e2e",
+    "test:load": "artillery run load-test/artillery.yml",
+    "test:load:quick": "artillery run --count 5 load-test/artillery.yml",
+    "i18n:check": "node scripts/i18n-check.js",
+    "i18n:extract": "echo 'Extract translation keys - TODO'"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.22.0",
+    "bcryptjs": "^2.4.3",
+    "jose": "^5.9.6",
+    "stripe": "^14.0.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@playwright/test": "^1.57.0",
+    "artillery": "^2.0.27",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "prisma": "^5.22.0",
+    "sharp": "^0.34.5",
+    "terser": "^5.46.0",
+    "vite": "^5.4.21"
+  }
+}

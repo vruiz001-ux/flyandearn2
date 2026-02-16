@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Privacy Policy | FlyAndEarn.eu</title>
+    <meta name="description" content="FlyAndEarn Privacy Policy - Learn how we collect, use, and protect your personal data in compliance with GDPR and Polish data protection laws.">
+    <link rel="canonical" href="https://flyandearn.eu/privacy">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #a1a1aa;
+            --gold: #d4a853;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 11, 0.9);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        .logo span { color: var(--gold); }
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: var(--gold); }
+        h1 {
+            font-size: 2.5rem;
+            margin: 3rem 0 1rem;
+            background: linear-gradient(135deg, var(--gold), #f0d78c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .last-updated {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem;
+            color: var(--text);
+        }
+        h3 {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text-secondary);
+        }
+        p, li {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        li { margin-bottom: 0.5rem; }
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--gold);
+        }
+        a { color: var(--gold); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        th {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .contact-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.25rem; }
+        }
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background 0.2s ease;
+        }
+        .back-to-top:hover { background: #e5b963; }
+        .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:focus { outline: 3px solid #2dd4bf; outline-offset: 3px; }
+        .back-to-top svg { width: 24px; height: 24px; fill: #0a0a0b; }
+        @media (prefers-reduced-motion: reduce) {
+            .back-to-top { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <header id="site-header">
+        <div class="header-content">
+            <a href="/" class="logo">Fly<span>&</span>Earn</a>
+            <a href="/" class="back-link">Back to Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Privacy Policy</h1>
+        <p class="last-updated">Last updated: January 16, 2025</p>
+
+        <div class="highlight-box">
+            <h3>Data Controller</h3>
+            <p><strong>Tropos Sp. z o.o.</strong><br>
+            ul. Stanislawa Moniuszki 16<br>
+            65-409 Zielona Gora, Poland<br>
+            KRS: 0000707644<br>
+            NIP: 9731058163<br>
+            Email: <a href="mailto:privacy@tropos.pl">privacy@tropos.pl</a></p>
+        </div>
+
+        <h2>1. Introduction</h2>
+        <p>FlyAndEarn.eu ("we", "us", "our") is committed to protecting your personal data in accordance with the General Data Protection Regulation (EU) 2016/679 ("GDPR") and Polish data protection laws, including the Act of 10 May 2018 on Personal Data Protection.</p>
+        <p>This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.</p>
+
+        <h2>2. Data We Collect</h2>
+
+        <h3>2.1 Information You Provide</h3>
+        <ul>
+            <li><strong>Account Information:</strong> Email address, name, location, profile information</li>
+            <li><strong>Transaction Data:</strong> Duty-free requests, trips, deals, payment information</li>
+            <li><strong>Communications:</strong> Messages between users, support inquiries</li>
+        </ul>
+
+        <h3>2.2 Automatically Collected Information</h3>
+        <ul>
+            <li><strong>Device Information:</strong> Browser type, operating system, device identifiers</li>
+            <li><strong>Usage Data:</strong> Pages visited, features used, timestamps</li>
+            <li><strong>Location Data:</strong> General location based on IP address</li>
+        </ul>
+
+        <h3>2.3 Local Storage</h3>
+        <p>We use browser localStorage to store:</p>
+        <ul>
+            <li>Authentication tokens</li>
+            <li>User preferences (language, theme)</li>
+            <li>Session data for functionality</li>
+        </ul>
+
+        <h2>3. Legal Basis for Processing</h2>
+        <p>We process your personal data based on:</p>
+        <table>
+            <tr>
+                <th>Purpose</th>
+                <th>Legal Basis (GDPR Art. 6)</th>
+            </tr>
+            <tr>
+                <td>Account creation and management</td>
+                <td>Contract performance (Art. 6(1)(b))</td>
+            </tr>
+            <tr>
+                <td>Processing transactions</td>
+                <td>Contract performance (Art. 6(1)(b))</td>
+            </tr>
+            <tr>
+                <td>Communication between users</td>
+                <td>Contract performance (Art. 6(1)(b))</td>
+            </tr>
+            <tr>
+                <td>Service improvement</td>
+                <td>Legitimate interest (Art. 6(1)(f))</td>
+            </tr>
+            <tr>
+                <td>Marketing communications</td>
+                <td>Consent (Art. 6(1)(a))</td>
+            </tr>
+            <tr>
+                <td>Legal compliance</td>
+                <td>Legal obligation (Art. 6(1)(c))</td>
+            </tr>
+        </table>
+
+        <h2>4. How We Use Your Data</h2>
+        <ul>
+            <li>To create and manage your account</li>
+            <li>To facilitate duty-free transactions between travelers and buyers</li>
+            <li>To process payments and manage escrow</li>
+            <li>To enable communication between users</li>
+            <li>To send notifications about your transactions</li>
+            <li>To improve our services and user experience</li>
+            <li>To comply with legal obligations</li>
+            <li>To prevent fraud and ensure platform security</li>
+        </ul>
+
+        <h2>5. Data Sharing</h2>
+        <p>We may share your data with:</p>
+        <ul>
+            <li><strong>Other Users:</strong> Limited profile information visible to facilitate transactions</li>
+            <li><strong>Payment Processors:</strong> To process payments (e.g., Stripe)</li>
+            <li><strong>Legal Authorities:</strong> When required by law or to protect our rights</li>
+            <li><strong>Service Providers:</strong> Who assist in operating our platform (under data processing agreements)</li>
+        </ul>
+        <p>We do not sell your personal data to third parties.</p>
+
+        <h2>6. International Transfers</h2>
+        <p>Your data is primarily processed within the European Economic Area (EEA). If we transfer data outside the EEA, we ensure appropriate safeguards are in place, such as Standard Contractual Clauses approved by the European Commission.</p>
+
+        <h2>7. Data Retention</h2>
+        <table>
+            <tr>
+                <th>Data Type</th>
+                <th>Retention Period</th>
+            </tr>
+            <tr>
+                <td>Account information</td>
+                <td>Until account deletion + 30 days</td>
+            </tr>
+            <tr>
+                <td>Transaction records</td>
+                <td>7 years (tax/legal requirements)</td>
+            </tr>
+            <tr>
+                <td>Messages</td>
+                <td>2 years or until account deletion</td>
+            </tr>
+            <tr>
+                <td>Usage logs</td>
+                <td>12 months</td>
+            </tr>
+        </table>
+
+        <h2>8. Your Rights (GDPR)</h2>
+        <p>Under GDPR, you have the following rights:</p>
+
+        <div class="highlight-box">
+            <h3>Right of Access (Art. 15)</h3>
+            <p>You can request a copy of all personal data we hold about you. Use the "Export My Data" feature in your account settings or contact us.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Right to Rectification (Art. 16)</h3>
+            <p>You can update your personal information through your profile settings or by contacting us.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Right to Erasure (Art. 17)</h3>
+            <p>You can delete your account and all associated data using the "Delete Account" feature. Some data may be retained for legal compliance.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Right to Data Portability (Art. 20)</h3>
+            <p>You can download your data in a machine-readable format (JSON) using the "Export My Data" feature.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Right to Object (Art. 21)</h3>
+            <p>You can object to processing based on legitimate interests by contacting us.</p>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Right to Withdraw Consent (Art. 7)</h3>
+            <p>Where processing is based on consent, you can withdraw it at any time without affecting the lawfulness of prior processing.</p>
+        </div>
+
+        <h2>9. How to Exercise Your Rights</h2>
+        <p>You can exercise your GDPR rights by:</p>
+        <ol>
+            <li><strong>Self-Service:</strong> Use features in your account (Dashboard > Settings)</li>
+            <li><strong>Email:</strong> Contact <a href="mailto:privacy@tropos.pl">privacy@tropos.pl</a></li>
+            <li><strong>Mail:</strong> Write to our address above</li>
+        </ol>
+        <p>We will respond to your request within 30 days. If we need more time, we will inform you.</p>
+
+        <h2>10. Security Measures</h2>
+        <p>We implement appropriate technical and organizational measures to protect your data:</p>
+        <ul>
+            <li>HTTPS encryption for all data transmission</li>
+            <li>Secure headers (CSP, HSTS, X-Frame-Options)</li>
+            <li>Input validation and sanitization</li>
+            <li>Regular security assessments</li>
+            <li>Access controls and authentication</li>
+        </ul>
+
+        <h2>11. Cookies and Local Storage</h2>
+        <p>We use localStorage (similar to cookies) for:</p>
+        <ul>
+            <li><strong>Essential:</strong> Authentication, security, basic functionality</li>
+            <li><strong>Preferences:</strong> Language selection, UI preferences</li>
+        </ul>
+        <p>You can manage localStorage through your browser settings. Note that disabling localStorage may affect site functionality.</p>
+
+        <h2>12. Children's Privacy</h2>
+        <p>Our service is not intended for users under 18 years of age. We do not knowingly collect data from minors. If you believe a minor has provided us with personal data, please contact us.</p>
+
+        <h2>13. Complaints</h2>
+        <p>If you believe we have violated your data protection rights, you have the right to lodge a complaint with:</p>
+        <div class="contact-info">
+            <strong>Urzad Ochrony Danych Osobowych (UODO)</strong><br>
+            Polish Data Protection Authority<br>
+            ul. Stawki 2<br>
+            00-193 Warszawa, Poland<br>
+            Website: <a href="https://uodo.gov.pl" target="_blank">uodo.gov.pl</a><br>
+            Email: kancelaria@uodo.gov.pl
+        </div>
+
+        <h2>14. Changes to This Policy</h2>
+        <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by email or through the platform. The "Last updated" date at the top indicates when this policy was last revised.</p>
+
+        <h2>15. Contact Us</h2>
+        <div class="contact-info">
+            <p>For any questions about this Privacy Policy or our data practices:</p>
+            <p><strong>Email:</strong> <a href="mailto:privacy@tropos.pl">privacy@tropos.pl</a><br>
+            <strong>Address:</strong> Tropos Sp. z o.o., ul. Stanislawa Moniuszki 16, 65-409 Zielona Gora, Poland<br>
+            <strong>Complaints:</strong> <a href="mailto:reklamacje@tropos.pl">reklamacje@tropos.pl</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FlyAndEarn.eu - Tropos Sp. z o.o. All rights reserved.</p>
+        <p><a href='/terms'>Terms of Service</a> | <a href='/privacy'>Privacy Policy</a> | <a href="/">Home</a></p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
+    </button>
+    <script>
+        (function() {
+            const btn = document.querySelector('.back-to-top');
+            const header = document.getElementById('site-header');
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const SCROLL_THRESHOLD = 300;
+
+            function updateVisibility() {
+                if (window.scrollY > SCROLL_THRESHOLD) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            }
+
+            window.addEventListener('scroll', updateVisibility, { passive: true });
+            updateVisibility();
+
+            btn.addEventListener('click', function() {
+                if (header) {
+                    header.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                    header.focus({ preventScroll: true });
+                } else {
+                    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

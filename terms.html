@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="index, follow">
+    <title>Terms of Service | FlyAndEarn.eu</title>
+    <meta name="description" content="FlyAndEarn Terms of Service - Rules and conditions for using our duty-free marketplace platform.">
+    <link rel="canonical" href="https://flyandearn.eu/terms">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0b;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #a1a1aa;
+            --gold: #d4a853;
+            --red: #ef4444;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        header {
+            padding: 1rem 2rem;
+            border-bottom: 1px solid var(--border);
+            background: rgba(10, 10, 11, 0.9);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(10px);
+        }
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+        .logo span { color: var(--gold); }
+        .back-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+        .back-link:hover { color: var(--gold); }
+        h1 {
+            font-size: 2.5rem;
+            margin: 3rem 0 1rem;
+            background: linear-gradient(135deg, var(--gold), #f0d78c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .last-updated {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+        h2 {
+            font-size: 1.5rem;
+            margin: 2.5rem 0 1rem;
+            color: var(--text);
+        }
+        h3 {
+            font-size: 1.1rem;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--text-secondary);
+        }
+        p, li {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        ul, ol {
+            margin-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        li { margin-bottom: 0.5rem; }
+        .highlight-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .highlight-box h3 {
+            margin-top: 0;
+            color: var(--gold);
+        }
+        .warning-box {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid var(--red);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        .warning-box h3 {
+            margin-top: 0;
+            color: var(--red);
+        }
+        a { color: var(--gold); }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 0.75rem;
+            border-bottom: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        th {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .contact-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        footer {
+            margin-top: 4rem;
+            padding: 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        @media (max-width: 640px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 1.75rem; }
+            h2 { font-size: 1.25rem; }
+        }
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease, background 0.2s ease;
+        }
+        .back-to-top:hover { background: #e5b963; }
+        .back-to-top.visible { opacity: 1; visibility: visible; transform: translateY(0); }
+        .back-to-top:focus { outline: 3px solid #2dd4bf; outline-offset: 3px; }
+        .back-to-top svg { width: 24px; height: 24px; fill: #0a0a0b; }
+        @media (prefers-reduced-motion: reduce) {
+            .back-to-top { transition: none; }
+        }
+    </style>
+</head>
+<body>
+    <header id="site-header">
+        <div class="header-content">
+            <a href="/" class="logo">Fly<span>&</span>Earn</a>
+            <a href="/" class="back-link">Back to Home</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last updated: January 16, 2025</p>
+
+        <div class="highlight-box">
+            <h3>Service Provider</h3>
+            <p><strong>Tropos Sp. z o.o.</strong><br>
+            ul. Stanislawa Moniuszki 16<br>
+            65-409 Zielona Gora, Poland<br>
+            KRS: 0000707644<br>
+            NIP: 9731058163<br>
+            Email: <a href="mailto:kontakt@tropos.pl">kontakt@tropos.pl</a></p>
+        </div>
+
+        <h2>1. Acceptance of Terms</h2>
+        <p>By accessing or using FlyAndEarn.eu ("the Platform"), you agree to be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, you may not use the Platform.</p>
+        <p>These Terms constitute a legally binding agreement between you and Tropos Sp. z o.o. ("we", "us", "our").</p>
+
+        <h2>2. Description of Service</h2>
+        <p>FlyAndEarn is a peer-to-peer marketplace that connects:</p>
+        <ul>
+            <li><strong>Travelers:</strong> Individuals traveling internationally who can purchase duty-free goods</li>
+            <li><strong>Buyers:</strong> Individuals seeking to purchase duty-free goods at discounted prices</li>
+        </ul>
+        <p>We provide a platform for connection and communication. We do not sell goods directly, nor do we act as an importer, exporter, or customs agent.</p>
+
+        <div class="warning-box">
+            <h3>Important Legal Notice</h3>
+            <p>All transactions on FlyAndEarn must comply with EU customs regulations and personal import allowances. Users are solely responsible for ensuring compliance with applicable laws. The Platform facilitates service fee transactions only, not commercial import/export activities.</p>
+        </div>
+
+        <h2>3. Eligibility</h2>
+        <p>To use FlyAndEarn, you must:</p>
+        <ul>
+            <li>Be at least 18 years of age</li>
+            <li>Be legally capable of entering into binding contracts</li>
+            <li>Not be prohibited from using the service under applicable law</li>
+            <li>Provide accurate and complete registration information</li>
+        </ul>
+
+        <h2>4. User Accounts</h2>
+        <h3>4.1 Registration</h3>
+        <p>You must create an account to use most Platform features. You agree to:</p>
+        <ul>
+            <li>Provide accurate, current, and complete information</li>
+            <li>Keep your account credentials secure</li>
+            <li>Notify us immediately of unauthorized access</li>
+            <li>Accept responsibility for all activity under your account</li>
+        </ul>
+
+        <h3>4.2 Account Termination</h3>
+        <p>We reserve the right to suspend or terminate accounts that:</p>
+        <ul>
+            <li>Violate these Terms</li>
+            <li>Engage in fraudulent or illegal activity</li>
+            <li>Harm other users or the Platform</li>
+            <li>Remain inactive for extended periods</li>
+        </ul>
+
+        <h2>5. Service Fee Model</h2>
+        <h3>5.1 How It Works</h3>
+        <p>FlyAndEarn operates on a service fee model:</p>
+        <ol>
+            <li>Buyers post requests for duty-free goods</li>
+            <li>Travelers offer to fulfill requests for a service fee</li>
+            <li>Buyers pay for goods + service fee + platform fee</li>
+            <li>Funds are held in escrow until delivery confirmation</li>
+            <li>Travelers receive payment after successful delivery</li>
+        </ol>
+
+        <h3>5.2 Fees</h3>
+        <table>
+            <tr>
+                <th>Fee Type</th>
+                <th>Amount</th>
+                <th>Paid By</th>
+            </tr>
+            <tr>
+                <td>Service Fee (to Traveler)</td>
+                <td>Set by Buyer (max 15% of product price)</td>
+                <td>Buyer</td>
+            </tr>
+            <tr>
+                <td>Platform Fee</td>
+                <td>10% of total + €0.50</td>
+                <td>Buyer</td>
+            </tr>
+        </table>
+
+        <h3>5.3 Escrow</h3>
+        <p>All payments are held in escrow until:</p>
+        <ul>
+            <li>The Buyer confirms delivery, OR</li>
+            <li>14 days pass without a dispute, OR</li>
+            <li>A dispute is resolved</li>
+        </ul>
+
+        <h2>6. EU Customs Compliance</h2>
+        <div class="highlight-box">
+            <h3>Personal Import Allowances (Non-EU to EU)</h3>
+            <p>Travelers arriving from outside the EU by air may bring:</p>
+            <ul>
+                <li><strong>Alcohol:</strong> 1L spirits (>22% ABV) OR 2L wines/spirits (≤22% ABV), plus 4L wine, plus 16L beer</li>
+                <li><strong>Tobacco:</strong> 200 cigarettes OR 50 cigars OR 250g tobacco</li>
+                <li><strong>Other goods:</strong> Up to €430 in value</li>
+            </ul>
+            <p>These allowances are for personal use only. Exceeding these limits or commercial activity may result in customs duties, fines, or legal action.</p>
+        </div>
+
+        <h2>7. User Responsibilities</h2>
+        <h3>7.1 For All Users</h3>
+        <ul>
+            <li>Comply with all applicable laws and regulations</li>
+            <li>Provide accurate information in all transactions</li>
+            <li>Communicate respectfully with other users</li>
+            <li>Report suspicious or illegal activity</li>
+            <li>Not use the Platform for commercial import/export</li>
+        </ul>
+
+        <h3>7.2 For Travelers</h3>
+        <ul>
+            <li>Only offer to fulfill requests within your personal allowance</li>
+            <li>Purchase genuine products from authorized duty-free retailers</li>
+            <li>Declare goods to customs if required</li>
+            <li>Deliver goods as agreed within the specified timeframe</li>
+        </ul>
+
+        <h3>7.3 For Buyers</h3>
+        <ul>
+            <li>Only request quantities within personal use limits</li>
+            <li>Provide accurate delivery information</li>
+            <li>Confirm delivery promptly and honestly</li>
+            <li>Not resell purchased goods commercially</li>
+        </ul>
+
+        <h2>8. Prohibited Activities</h2>
+        <p>The following activities are strictly prohibited:</p>
+        <ul>
+            <li>Commercial import/export or customs fraud</li>
+            <li>Purchasing goods for resale</li>
+            <li>Requesting or transporting illegal goods</li>
+            <li>Exceeding personal import allowances</li>
+            <li>Providing false information</li>
+            <li>Harassment or abuse of other users</li>
+            <li>Attempting to bypass the Platform for transactions</li>
+            <li>Creating multiple accounts</li>
+            <li>Scraping or automated access to the Platform</li>
+        </ul>
+
+        <h2>9. Disputes and Refunds</h2>
+        <h3>9.1 Dispute Process</h3>
+        <p>If a problem occurs with a transaction:</p>
+        <ol>
+            <li>Contact the other party to resolve directly</li>
+            <li>If unresolved, open a dispute within 48 hours of expected delivery</li>
+            <li>Provide evidence (photos, messages, etc.)</li>
+            <li>Our team will review and make a decision within 7 days</li>
+        </ol>
+
+        <h3>9.2 Refunds</h3>
+        <p>Buyers may receive refunds if:</p>
+        <ul>
+            <li>Goods are not delivered</li>
+            <li>Goods are significantly different from description</li>
+            <li>Goods are damaged or counterfeit</li>
+        </ul>
+        <p>Platform fees are non-refundable except in cases of Platform error.</p>
+
+        <h2>10. Limitation of Liability</h2>
+        <p>To the maximum extent permitted by law:</p>
+        <ul>
+            <li>We are not liable for actions of users</li>
+            <li>We are not liable for customs issues or legal consequences</li>
+            <li>We are not liable for indirect, incidental, or consequential damages</li>
+            <li>Our total liability shall not exceed the fees paid to us in the past 12 months</li>
+        </ul>
+        <p>This limitation does not affect your statutory rights as a consumer under EU law.</p>
+
+        <h2>11. Indemnification</h2>
+        <p>You agree to indemnify and hold harmless Tropos Sp. z o.o. and its officers, directors, employees, and agents from any claims, damages, losses, or expenses arising from:</p>
+        <ul>
+            <li>Your violation of these Terms</li>
+            <li>Your violation of any law or third-party rights</li>
+            <li>Your use of the Platform</li>
+        </ul>
+
+        <h2>12. Intellectual Property</h2>
+        <p>All content on the Platform, including logos, text, graphics, and software, is owned by Tropos Sp. z o.o. or its licensors. You may not copy, modify, distribute, or create derivative works without our written permission.</p>
+
+        <h2>13. Privacy</h2>
+        <p>Your use of the Platform is subject to our <a href='/privacy'>Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+
+        <h2>14. Modifications</h2>
+        <p>We may modify these Terms at any time. We will notify users of material changes via email or Platform notification. Continued use after changes constitutes acceptance of the modified Terms.</p>
+
+        <h2>15. Governing Law and Jurisdiction</h2>
+        <p>These Terms are governed by the laws of Poland. Any disputes shall be resolved in the courts of Zielona Gora, Poland, except where EU consumer protection laws grant you the right to bring proceedings in your country of residence.</p>
+
+        <h2>16. Consumer Rights (EU)</h2>
+        <p>If you are a consumer in the EU, you have certain statutory rights that cannot be waived by these Terms, including:</p>
+        <ul>
+            <li>Right to clear information before purchase</li>
+            <li>Protection against unfair contract terms</li>
+            <li>Access to alternative dispute resolution</li>
+        </ul>
+        <p>For EU consumer disputes, you may use the European Commission's Online Dispute Resolution platform: <a href="https://ec.europa.eu/odr" target="_blank">https://ec.europa.eu/odr</a></p>
+
+        <h2>17. Severability</h2>
+        <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions shall continue in full force and effect.</p>
+
+        <h2>18. Contact</h2>
+        <div class="contact-info">
+            <p>For questions about these Terms:</p>
+            <p><strong>Email:</strong> <a href="mailto:kontakt@tropos.pl">kontakt@tropos.pl</a><br>
+            <strong>Address:</strong> Tropos Sp. z o.o., ul. Stanislawa Moniuszki 16, 65-409 Zielona Gora, Poland<br>
+            <strong>Complaints:</strong> <a href="mailto:reklamacje@tropos.pl">reklamacje@tropos.pl</a></p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FlyAndEarn.eu - Tropos Sp. z o.o. All rights reserved.</p>
+        <p><a href='/terms'>Terms of Service</a> | <a href='/privacy'>Privacy Policy</a> | <a href="/">Home</a></p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" aria-label="Back to top">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 4l-8 8h5v8h6v-8h5z"/></svg>
+    </button>
+    <script>
+        (function() {
+            const btn = document.querySelector('.back-to-top');
+            const header = document.getElementById('site-header');
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const SCROLL_THRESHOLD = 300;
+
+            function updateVisibility() {
+                if (window.scrollY > SCROLL_THRESHOLD) {
+                    btn.classList.add('visible');
+                } else {
+                    btn.classList.remove('visible');
+                }
+            }
+
+            window.addEventListener('scroll', updateVisibility, { passive: true });
+            updateVisibility();
+
+            btn.addEventListener('click', function() {
+                if (header) {
+                    header.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                    header.focus({ preventScroll: true });
+                } else {
+                    window.scrollTo({ top: 0, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+                }
+            });
+        })();
+    </script>
+</body>
+</html>

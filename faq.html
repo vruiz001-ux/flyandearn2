@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | FlyAndEarn - Frequently Asked Questions</title>
+    <meta name="description" content="Find answers to common questions about FlyAndEarn - the peer-to-peer duty-free shopping marketplace.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="nav.css">
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #18181b;
+            --border: #27272a;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #a1a1aa;
+            --accent-gold: #d4a853;
+            --accent-gold-light: #f0d78c;
+            --accent-teal: #2dd4bf;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Outfit', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; line-height: 1.6; }
+
+        header { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 1rem 2rem; background: rgba(10, 10, 11, 0.95); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+        .logo span { font-size: 1.5rem; font-weight: 800; }
+        .fly { color: var(--text-primary); }
+        .amp { color: var(--accent-gold); }
+        .earn { color: var(--accent-teal); }
+        .header-nav { display: flex; align-items: center; gap: 1.5rem; }
+        .header-nav a { color: var(--text-secondary); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+        .header-nav a:hover { color: var(--text-primary); }
+        .header-nav a.active { color: var(--accent-gold); }
+
+        .lang-selector { display: flex; gap: 0.5rem; margin-left: 1rem; padding-left: 1rem; border-left: 1px solid var(--border); }
+        .lang-btn { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 4px; transition: all 0.2s; }
+        .lang-btn:hover { color: var(--text-primary); }
+        .lang-btn.active { color: var(--accent-gold); background: rgba(212, 168, 83, 0.1); }
+
+        main { max-width: 800px; margin: 0 auto; padding: 7rem 2rem 4rem; }
+
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 1rem; }
+        .page-subtitle { color: var(--text-secondary); font-size: 1.1rem; }
+
+        .faq-section { margin-bottom: 2rem; }
+        .faq-section-title { font-size: 1.25rem; font-weight: 600; color: var(--accent-gold); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+        .faq-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1rem; overflow: hidden; }
+        .faq-question { padding: 1.25rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-weight: 500; transition: background 0.2s; }
+        .faq-question:hover { background: var(--bg-secondary); }
+        .faq-question::after { content: '+'; font-size: 1.5rem; color: var(--accent-gold); transition: transform 0.3s; }
+        .faq-item.open .faq-question::after { content: '-'; }
+        .faq-answer { padding: 0 1.5rem; max-height: 0; overflow: hidden; transition: max-height 0.3s, padding 0.3s; color: var(--text-secondary); }
+        .faq-item.open .faq-answer { padding: 0 1.5rem 1.5rem; max-height: 500px; }
+
+        .contact-cta { text-align: center; margin-top: 3rem; padding: 2rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; }
+        .contact-cta h3 { margin-bottom: 0.5rem; }
+        .contact-cta p { color: var(--text-muted); margin-bottom: 1.5rem; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; cursor: pointer; transition: all 0.2s; border: none; font-size: 0.95rem; text-decoration: none; font-family: inherit; }
+        .btn-primary { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light)); color: #000; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3); }
+
+        footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem; border-top: 1px solid var(--border); }
+        footer a { color: var(--accent-gold); text-decoration: underline; }
+        footer a:hover { text-decoration: none; }
+
+        @media (max-width: 768px) {
+            main { padding: 6rem 1rem 2rem; }
+            .page-title { font-size: 2rem; }
+            .header-nav { display: none; }
+            .lang-selector { margin-left: 0; padding-left: 0; border-left: none; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Site Header Navigation -->
+    <header class="site-header" id="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="main-nav-list" role="menubar">
+                    <li class="nav-item" role="none">
+                        <a href="/" class="nav-link" role="menuitem">Home</a>
+                    </li>
+                    <li class="nav-item has-dropdown" role="none">
+                        <a href="/#requests" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                            Browse <span class="dropdown-arrow">▼</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <ul class="nav-dropdown-menu" role="menu">
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/#requests" class="nav-dropdown-link" role="menuitem">Browse Requests</a>
+                                </li>
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/dashboard#travelers" class="nav-dropdown-link" role="menuitem">Find Travelers</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="/pricing" class="nav-link" role="menuitem">Pricing</a>
+                    </li>
+                    <li class="nav-item active has-dropdown" role="none">
+                        <a href="#" class="nav-link active" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                            Help <span class="dropdown-arrow">▼</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <ul class="nav-dropdown-menu" role="menu">
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/faq" class="nav-dropdown-link active" role="menuitem">FAQ</a>
+                                </li>
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/contact" class="nav-dropdown-link" role="menuitem">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="nav-cta">
+                <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true">
+        <div class="mobile-nav-header">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+            <button class="mobile-nav-close" aria-label="Close menu">×</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="/" class="mobile-nav-link"><span class="mobile-nav-link-icon">🏠</span> Home</a></li>
+            <li><a href="/#requests" class="mobile-nav-link"><span class="mobile-nav-link-icon">🔍</span> Browse Requests</a></li>
+            <li><a href="/pricing" class="mobile-nav-link"><span class="mobile-nav-link-icon">💳</span> Pricing</a></li>
+            <li class="mobile-nav-divider" role="separator"></li>
+            <li><a href="/faq" class="mobile-nav-link active"><span class="mobile-nav-link-icon">❓</span> FAQ</a></li>
+            <li><a href="/contact" class="mobile-nav-link"><span class="mobile-nav-link-icon">📧</span> Contact</a></li>
+        </ul>
+        <div class="mobile-nav-cta">
+            <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header">
+            <h1 class="page-title" data-i18n="faq.title">Frequently Asked Questions</h1>
+            <p class="page-subtitle" data-i18n="faq.subtitle">Everything you need to know about FlyAndEarn</p>
+        </div>
+
+        <section class="faq-section">
+            <h2 class="faq-section-title" data-i18n="faq.general">General</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q1">What is FlyAndEarn?</div>
+                <div class="faq-answer" data-i18n="faq.a1">
+                    FlyAndEarn is a peer-to-peer marketplace that connects travelers with shoppers who want to purchase duty-free items. Travelers can earn money by bringing back duty-free products for others, while shoppers get access to duty-free prices without traveling.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q2">How does it work?</div>
+                <div class="faq-answer">
+                    <strong data-i18n="faq.a2.shoppers">For Shoppers:</strong> <span data-i18n="faq.a2.shoppers.desc">Create a request specifying what you want, your budget, and where you need it delivered. Travelers heading to relevant destinations will see your request and can offer to fulfill it.</span><br><br>
+                    <strong data-i18n="faq.a2.travelers">For Travelers:</strong> <span data-i18n="faq.a2.travelers.desc">Browse requests that match your upcoming trips, make offers, and earn money by purchasing and delivering duty-free items on your way.</span>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q3">Is FlyAndEarn legal?</div>
+                <div class="faq-answer" data-i18n="faq.a3">
+                    Yes! FlyAndEarn facilitates peer-to-peer shopping transactions. However, both shoppers and travelers must comply with customs regulations and duty-free allowances in their respective countries. Each person is responsible for understanding and following local laws.
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2 class="faq-section-title" data-i18n="faq.payments">Payments & Security</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q4">How are payments handled?</div>
+                <div class="faq-answer" data-i18n="faq.a4">
+                    We use Stripe for secure payment processing. When a shopper pays for a request, funds are held in escrow until the delivery is confirmed. This protects both parties in the transaction.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q5">When does the traveler get paid?</div>
+                <div class="faq-answer" data-i18n="faq.a5">
+                    Funds are released to the traveler's wallet when the shopper confirms receipt of the items, or automatically after 14 days if no dispute is raised. Travelers can then withdraw their earnings to their bank account.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q6">What if there's a problem with my order?</div>
+                <div class="faq-answer" data-i18n="faq.a6">
+                    If items are damaged, incorrect, or not delivered, you can open a dispute within 14 days of the expected delivery date. Our support team will investigate and may issue a partial or full refund depending on the situation.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q7">What fees does FlyAndEarn charge?</div>
+                <div class="faq-answer">
+                    <strong data-i18n="faq.a7.shoppers">Shoppers:</strong> <span data-i18n="faq.a7.shoppers.desc">A small service fee is added to each transaction to cover payment processing and platform costs.</span><br><br>
+                    <strong data-i18n="faq.a7.travelers">Travelers:</strong> <span data-i18n="faq.a7.travelers.desc">A small platform fee is deducted from earnings. Premium subscription members enjoy reduced fees.</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2 class="faq-section-title" data-i18n="faq.forShoppers">For Shoppers</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q8">How do I create a request?</div>
+                <div class="faq-answer" data-i18n="faq.a8">
+                    Click "Create Request" on the homepage or dashboard. Specify the product you want, your budget, delivery location, and any preferences. Travelers will then be able to see your request and make offers.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q9">Can I request any product?</div>
+                <div class="faq-answer" data-i18n="faq.a9">
+                    You can request most duty-free items including perfumes, cosmetics, alcohol, tobacco, electronics, and luxury goods. However, prohibited items (weapons, illegal substances, etc.) are strictly forbidden. All products must comply with customs regulations.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q10">How do I know I can trust a traveler?</div>
+                <div class="faq-answer" data-i18n="faq.a10">
+                    All travelers have public profiles showing their ratings, completed transactions, and verification status. We recommend choosing travelers with positive reviews. Plus, our escrow system protects your payment until you confirm delivery.
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h2 class="faq-section-title" data-i18n="faq.forTravelers">For Travelers</h2>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q11">How do I start earning?</div>
+                <div class="faq-answer" data-i18n-html="faq.a11">
+                    1. Create an account and verify your email<br>
+                    2. Add your upcoming trip details<br>
+                    3. Browse requests that match your route<br>
+                    4. Make offers on requests you can fulfill<br>
+                    5. Once accepted, purchase the items and deliver them<br>
+                    6. Get paid when delivery is confirmed!
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q12">How much can I earn?</div>
+                <div class="faq-answer" data-i18n="faq.a12">
+                    Earnings vary based on the products you deliver and your service fee. Many travelers earn between 10-20% of the product value as their fee. High-demand items and premium service can command higher rates.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" data-i18n="faq.q13">What about customs limits?</div>
+                <div class="faq-answer" data-i18n="faq.a13">
+                    Each country has duty-free allowances. As a traveler, you're responsible for staying within these limits. We recommend familiarizing yourself with the customs regulations of both your departure and arrival countries.
+                </div>
+            </div>
+        </section>
+
+        <div class="contact-cta">
+            <h3 data-i18n="faq.stillQuestions">Still have questions?</h3>
+            <p data-i18n="faq.supportHelp">Our support team is here to help you.</p>
+            <a href="/contact" class="btn btn-primary" data-i18n="faq.contactUs">Contact Us</a>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FlyAndEarn. All rights reserved. | <a href="/privacy" data-i18n="footer.privacy">Privacy Policy</a> | <a href="/terms" data-i18n="footer.terms">Terms of Service</a> | <a href="/admin" aria-label="Admin login" style="opacity: 0.7;">Admin</a></p>
+    </footer>
+
+    <script src="i18n.js"></script>
+    <script>
+        // Language selector
+        function setLang(lang) {
+            T.setLanguage(lang);
+            T.updatePage();
+            updateLangButtons();
+        }
+
+        function updateLangButtons() {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === T.currentLang);
+            });
+        }
+
+        // FAQ accordion
+        document.querySelectorAll('.faq-question').forEach(q => {
+            q.addEventListener('click', () => {
+                const item = q.parentElement;
+                document.querySelectorAll('.faq-item').forEach(i => {
+                    if (i !== item) i.classList.remove('open');
+                });
+                item.classList.toggle('open');
+            });
+        });
+
+        // Initialize
+        T.init();
+        T.updatePage();
+        updateLangButtons();
+    </script>
+
+    <!-- Navigation JavaScript -->
+    <script src="nav.js"></script>
+</body>
+</html>

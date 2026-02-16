@@ -1,0 +1,773 @@
+// Prisma schema for FlyAndEarn Admin Panel
+// PostgreSQL database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// ADMIN AUTHENTICATION
+// ============================================
+
+model AdminUser {
+  id            String   @id @default(cuid())
+  username      String   @unique
+  passwordHash  String
+  email         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  lastLoginAt   DateTime?
+  isActive      Boolean  @default(true)
+
+  // Relations
+  auditLogs     AuditLog[]
+
+  @@map("admin_users")
+}
+
+model AdminSession {
+  id            String   @id @default(cuid())
+  adminId       String
+  token         String   @unique
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+  expiresAt     DateTime
+
+  @@index([token])
+  @@index([adminId])
+  @@map("admin_sessions")
+}
+
+model LoginAttempt {
+  id            String   @id @default(cuid())
+  username      String
+  ipAddress     String
+  userAgent     String?
+  success       Boolean
+  createdAt     DateTime @default(now())
+
+  @@index([ipAddress, createdAt])
+  @@index([username, createdAt])
+  @@map("login_attempts")
+}
+
+// ============================================
+// USER / ACCOUNT MANAGEMENT
+// ============================================
+
+enum UserRole {
+  REQUESTER
+  TRAVELLER
+  BOTH
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+  DELETED
+}
+
+model User {
+  id                String     @id @default(cuid())
+  email             String     @unique
+  phone             String?
+  passwordHash      String
+
+  // Profile
+  firstName         String?
+  lastName          String?
+  displayName       String?
+  avatarUrl         String?
+
+  // Address
+  addressLine1      String?
+  addressLine2      String?
+  city              String?
+  state             String?
+  postalCode        String?
+  country           String?
+
+  // Account info
+  role              UserRole   @default(REQUESTER)
+  status            UserStatus @default(PENDING_VERIFICATION)
+  emailVerified     Boolean    @default(false)
+  phoneVerified     Boolean    @default(false)
+  identityVerified  Boolean    @default(false)
+
+  // Metadata
+  createdAt         DateTime   @default(now())
+  updatedAt         DateTime   @updatedAt
+  lastActiveAt      DateTime?
+  suspendedAt       DateTime?
+  suspendReason     String?
+
+  // Relations
+  wallet            Wallet?
+  requestsCreated   Request[]  @relation("RequestCreator")
+  matchesAsTraveller Match[]   @relation("MatchTraveller")
+  messagesSent      Message[]  @relation("MessageSender")
+  messagesReceived  Message[]  @relation("MessageRecipient")
+  conversations     ConversationParticipant[]
+  events            Event[]
+
+  @@index([email])
+  @@index([status])
+  @@index([createdAt])
+  @@map("users")
+}
+
+// ============================================
+// WALLET & TRANSACTIONS
+// ============================================
+
+model Wallet {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  balance         Decimal  @default(0) @db.Decimal(12, 2)
+  currency        String   @default("EUR")
+  holdBalance     Decimal  @default(0) @db.Decimal(12, 2)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relations
+  transactions    WalletTransaction[]
+
+  @@map("wallets")
+}
+
+enum TransactionType {
+  TOPUP
+  HOLD
+  RELEASE
+  PAYOUT
+  REFUND
+  FEE
+  ADJUSTMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model WalletTransaction {
+  id              String            @id @default(cuid())
+  walletId        String
+  wallet          Wallet            @relation(fields: [walletId], references: [id], onDelete: Cascade)
+
+  type            TransactionType
+  amount          Decimal           @db.Decimal(12, 2)
+  currency        String            @default("EUR")
+  status          TransactionStatus @default(PENDING)
+
+  // Reference to related entity
+  referenceType   String?           // 'request', 'match', 'payout', etc.
+  referenceId     String?
+
+  description     String?
+  metadata        Json?
+
+  // Payout specific
+  payoutMethod    String?
+  payoutDetails   String?
+
+  // Failure tracking
+  failureReason   String?
+  failureCode     String?
+  retryCount      Int               @default(0)
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  completedAt     DateTime?
+  failedAt        DateTime?
+
+  @@index([walletId])
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+  @@map("wallet_transactions")
+}
+
+// ============================================
+// REQUESTS & MATCHING
+// ============================================
+
+enum RequestStatus {
+  DRAFT
+  OPEN
+  ACCEPTED
+  IN_PROGRESS
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  EXPIRED
+  DISPUTED
+}
+
+enum RequestCategory {
+  ELECTRONICS
+  FASHION
+  COSMETICS
+  FOOD
+  DOCUMENTS
+  MEDICINE
+  LUXURY
+  OTHER
+}
+
+model Request {
+  id              String          @id @default(cuid())
+  requesterId     String
+  requester       User            @relation("RequestCreator", fields: [requesterId], references: [id], onDelete: Cascade)
+
+  // Item details
+  title           String
+  description     String?
+  category        RequestCategory @default(OTHER)
+  itemUrl         String?
+  itemImageUrl    String?
+
+  // Pricing
+  itemPrice       Decimal         @db.Decimal(12, 2)
+  targetPrice     Decimal         @db.Decimal(12, 2)
+  commission      Decimal         @db.Decimal(12, 2)
+  currency        String          @default("EUR")
+
+  // Location
+  pickupCity      String
+  pickupCountry   String
+  deliveryCity    String
+  deliveryCountry String
+
+  // Dates
+  neededBy        DateTime?
+
+  // Status
+  status          RequestStatus   @default(DRAFT)
+
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  publishedAt     DateTime?
+  completedAt     DateTime?
+  cancelledAt     DateTime?
+
+  // Cancellation tracking
+  cancelReason    String?
+  cancelledBy     String?         // 'requester', 'traveller', 'admin', 'system'
+
+  // Relations
+  matches         Match[]
+  events          Event[]
+
+  @@index([requesterId])
+  @@index([status])
+  @@index([category])
+  @@index([createdAt])
+  @@index([deliveryCountry])
+  @@map("requests")
+}
+
+enum MatchStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  PURCHASED
+  SHIPPED
+  DELIVERED
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+model Match {
+  id              String      @id @default(cuid())
+  requestId       String
+  request         Request     @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  travellerId     String
+  traveller       User        @relation("MatchTraveller", fields: [travellerId], references: [id], onDelete: Cascade)
+
+  status          MatchStatus @default(PENDING)
+
+  // Pricing
+  agreedPrice     Decimal?    @db.Decimal(12, 2)
+  commission      Decimal?    @db.Decimal(12, 2)
+  platformFee     Decimal?    @db.Decimal(12, 2)
+
+  // Dates
+  expectedDelivery DateTime?
+  purchasedAt     DateTime?
+  shippedAt       DateTime?
+  deliveredAt     DateTime?
+  completedAt     DateTime?
+
+  // Notes
+  travellerNote   String?
+
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@unique([requestId, travellerId])
+  @@index([requestId])
+  @@index([travellerId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("matches")
+}
+
+// ============================================
+// MESSAGING
+// ============================================
+
+model Conversation {
+  id              String    @id @default(cuid())
+  requestId       String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  lastMessageAt   DateTime?
+
+  // Relations
+  participants    ConversationParticipant[]
+  messages        Message[]
+
+  @@index([lastMessageAt])
+  @@map("conversations")
+}
+
+model ConversationParticipant {
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId          String
+  user            User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  joinedAt        DateTime     @default(now())
+  lastReadAt      DateTime?
+
+  @@unique([conversationId, userId])
+  @@map("conversation_participants")
+}
+
+model Message {
+  id              String       @id @default(cuid())
+  conversationId  String
+  conversation    Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId        String
+  sender          User         @relation("MessageSender", fields: [senderId], references: [id], onDelete: Cascade)
+  recipientId     String?
+  recipient       User?        @relation("MessageRecipient", fields: [recipientId], references: [id], onDelete: SetNull)
+
+  content         String
+  isRead          Boolean      @default(false)
+
+  createdAt       DateTime     @default(now())
+
+  @@index([conversationId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("messages")
+}
+
+// ============================================
+// DISPUTES & REFUNDS
+// ============================================
+
+enum DisputeStatus {
+  OPEN
+  UNDER_REVIEW
+  RESOLVED_BUYER
+  RESOLVED_SELLER
+  RESOLVED_SPLIT
+  CLOSED
+}
+
+model Dispute {
+  id              String        @id @default(cuid())
+  matchId         String
+
+  raisedById      String
+  reason          String
+  description     String?
+  evidence        Json?
+
+  status          DisputeStatus @default(OPEN)
+  resolution      String?
+  refundAmount    Decimal?      @db.Decimal(12, 2)
+
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  resolvedAt      DateTime?
+
+  @@index([matchId])
+  @@index([status])
+  @@map("disputes")
+}
+
+// ============================================
+// ANALYTICS & EVENTS
+// ============================================
+
+enum EventType {
+  // Traffic
+  PAGEVIEW
+
+  // Authentication
+  SIGNUP
+  LOGIN
+  LOGOUT
+
+  // Marketplace
+  REQUEST_CREATED
+  REQUEST_PUBLISHED
+  REQUEST_CANCELLED
+  MATCH_CREATED
+  MATCH_ACCEPTED
+  MATCH_REJECTED
+  PURCHASE_MADE
+  DELIVERY_CONFIRMED
+  PAYMENT_RELEASED
+
+  // Wallet
+  PAYOUT_REQUESTED
+  PAYOUT_COMPLETED
+  PAYOUT_FAILED
+  TOPUP_COMPLETED
+  REFUND_ISSUED
+
+  // Disputes
+  DISPUTE_OPENED
+  DISPUTE_RESOLVED
+
+  // Subscriptions (Critical for SaaS metrics)
+  PLAN_VIEWED
+  CHECKOUT_STARTED
+  CHECKOUT_ABANDONED
+  SUBSCRIBED
+  SUBSCRIPTION_RENEWED
+  SUBSCRIPTION_UPGRADED
+  SUBSCRIPTION_DOWNGRADED
+  SUBSCRIPTION_CANCELLED
+  TRIAL_STARTED
+  TRIAL_CONVERTED
+  TRIAL_EXPIRED
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  OTHER
+}
+
+model Event {
+  id              String      @id @default(cuid())
+  type            EventType
+
+  // User (optional - not all events have users)
+  userId          String?
+  user            User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  // Request reference (optional)
+  requestId       String?
+  request         Request?    @relation(fields: [requestId], references: [id], onDelete: SetNull)
+
+  // Subscription reference (optional)
+  subscriptionId  String?
+
+  // Visitor tracking (for anonymous events)
+  sessionId       String?
+  ipHash          String?     // Anonymized IP hash
+  userAgent       String?
+  referrer        String?
+  path            String?
+
+  // Device & Source tracking
+  deviceType      DeviceType?
+  source          String?     // utm_source or parsed referrer domain
+  medium          String?     // utm_medium
+  campaign        String?     // utm_campaign
+
+  // Geographic
+  country         String?
+  city            String?
+
+  // Additional data
+  metadata        Json?
+
+  // Revenue attribution (for subscription events)
+  revenue         Decimal?    @db.Decimal(12, 2)
+
+  createdAt       DateTime    @default(now())
+
+  @@index([type])
+  @@index([userId])
+  @@index([createdAt])
+  @@index([sessionId])
+  @@index([deviceType])
+  @@index([source])
+  @@map("events")
+}
+
+// Daily aggregated stats for faster dashboard queries
+model DailyStats {
+  id              String   @id @default(cuid())
+  date            DateTime @db.Date @unique
+
+  // Visitors
+  totalVisits     Int      @default(0)
+  uniqueVisitors  Int      @default(0)
+  pageviews       Int      @default(0)
+
+  // Device breakdown
+  desktopVisits   Int      @default(0)
+  mobileVisits    Int      @default(0)
+  tabletVisits    Int      @default(0)
+
+  // Users
+  newSignups      Int      @default(0)
+  activeUsers     Int      @default(0)
+
+  // Requests
+  newRequests     Int      @default(0)
+  publishedRequests Int    @default(0)
+  completedRequests Int    @default(0)
+  cancelledRequests Int    @default(0)
+
+  // Matches
+  newMatches      Int      @default(0)
+  acceptedMatches Int      @default(0)
+  completedMatches Int     @default(0)
+
+  // Financial
+  gmv             Decimal  @default(0) @db.Decimal(14, 2)
+  platformFees    Decimal  @default(0) @db.Decimal(14, 2)
+  totalPayouts    Decimal  @default(0) @db.Decimal(14, 2)
+  failedPayouts   Int      @default(0)
+  refundAmount    Decimal  @default(0) @db.Decimal(14, 2)
+
+  // Subscriptions (Critical SaaS metrics)
+  newSubscriptions     Int      @default(0)
+  cancelledSubscriptions Int    @default(0)
+  trialStarts          Int      @default(0)
+  trialConversions     Int      @default(0)
+  trialExpiries        Int      @default(0)
+  upgrades             Int      @default(0)
+  downgrades           Int      @default(0)
+  mrr                  Decimal  @default(0) @db.Decimal(14, 2)  // End-of-day MRR
+  arr                  Decimal  @default(0) @db.Decimal(14, 2)  // End-of-day ARR
+  expansionMrr         Decimal  @default(0) @db.Decimal(14, 2)  // From upgrades
+  contractionMrr       Decimal  @default(0) @db.Decimal(14, 2)  // From downgrades
+  churnedMrr           Decimal  @default(0) @db.Decimal(14, 2)  // From cancellations
+
+  // Messages
+  messagesSent    Int      @default(0)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([date])
+  @@map("daily_stats")
+}
+
+// ============================================
+// SUBSCRIPTION PLANS
+// ============================================
+
+enum BillingCycle {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum PlanTier {
+  FREE
+  BASIC
+  PRO
+  ENTERPRISE
+}
+
+model Plan {
+  id              String       @id @default(cuid())
+  name            String       @unique
+  tier            PlanTier     @default(BASIC)
+  description     String?
+
+  // Pricing
+  monthlyPrice    Decimal      @db.Decimal(10, 2)
+  yearlyPrice     Decimal?     @db.Decimal(10, 2)
+  currency        String       @default("EUR")
+
+  // Features
+  features        Json?        // Array of feature strings
+  limits          Json?        // { requestsPerMonth: 10, etc. }
+
+  // Trial
+  trialDays       Int          @default(0)
+
+  // Status
+  isActive        Boolean      @default(true)
+  isPublic        Boolean      @default(true)
+  sortOrder       Int          @default(0)
+
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  // Relations
+  subscriptions   Subscription[]
+
+  @@index([isActive])
+  @@index([tier])
+  @@map("plans")
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+  EXPIRED
+  PAUSED
+}
+
+model Subscription {
+  id              String             @id @default(cuid())
+  userId          String
+  planId          String
+  plan            Plan               @relation(fields: [planId], references: [id])
+
+  status          SubscriptionStatus @default(TRIALING)
+  billingCycle    BillingCycle       @default(MONTHLY)
+
+  // Pricing (at time of subscription, may differ from plan)
+  currentPrice    Decimal            @db.Decimal(10, 2)
+  currency        String             @default("EUR")
+
+  // Dates
+  startDate       DateTime           @default(now())
+  endDate         DateTime?          // For non-renewing subscriptions
+  trialStartDate  DateTime?
+  trialEndDate    DateTime?
+  cancelledAt     DateTime?
+  pausedAt        DateTime?
+
+  // Billing
+  currentPeriodStart DateTime        @default(now())
+  currentPeriodEnd   DateTime
+  nextBillingDate    DateTime?
+
+  // Metadata
+  cancelReason    String?
+  cancelFeedback  String?
+  stripeSubId     String?            // External payment provider ID
+  metadata        Json?
+
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  // Relations
+  history         SubscriptionHistory[]
+
+  @@index([userId])
+  @@index([planId])
+  @@index([status])
+  @@index([createdAt])
+  @@index([currentPeriodEnd])
+  @@map("subscriptions")
+}
+
+enum SubscriptionChangeType {
+  CREATED
+  UPGRADED
+  DOWNGRADED
+  RENEWED
+  CANCELLED
+  REACTIVATED
+  PAUSED
+  RESUMED
+  TRIAL_STARTED
+  TRIAL_CONVERTED
+  TRIAL_EXPIRED
+  PRICE_CHANGED
+}
+
+model SubscriptionHistory {
+  id              String                 @id @default(cuid())
+  subscriptionId  String
+  subscription    Subscription           @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  changeType      SubscriptionChangeType
+  fromPlanId      String?
+  toPlanId        String?
+  fromPrice       Decimal?               @db.Decimal(10, 2)
+  toPrice         Decimal?               @db.Decimal(10, 2)
+
+  reason          String?
+  metadata        Json?
+
+  createdAt       DateTime               @default(now())
+
+  @@index([subscriptionId])
+  @@index([changeType])
+  @@index([createdAt])
+  @@map("subscription_history")
+}
+
+// ============================================
+// AUDIT LOGGING
+// ============================================
+
+enum AuditAction {
+  LOGIN_SUCCESS
+  LOGIN_FAILURE
+  LOGOUT
+  USER_VIEWED
+  USER_SUSPENDED
+  USER_UNSUSPENDED
+  USER_DELETED
+  WALLET_ADJUSTED
+  WALLET_RESET
+  REQUEST_STATUS_CHANGED
+  MATCH_STATUS_CHANGED
+  PAYOUT_APPROVED
+  PAYOUT_REJECTED
+  DISPUTE_RESOLVED
+  SETTINGS_CHANGED
+  EXPORT_DATA
+}
+
+model AuditLog {
+  id              String      @id @default(cuid())
+  adminId         String?
+  admin           AdminUser?  @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  action          AuditAction
+  targetType      String?     // 'user', 'request', 'wallet', etc.
+  targetId        String?
+
+  ipAddress       String?
+  userAgent       String?
+
+  details         Json?
+  previousValue   Json?
+  newValue        Json?
+
+  createdAt       DateTime    @default(now())
+
+  @@index([adminId])
+  @@index([action])
+  @@index([targetType, targetId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
