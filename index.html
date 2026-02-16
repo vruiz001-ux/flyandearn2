@@ -2908,7 +2908,7 @@
                 <p id="hero-subtitle">Connect with verified travelers to get duty-free spirits, perfume & electronics at airport prices — delivered to your city. 100% legal within EU customs allowances.</p>
                 <div class="hero-cta-buttons" style="display: flex; gap: 1rem; justify-content: flex-start; flex-wrap: wrap;">
                     <a href="#requests" class="btn btn-primary btn-large" id="btn-see-requests">Browse Available Items →</a>
-                    <button class="btn btn-outline btn-large" id="btn-start-earning" onclick="openAuthModal('register')">Start Earning as a Traveler →</button>
+                    <button class="btn btn-outline btn-large" id="btn-start-earning" onclick="openAuthModal('signup')">Start Earning as a Traveler →</button>
                 </div>
             </div>
             <div class="hero-preview">
@@ -3255,8 +3255,8 @@
             <h2 class="cta-title" data-i18n="cta.title">Ready to Start?</h2>
             <p class="cta-subtitle" data-i18n="cta.subtitle">Join thousands of travelers earning and buyers saving.</p>
             <div class="cta-buttons">
-                <button class="btn btn-primary btn-large" data-i18n="cta.earnMoney">I Want to Earn Money</button>
-                <button class="btn btn-outline btn-large" data-i18n="cta.saveMoney">I Want to Save Money</button>
+                <button class="btn btn-primary btn-large" data-i18n="cta.earnMoney" onclick="handleStartEarning()">I Want to Earn Money</button>
+                <button class="btn btn-outline btn-large" data-i18n="cta.saveMoney" onclick="handleStartSaving()">I Want to Save Money</button>
             </div>
         </div>
     </section>

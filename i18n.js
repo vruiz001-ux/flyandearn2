@@ -2648,25 +2648,63 @@ const T = {
         return this.currentLang;
     },
 
-    // Initialize
+    // Initialize with auto-detection
     init() {
-        // Check cookie first (new system), then localStorage (both keys)
+        const supported = ['en', 'pl', 'fr', 'de'];
+
+        // 1. Check saved preference (cookie or localStorage) — always wins
         const cookieMatch = document.cookie.match(/(?:^|; )fae_locale=([^;]*)/);
         const cookieLang = cookieMatch ? cookieMatch[1].split('-')[0] : null;
         const newSaved = localStorage.getItem('flyandearn_lang');
         const oldSaved = localStorage.getItem('fae_language');
         const saved = cookieLang || newSaved || oldSaved;
 
-        if (saved && ['en', 'pl', 'fr', 'de'].includes(saved)) {
+        if (saved && supported.includes(saved)) {
             this.currentLang = saved;
-        } else {
-            const browserLang = navigator.language.substring(0, 2);
-            if (['en', 'pl', 'fr', 'de'].includes(browserLang)) {
-                this.currentLang = browserLang;
-            }
+            document.documentElement.lang = this.currentLang;
+            return this.currentLang;
         }
+
+        // 2. Try browser language (instant, no network)
+        const browserLang = (navigator.language || '').substring(0, 2).toLowerCase();
+        if (supported.includes(browserLang)) {
+            this.currentLang = browserLang;
+            // Save so we don't re-detect every visit
+            this.setLanguage(browserLang);
+            document.documentElement.lang = this.currentLang;
+            return this.currentLang;
+        }
+
+        // 3. Default to 'en' immediately, then try IP-based geolocation async
+        this.currentLang = 'en';
         document.documentElement.lang = this.currentLang;
+        this._detectByIP();
+
         return this.currentLang;
+    },
+
+    // Async IP-based language detection (non-blocking fallback)
+    _detectByIP() {
+        const supported = ['en', 'pl', 'fr', 'de'];
+        const countryLangMap = {
+            'PL': 'pl',
+            'DE': 'de', 'AT': 'de', 'CH': 'de',
+            'FR': 'fr', 'BE': 'fr', 'LU': 'fr',
+        };
+
+        fetch('https://ipapi.co/json/', { signal: AbortSignal.timeout(3000) })
+            .then(r => r.json())
+            .then(data => {
+                const detectedLang = countryLangMap[data.country_code];
+                if (detectedLang && supported.includes(detectedLang) && detectedLang !== this.currentLang) {
+                    this.setLanguage(detectedLang);
+                    this.updatePage();
+                    // Update UI elements that depend on language
+                    if (typeof updateLangDropdown === 'function') updateLangDropdown();
+                    if (typeof updateLandingText === 'function') updateLandingText();
+                }
+            })
+            .catch(() => {}); // Silent fail — user stays on 'en'
     },
 
     // Update all data-i18n elements

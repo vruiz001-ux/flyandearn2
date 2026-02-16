@@ -80,17 +80,10 @@
                 return prefix + num.toLocaleString();
             },
 
-            // Update the hero stats display
+            // Update stats display (hero stats section was removed in redesign)
             updateDisplay() {
-                const stats = this.get();
-                const avgFee = this.getAvgFee();
-
-                const statValues = document.querySelectorAll('.hero-stats .stat-value');
-                if (statValues.length >= 3) {
-                    statValues[0].textContent = this.formatNumber(stats.totalSavings, '€');
-                    statValues[1].textContent = stats.activeTravelers.toLocaleString();
-                    statValues[2].textContent = '€' + avgFee;
-                }
+                // No-op: hero stats elements no longer exist
+                // Stats are still tracked in localStorage for future use
             },
 
             // Initialize stats display on page load
@@ -1444,40 +1437,26 @@
         // MAIN APPLICATION FUNCTIONALITY
         // ==========================================
 
-        // Role toggle functionality
+        // Role toggle functionality (hero role toggle was removed in redesign)
         let currentRole = 'traveler';
 
         function setRole(role) {
             currentRole = role;
-            const buttons = document.querySelectorAll('.role-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            if (event && event.target) {
-                event.target.classList.add('active');
-            }
             updateHeroContent();
         }
 
         function updateHeroContent() {
             if (typeof T === 'undefined' || !T.t) {
-                console.error('T translation object not available');
                 return;
             }
 
             const title = document.getElementById('hero-title');
             const subtitle = document.getElementById('hero-subtitle');
-            const tagline = document.getElementById('hero-tagline');
-            const legal = document.getElementById('hero-legal');
 
-            if (currentRole === 'traveler') {
-                if (title) title.innerHTML = T.t('hero.title');
-                if (subtitle) subtitle.textContent = T.t('hero.subtitle');
-                if (tagline) tagline.textContent = T.t('hero.tagline');
-            } else {
-                if (title) title.innerHTML = T.t('hero.buyer.title');
-                if (subtitle) subtitle.textContent = T.t('hero.buyer.subtitle');
-                if (tagline) tagline.textContent = T.t('hero.buyer.tagline');
-            }
-            if (legal) legal.textContent = '✅ ' + T.t('hero.legal');
+            // Hero was redesigned — no more role toggle, tagline, or legal elements
+            // Just update title and subtitle if they exist
+            if (title) title.innerHTML = T.t('hero.title');
+            if (subtitle) subtitle.textContent = T.t('hero.subtitle');
         }
 
         // ==========================================
@@ -1831,8 +1810,7 @@
             });
         }, observerOptions);
 
-        const heroStats = document.querySelector('.hero-stats');
-        if (heroStats) statsObserver.observe(heroStats);
+        // Hero stats section was removed in redesign — observer no longer needed
 
         // Add fade-in animation for cards on scroll
         const cardObserver = new IntersectionObserver((entries) => {
@@ -1927,12 +1905,6 @@
             // Update hero section based on current role
             updateHeroContent();
 
-            // Update stat labels (order: saved, travelers, fee)
-            document.querySelectorAll('.hero-stat-label').forEach((el, i) => {
-                const keys = ['hero.stat.savings', 'hero.stat.users', 'hero.stat.fee'];
-                if (keys[i]) el.textContent = t(keys[i]);
-            });
-            
             // Update navigation links
             document.querySelectorAll('header nav a, .mobile-nav a').forEach(link => {
                 const href = link.getAttribute('href') || '';
