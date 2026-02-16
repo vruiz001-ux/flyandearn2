@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="theme-color" content="#0a0a0b">
+    <title>About - FlyAndEarn.eu | Connecting Travelers and Buyers</title>
+    <meta name="description" content="Learn about FlyAndEarn.eu - connecting travelers and buyers to unlock savings through duty-free allowances and global shopping. Founded by aviation enthusiasts.">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="About FlyAndEarn.eu - Connecting Travelers and Buyers">
+    <meta property="og:description" content="Founded by aviation enthusiasts who noticed travelers leaving their duty-free allowance unused. We connect travelers and buyers to unlock savings.">
+    <meta property="og:image" content="https://flyandearn.eu/og-about.jpg">
+    <meta property="og:url" content="https://flyandearn.eu/about">
+    <meta property="og:type" content="website">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "FlyAndEarn.eu",
+        "legalName": "Tropos Sp. z o.o.",
+        "url": "https://flyandearn.eu",
+        "logo": "https://flyandearn.eu/favicon.svg",
+        "foundingDate": "2024",
+        "foundingLocation": {
+            "@type": "Place",
+            "address": {
+                "@type": "PostalAddress",
+                "addressCountry": "PL",
+                "addressLocality": "Warsaw"
+            }
+        },
+        "description": "Connecting travelers and buyers to unlock savings through duty-free allowances and global shopping",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+48-000-000-000",
+            "contactType": "customer service",
+            "email": "contact@flyandearn.eu"
+        },
+        "sameAs": [
+            "https://twitter.com/flyandearn",
+            "https://linkedin.com/company/flyandearn"
+        ]
+    }
+    </script>
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+
+    <!-- Navigation CSS -->
+    <link rel="stylesheet" href="nav.css">
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #18181b;
+            --bg-card-hover: #1f1f23;
+            --accent-gold: #d4a853;
+            --accent-gold-light: #e8c878;
+            --accent-teal: #2dd4bf;
+            --accent-coral: #f472b6;
+            --text-primary: #fafafa;
+            --text-secondary: #a1a1aa;
+            --text-muted: #a1a1aa;
+            --border: #27272a;
+            --border-light: #3f3f46;
+            --gradient-gold: linear-gradient(135deg, #d4a853 0%, #f0d78c 50%, #d4a853 100%);
+            --gradient-card: linear-gradient(145deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0) 100%);
+            --shadow-glow: 0 0 60px rgba(212, 168, 83, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 99999;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 11, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* Main content */
+        main, #mainContent {
+            padding-top: 100px;
+            min-height: 100vh;
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-hero {
+            text-align: center;
+            padding: 4rem 2rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .about-hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: var(--gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .content-section {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .section {
+            margin-bottom: 4rem;
+        }
+
+        .section h2 {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-gold);
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .company-info {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .company-info h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .service-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .service-card .icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-gold);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .service-card h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .value-item {
+            text-align: center;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .value-item .icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin: 0 auto 1rem;
+        }
+
+        .value-item h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .value-item p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        .team-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            margin: 2rem 0;
+        }
+
+        .cta-section {
+            text-align: center;
+            padding: 3rem 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            margin: 2rem 0;
+        }
+
+        .cta-section h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .btn-cta {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--gradient-gold);
+            color: #0a0a0b;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 168, 83, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--bg-secondary);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        footer a:hover {
+            color: var(--accent-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .content-section {
+                padding: 1rem;
+            }
+
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .values-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .values-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Skip Link for Accessibility -->
+    <a href="#mainContent" class="skip-link">Skip to main content</a>
+
+    <!-- Site Header Navigation -->
+    <header class="site-header" id="site-header" role="banner">
+        <div class="header-container">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+
+            <nav class="main-nav" aria-label="Main navigation">
+                <ul class="main-nav-list" role="menubar">
+                    <li class="nav-item" role="none">
+                        <a href="/#how-it-works" class="nav-link" role="menuitem">How It Works</a>
+                    </li>
+                    <li class="nav-item has-dropdown" role="none">
+                        <a href="/#requests" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                            Browse <span class="dropdown-arrow">▼</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <ul class="nav-dropdown-menu" role="menu">
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/#requests" class="nav-dropdown-link" role="menuitem">Browse Requests</a>
+                                </li>
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/dashboard#travelers" class="nav-dropdown-link" role="menuitem">Find Travelers</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="/#savings" class="nav-link" role="menuitem">Calculator</a>
+                    </li>
+                    <li class="nav-item" role="none">
+                        <a href="/pricing" class="nav-link" role="menuitem">Pricing</a>
+                    </li>
+                    <li class="nav-item has-dropdown" role="none">
+                        <a href="#" class="nav-link" role="menuitem" aria-haspopup="true" aria-expanded="false">
+                            Help <span class="dropdown-arrow">▼</span>
+                        </a>
+                        <div class="nav-dropdown">
+                            <ul class="nav-dropdown-menu" role="menu">
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/faq" class="nav-dropdown-link" role="menuitem">FAQ</a>
+                                </li>
+                                <li class="nav-dropdown-item" role="none">
+                                    <a href="/contact" class="nav-dropdown-link" role="menuitem">Contact</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+
+            <div class="nav-cta">
+                <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+            </div>
+
+            <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav">
+                <span class="hamburger-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true"></div>
+
+    <!-- Mobile Navigation -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation" aria-hidden="true">
+        <div class="mobile-nav-header">
+            <a href="/" class="site-logo" aria-label="FlyAndEarn Home">
+                <span class="logo-text"><span class="fly">Fly</span><span class="amp">&</span><span class="earn">Earn</span></span>
+            </a>
+            <button class="mobile-nav-close" aria-label="Close menu">×</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="/" class="mobile-nav-link"><span class="mobile-nav-link-icon">🏠</span> Home</a></li>
+            <li><a href="/#how-it-works" class="mobile-nav-link"><span class="mobile-nav-link-icon">🔄</span> How It Works</a></li>
+            <li><a href="/#savings" class="mobile-nav-link"><span class="mobile-nav-link-icon">🧮</span> Calculator</a></li>
+            <li><a href="/pricing" class="mobile-nav-link"><span class="mobile-nav-link-icon">💳</span> Pricing</a></li>
+            <li class="mobile-nav-divider" role="separator"></li>
+            <li><a href="/faq" class="mobile-nav-link"><span class="mobile-nav-link-icon">❓</span> FAQ</a></li>
+            <li><a href="/contact" class="mobile-nav-link"><span class="mobile-nav-link-icon">📧</span> Contact</a></li>
+        </ul>
+        <div class="mobile-nav-cta">
+            <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+        </div>
+    </nav>
+
+    <div id="mainContent" role="main">
+        <section class="about-hero">
+            <h1>About FlyAndEarn</h1>
+            <p>Connecting travelers and buyers to unlock savings through duty-free allowances and global shopping.</p>
+        </section>
+
+        <div class="content-section">
+            <div class="company-info">
+                <h3>Company Information</h3>
+                <p><strong>Legal Entity:</strong> Tropos Sp. z o.o.</p>
+                <p><strong>Registration:</strong> Polish registered company</p>
+                <p><strong>Location:</strong> Warsaw, Poland</p>
+            </div>
+
+            <section class="section">
+                <h2>Our Mission</h2>
+                <p>At FlyAndEarn, we're on a mission to connect travelers and buyers to unlock savings through duty-free allowances and global shopping. We believe that everyone should have access to great products at fair prices, regardless of where they are in the world.</p>
+                <p>Our platform facilitates two types of connections: travelers can help others by purchasing duty-free goods during their journeys, while buyers can access products from anywhere in the world through our network of helpful travelers.</p>
+            </section>
+
+            <section class="section">
+                <h2>How It Started</h2>
+                <p>FlyAndEarn was founded by aviation enthusiasts who noticed a common problem: travelers were leaving their valuable duty-free allowances unused. Every day, millions of passengers pass through airports with the legal right to purchase duty-free goods, but many don't take advantage of this opportunity.</p>
+                <p>At the same time, we saw people struggling to access specific products that weren't available in their region or were significantly more expensive locally. The solution was clear: create a platform that connects these two groups in a way that benefits everyone.</p>
+            </section>
+
+            <section class="section">
+                <h2>Our Services</h2>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="icon">✈️</div>
+                        <h4>Duty-Free Service</h4>
+                        <p>Connect with travelers who can purchase duty-free goods for you during their flights. Perfect for accessing airport-exclusive products and tax-free prices.</p>
+                    </div>
+                    <div class="service-card">
+                        <div class="icon">🛍️</div>
+                        <h4>Shop Anywhere Service</h4>
+                        <p>Get help from travelers to purchase items from anywhere in the world. Access region-specific products, better prices, or items not available in your area.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>Our Values</h2>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <div class="icon">🤝</div>
+                        <h4>Trust</h4>
+                        <p>Building reliable connections between strangers through transparency and accountability</p>
+                    </div>
+                    <div class="value-item">
+                        <div class="icon">⚖️</div>
+                        <h4>Legality</h4>
+                        <p>Operating within all legal frameworks and customs regulations worldwide</p>
+                    </div>
+                    <div class="value-item">
+                        <div class="icon">👥</div>
+                        <h4>Community</h4>
+                        <p>Fostering a helpful global community of travelers and shoppers</p>
+                    </div>
+                    <div class="value-item">
+                        <div class="icon">💰</div>
+                        <h4>Savings</h4>
+                        <p>Making quality products more accessible and affordable for everyone</p>
+                    </div>
+                </div>
+            </section>
+
+            <div class="team-section">
+                <h2>Our Team</h2>
+                <p>We're a small team of aviation and tech enthusiasts based in Warsaw, Poland. Our diverse backgrounds in travel, technology, and e-commerce help us understand both the opportunities and challenges in connecting global buyers with travelers.</p>
+                <p>Every day, we work to make international shopping more accessible, affordable, and reliable for people around the world.</p>
+            </div>
+
+            <div class="cta-section">
+                <h3>Ready to start saving?</h3>
+                <p>Join our community of travelers and buyers today.</p>
+                <a href="/contact" class="btn-cta">Get in Touch</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 FlyAndEarn.eu - Tropos Sp. z o.o.</p>
+        <nav>
+            <a href="/terms">Terms of Service</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/about">About Us</a>
+            <a href="mailto:contact@flyandearn.eu">Contact</a>
+            <a href="/admin" aria-label="Admin login" style="opacity: 0.7;">Admin</a>
+        </nav>
+    </footer>
+
+    <!-- Navigation JavaScript -->
+    <script src="i18n.js"></script>
+    <script src="nav.js"></script>
+</body>
+</html>

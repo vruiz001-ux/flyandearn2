@@ -2862,7 +2862,7 @@
             <li><a class='mobile-nav-link' href='/faq'><span class="mobile-nav-link-icon">❓</span> FAQ</a></li>
             <li><a class='mobile-nav-link' data-i18n='footer.contact' href='/contact'><span class="mobile-nav-link-icon">📧</span> Contact</a></li>
             <li class="mobile-nav-divider" role="separator"></li>
-            <li><a href="#" class="mobile-nav-link" onclick="openMessagesModal(); return false;"><span class="mobile-nav-link-icon">💬</span> Messages <span class="messages-badge" style="display: none; background: var(--accent-gold); color: #000; font-size: 0.65rem; font-weight: 700; min-width: 18px; height: 18px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 0.25rem; margin-left: auto;">0</span></a></li>
+            <li><a href="#" class="mobile-nav-link" onclick="closeMobileMenu(); openMessagesModal(); return false;"><span class="mobile-nav-link-icon">💬</span> Messages <span class="messages-badge" style="display: none; background: var(--accent-gold); color: #000; font-size: 0.65rem; font-weight: 700; min-width: 18px; height: 18px; border-radius: 9px; display: inline-flex; align-items: center; justify-content: center; padding: 0 0.25rem; margin-left: auto;">0</span></a></li>
         </ul>
 
         <!-- Mobile Language Selector -->
@@ -2889,7 +2889,7 @@
         </div>
 
         <div class="mobile-nav-cta">
-            <button class="btn btn-outline" id="mobileLoginBtn" data-i18n="btn.login" onclick="openAuthModal('login')">Log In</button>
+            <button class="btn btn-outline" id="mobileLoginBtn" data-i18n="btn.login" onclick="closeMobileMenu(); openAuthModal('login')">Log In</button>
             <a class='btn btn-primary' data-i18n='nav.dashboard' href='/dashboard'>Dashboard</a>
         </div>
     </nav>
@@ -3463,7 +3463,7 @@
             </div>
             <div class="footer-column">
                 <h4 data-i18n="footer.company">Company</h4>
-                <a href="/#about" data-i18n="footer.aboutUs">About Us</a>
+                <a href="/about" data-i18n="footer.aboutUs">About Us</a>
                 <a href="/contact" data-i18n="footer.careers">Careers</a>
                 <a href="/contact" data-i18n="footer.press">Press</a>
                 <a href="#" onclick="showToast('Blog coming soon!', 'info'); return false;" data-i18n="footer.blog">Blog</a>

@@ -258,6 +258,7 @@
             font-size: 1.75rem;
         }
 
+        .tier-free .tier-icon { background: linear-gradient(135deg, #2dd4bf 0%, #67e8f9 50%, #2dd4bf 100%); }
         .tier-silver .tier-icon { background: linear-gradient(135deg, #9ca3af 0%, #d1d5db 50%, #9ca3af 100%); }
         .tier-gold .tier-icon { background: var(--gradient-gold); }
         .tier-platinum .tier-icon { background: linear-gradient(135deg, #475569 0%, #94a3b8 50%, #475569 100%); }
@@ -406,6 +407,149 @@
             font-size: 0.875rem;
         }
 
+        /* Comparison table */
+        .comparison-section {
+            max-width: 1200px;
+            margin: 4rem auto 0;
+            padding: 0 2rem 4rem;
+        }
+
+        .comparison-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .comparison-table {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            overflow: hidden;
+            overflow-x: auto;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: var(--bg-secondary);
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .comparison-table th:first-child {
+            width: 30%;
+        }
+
+        .comparison-table .plan-header {
+            text-align: center;
+            position: relative;
+        }
+
+        .comparison-table .plan-header.featured {
+            background: linear-gradient(145deg, var(--bg-secondary) 0%, rgba(212, 168, 83, 0.1) 100%);
+        }
+
+        .comparison-table .plan-header.featured::after {
+            content: 'Most Popular';
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gradient-gold);
+            color: #0a0a0b;
+            padding: 0.125rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.625rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .comparison-table td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table .check-yes {
+            color: var(--accent-teal);
+            font-size: 1.25rem;
+        }
+
+        .comparison-table .check-no {
+            color: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        /* FAQ section */
+        .faq-section {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .faq-section h3 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--accent-gold);
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .faq-question:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .faq-question::after {
+            content: '+';
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            transition: transform 0.3s;
+        }
+
+        .faq-item.active .faq-question::after {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+
         /* Current subscription banner */
         .subscription-banner {
             max-width: 800px;
@@ -490,6 +634,24 @@
 
             .header-content {
                 padding: 0 1rem;
+            }
+
+            .comparison-table {
+                font-size: 0.875rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.75rem 0.5rem;
+            }
+
+            .comparison-table th:first-child,
+            .comparison-table td:first-child {
+                min-width: 120px;
+            }
+
+            .fee-breakdown {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -597,7 +759,7 @@
     <div id="mainContent" role="main">
         <section class="pricing-hero">
             <h1>Choose Your Plan</h1>
-            <p>Unlock duty-free savings with our annual subscription plans. Pay once, save all year.</p>
+            <p>Start for free or unlock unlimited savings with our annual subscription plans. No commitment required.</p>
         </section>
 
         <div class="currency-toggle">
@@ -616,19 +778,38 @@
         </div>
 
         <div class="pricing-container" id="pricingCards">
+            <!-- Free -->
+            <div class="pricing-card tier-free" data-tier="FREE">
+                <div class="tier-icon">&#9889;</div>
+                <h2>Free</h2>
+                <p class="description">Perfect for trying FlyAndEarn</p>
+                <div class="price">
+                    <span class="amount">0</span>
+                    <span class="period">/ forever</span>
+                    <div class="other-currency">No subscription needed</div>
+                </div>
+                <div class="purchase-limit">2 transactions per year</div>
+                <ul class="features-list">
+                    <li><span class="check">&#10003;</span> 2 transactions per year</li>
+                    <li><span class="check">&#10003;</span> Standard support</li>
+                    <li><span class="check">&#10003;</span> Basic matching</li>
+                </ul>
+                <button class="subscribe-btn" data-tier="FREE">Get Started Free</button>
+            </div>
+
             <!-- Silver -->
             <div class="pricing-card tier-silver" data-tier="SILVER">
                 <div class="tier-icon">&#127775;</div>
                 <h2>Silver</h2>
-                <p class="description">Perfect for occasional travelers</p>
+                <p class="description">For occasional travelers</p>
                 <div class="price">
                     <span class="currency" data-eur="&#8364;" data-pln="zł" data-gbp="£">€</span><span class="amount" data-eur="4.99" data-pln="19.99" data-gbp="3.99">4.99</span>
                     <span class="period">/ year</span>
                     <div class="other-currency" data-eur="~19.99 PLN" data-pln="~€4.99" data-gbp="~€4.99">~19.99 PLN</div>
                 </div>
-                <div class="purchase-limit">Up to 5 purchases</div>
+                <div class="purchase-limit">5 transactions per year</div>
                 <ul class="features-list">
-                    <li><span class="check">&#10003;</span> 5 purchases per year</li>
+                    <li><span class="check">&#10003;</span> 5 transactions per year</li>
                     <li><span class="check">&#10003;</span> Standard support</li>
                     <li><span class="check">&#10003;</span> Basic tracking</li>
                 </ul>
@@ -639,15 +820,15 @@
             <div class="pricing-card tier-gold featured" data-tier="GOLD">
                 <div class="tier-icon">&#11088;</div>
                 <h2>Gold</h2>
-                <p class="description">For regular travelers</p>
+                <p class="description">Most popular for regular travelers</p>
                 <div class="price">
                     <span class="currency" data-eur="&#8364;" data-pln="zł" data-gbp="£">€</span><span class="amount" data-eur="6.99" data-pln="29.99" data-gbp="5.99">6.99</span>
                     <span class="period">/ year</span>
                     <div class="other-currency" data-eur="~29.99 PLN" data-pln="~€6.99" data-gbp="~€6.99">~29.99 PLN</div>
                 </div>
-                <div class="purchase-limit">Up to 10 purchases</div>
+                <div class="purchase-limit">10 transactions per year</div>
                 <ul class="features-list">
-                    <li><span class="check">&#10003;</span> 10 purchases per year</li>
+                    <li><span class="check">&#10003;</span> 10 transactions per year</li>
                     <li><span class="check">&#10003;</span> Priority support</li>
                     <li><span class="check">&#10003;</span> Advanced tracking</li>
                     <li><span class="check">&#10003;</span> Early access to deals</li>
@@ -665,9 +846,9 @@
                     <span class="period">/ year</span>
                     <div class="other-currency" data-eur="~49.99 PLN" data-pln="~€11.99" data-gbp="~€11.99">~49.99 PLN</div>
                 </div>
-                <div class="purchase-limit">Unlimited purchases</div>
+                <div class="purchase-limit">Unlimited transactions</div>
                 <ul class="features-list">
-                    <li><span class="check">&#10003;</span> Unlimited purchases</li>
+                    <li><span class="check">&#10003;</span> Unlimited transactions</li>
                     <li><span class="check">&#10003;</span> VIP support</li>
                     <li><span class="check">&#10003;</span> Premium tracking</li>
                     <li><span class="check">&#10003;</span> Exclusive deals</li>
@@ -681,15 +862,119 @@
             <h3>Transparent Fee Structure</h3>
             <div class="fee-breakdown">
                 <div class="fee-item">
+                    <div class="percentage">15%</div>
+                    <div class="label">Duty-Free Service</div>
+                </div>
+                <div class="fee-item">
+                    <div class="percentage">20%</div>
+                    <div class="label">Shop Anywhere Service</div>
+                </div>
+                <div class="fee-item">
                     <div class="percentage">5%</div>
                     <div class="label">Platform Fee</div>
                 </div>
-                <div class="fee-item">
-                    <div class="percentage">15%</div>
-                    <div class="label">Traveller Service Fee</div>
+            </div>
+            <p class="fee-note">Service fees are calculated on the goods value. Platform fee applies to all transactions. No hidden charges.</p>
+        </section>
+
+        <section class="comparison-section">
+            <h3>Compare All Plans</h3>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Features</th>
+                            <th class="plan-header">Free</th>
+                            <th class="plan-header">Silver</th>
+                            <th class="plan-header featured">Gold</th>
+                            <th class="plan-header">Platinum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Annual Price</td>
+                            <td>€0</td>
+                            <td>€4.99</td>
+                            <td>€6.99</td>
+                            <td>€11.99</td>
+                        </tr>
+                        <tr>
+                            <td>Transactions per Year</td>
+                            <td>2</td>
+                            <td>5</td>
+                            <td>10</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Support Level</td>
+                            <td>Standard</td>
+                            <td>Standard</td>
+                            <td>Priority</td>
+                            <td>VIP</td>
+                        </tr>
+                        <tr>
+                            <td>Order Tracking</td>
+                            <td>Basic</td>
+                            <td>Basic</td>
+                            <td>Advanced</td>
+                            <td>Premium</td>
+                        </tr>
+                        <tr>
+                            <td>Traveler Matching</td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td>Priority</td>
+                        </tr>
+                        <tr>
+                            <td>Early Access to Deals</td>
+                            <td><span class="check-no">✕</span></td>
+                            <td><span class="check-no">✕</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td>Exclusive Deals</td>
+                            <td><span class="check-no">✕</span></td>
+                            <td><span class="check-no">✕</span></td>
+                            <td><span class="check-no">✕</span></td>
+                            <td><span class="check-yes">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="faq-section">
+            <h3>Frequently Asked Questions</h3>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I try FlyAndEarn for free?</div>
+                <div class="faq-answer">
+                    Yes! Our Free tier allows you to complete 2 transactions per year without any subscription. It's perfect for trying out the platform and seeing how much you can save.
                 </div>
             </div>
-            <p class="fee-note">Fees are calculated on the duty-free goods value. No hidden charges.</p>
+
+            <div class="faq-item">
+                <div class="faq-question">What counts as a transaction?</div>
+                <div class="faq-answer">
+                    One transaction equals one completed order, regardless of the number of items in that order. For example, if you order 3 different products in a single request, that counts as 1 transaction.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I switch plans?</div>
+                <div class="faq-answer">
+                    Yes, you can upgrade or downgrade your plan at any time. When upgrading, you'll pay the prorated difference. When downgrading, the change takes effect at your next billing cycle.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Is there a refund policy?</div>
+                <div class="faq-answer">
+                    Yes, we offer pro-rated refunds within 30 days of purchase. If you're not satisfied with your subscription, contact us and we'll refund the unused portion of your plan.
+                </div>
+            </div>
         </section>
     </div>
 
@@ -800,6 +1085,12 @@
             btn.addEventListener('click', async () => {
                 const tier = btn.dataset.tier;
 
+                // Handle Free tier - just redirect to signup
+                if (tier === 'FREE') {
+                    window.location.href = '/#signup';
+                    return;
+                }
+
                 if (!currentUser) {
                     window.location.href = '/#signup';
                     return;
@@ -845,6 +1136,24 @@
             alert('Checkout was cancelled. You can try again when you\'re ready.');
             window.history.replaceState({}, document.title, '/pricing');
         }
+
+        // FAQ accordion functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const faqItem = question.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all FAQ items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't already active
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                }
+            });
+        });
 
         // Initialize
         setCurrencyFromLanguage();

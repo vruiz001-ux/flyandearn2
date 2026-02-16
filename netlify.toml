@@ -54,3 +54,8 @@
   from = "/routes/paris-bangkok"
   to = "/routes/paris-bangkok.html"
   status = 200
+
+[[redirects]]
+  from = "/about"
+  to = "/about.html"
+  status = 200

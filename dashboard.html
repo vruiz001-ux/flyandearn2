@@ -1351,11 +1351,11 @@
                 <div class="form-row">
                     <div class="form-group">
                         <label class="form-label">Departure Date <span class="required">*</span></label>
-                        <input type="date" class="form-input" id="tripDeparture">
+                        <input type="date" class="form-input" id="tripDeparture" min="">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Return Date</label>
-                        <input type="date" class="form-input" id="tripReturn">
+                        <input type="date" class="form-input" id="tripReturn" min="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -3540,12 +3540,30 @@
         if (modalId === 'createRequest') {
             initRequestForm();
         }
+        if (modalId === 'createTrip') {
+            initTripForm();
+        }
         if (originalShowModal) {
             originalShowModal(modalId);
         } else {
             document.getElementById('modal-' + modalId).style.display = 'flex';
         }
     };
+    
+    function initTripForm() {
+        // Set minimum dates to today
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('tripDeparture').min = today;
+        document.getElementById('tripReturn').min = today;
+        
+        // Add change listener to departure date to update return date minimum
+        document.getElementById('tripDeparture').addEventListener('change', function() {
+            const departureDate = this.value;
+            if (departureDate) {
+                document.getElementById('tripReturn').min = departureDate;
+            }
+        });
+    }
 
     // Legacy function for backward compatibility
     function updateServiceFeeHint() {
@@ -3605,8 +3623,29 @@
                 data.outsideDutyFreeConstraints = constraintsInput || null;
             }
 
+            // Validate required fields
             if (!data.fromAirport || !data.fromCity || !data.toAirport || !data.toCity || !data.departureDate) {
-                toast('Please select departure and arrival airports', 'error');
+                toast('Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Validate dates
+            const departureDate = new Date(data.departureDate);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (departureDate < today) {
+                toast('Departure date cannot be in the past', 'error');
+                return;
+            }
+            
+            if (data.returnDate) {
+                const returnDate = new Date(data.returnDate);
+                if (returnDate < departureDate) {
+                    toast('Return date must be after departure date', 'error');
+                    return;
+                }
+            }
                 return;
             }
 

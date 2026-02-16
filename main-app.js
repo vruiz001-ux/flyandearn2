@@ -3024,3 +3024,4 @@
         window.toggleRole = toggleRole;
         window.updatePasswordStrength = updatePasswordStrength;
         window.logout = logout;
+        window.closeMobileMenu = closeMobileMenu;
