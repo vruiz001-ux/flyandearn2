@@ -234,6 +234,17 @@
             .btn-sm { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
         }
 
+        /* Welcome/Onboarding Panel */
+        .welcome-panel { background: linear-gradient(135deg, rgba(212, 168, 83, 0.08), rgba(45, 212, 191, 0.05)); border: 1px solid rgba(212, 168, 83, 0.2); border-radius: 16px; padding: 2rem; margin-bottom: 2rem; }
+        .welcome-panel h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .welcome-panel > p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+        .onboarding-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+        .onboarding-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem; cursor: pointer; transition: all 0.2s; position: relative; }
+        .onboarding-card:hover { border-color: var(--accent-gold); transform: translateY(-2px); }
+        .onboarding-card .step-number { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light)); border-radius: 50%; color: #000; font-weight: 700; font-size: 0.85rem; margin-bottom: 0.75rem; }
+        .onboarding-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.35rem; }
+        .onboarding-card p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; }
+
         /* Email Verification Banner */
         .verification-banner {
             background: linear-gradient(135deg, rgba(212, 168, 83, 0.1), rgba(212, 168, 83, 0.05));
@@ -489,6 +500,29 @@
                     </div>
                     <button class="btn btn-primary btn-sm" onclick="sendVerificationEmail()">Send Verification Email</button>
                     <button class="verification-banner-close" onclick="dismissVerificationBanner()">×</button>
+                </div>
+            </div>
+
+            <!-- Welcome/Onboarding Panel (shown for new users) -->
+            <div class="welcome-panel" id="welcomePanel" style="display:none;">
+                <h2>👋 Welcome to FlyAndEarn!</h2>
+                <p>Here's how to get started:</p>
+                <div class="onboarding-steps">
+                    <div class="onboarding-card" onclick="showPage('settings')">
+                        <span class="step-number">1</span>
+                        <h3>Complete Your Profile</h3>
+                        <p>Add your city and phone number for better matching</p>
+                    </div>
+                    <div class="onboarding-card" onclick="showModal('createTrip')">
+                        <span class="step-number">2</span>
+                        <h3>Post a Trip or Request</h3>
+                        <p>Travelers: share your next flight. Buyers: tell us what you need.</p>
+                    </div>
+                    <div class="onboarding-card" onclick="showPage('browse')">
+                        <span class="step-number">3</span>
+                        <h3>Get Matched & Earn</h3>
+                        <p>We'll connect you with the perfect match on your route.</p>
+                    </div>
                 </div>
             </div>
 
@@ -3976,6 +4010,34 @@
     };
     </script>
     <script src="leaflet.min.js"></script>
+
+    <!-- Welcome Panel Logic -->
+    <script>
+    (function() {
+        function checkWelcomePanel() {
+            var tripCount = parseInt(document.getElementById('statTrips')?.textContent) || 0;
+            var dealCount = parseInt(document.getElementById('statDeals')?.textContent) || 0;
+            var panel = document.getElementById('welcomePanel');
+            if (panel && tripCount === 0 && dealCount === 0) {
+                panel.style.display = 'block';
+            } else if (panel) {
+                panel.style.display = 'none';
+            }
+        }
+        // Check after a delay to let data load
+        setTimeout(checkWelcomePanel, 1500);
+        // Also observe stat changes
+        var observer = new MutationObserver(function() { setTimeout(checkWelcomePanel, 100); });
+        var trips = document.getElementById('statTrips');
+        var deals = document.getElementById('statDeals');
+        if (trips) observer.observe(trips, { childList: true, characterData: true, subtree: true });
+        if (deals) observer.observe(deals, { childList: true, characterData: true, subtree: true });
+    })();
+    // Handle #add-trip deep link
+    if (window.location.hash === '#add-trip') {
+        setTimeout(function() { if (typeof showModal === 'function') showModal('createTrip'); }, 500);
+    }
+    </script>
 
     <!-- Back to Top Button -->
     <button class="back-to-top" aria-label="Back to top">

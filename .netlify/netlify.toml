@@ -1,5 +1,5 @@
 functionsDirectory = "/root/.openclaw/workspace/flyandearn2/netlify/functions"
-functionsDirectoryOrigin = "default"
+functionsDirectoryOrigin = "ui"
 headersOrigin = "config"
 redirectsOrigin = "config"
 plugins = []
@@ -8,6 +8,7 @@ plugins = []
 publish = "/root/.openclaw/workspace/flyandearn2"
 publishOrigin = "config"
 commandOrigin = "config"
+base = "/root/.openclaw/workspace/flyandearn2"
 command = "npx prisma generate"
 functions = "/root/.openclaw/workspace/flyandearn2/netlify/functions"
 

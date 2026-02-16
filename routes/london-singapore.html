@@ -63,6 +63,7 @@
         .benefit h3{font-size:1rem;font-weight:600;margin-bottom:.25rem}
         .benefit p{color:var(--text-secondary);font-size:.85rem}
         .empty-state{text-align:center;padding:2rem;color:var(--text-secondary)}
+        .btn-share{display:inline-block;margin-top:1rem;padding:.5rem 1.25rem;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .2s}.btn-share:hover{border-color:var(--gold);color:var(--gold)}
         @media(max-width:640px){.route-header h1{font-size:1.5rem}.stats{grid-template-columns:1fr}.btn-outline{margin-left:0;margin-top:.5rem}}
     </style>
 </head>
@@ -157,6 +158,14 @@
             c.innerHTML=items.slice(0,5).map(function(r){return '<div class="card"><div style="font-weight:500">'+(r.product||r.item||'Duty-free item')+'</div><div style="color:var(--text-secondary);font-size:.85rem;margin-top:.25rem">Budget: €'+(r.budget||r.maxPrice||'—')+'</div></div>'}).join('');
         }).catch(function(){document.getElementById('requests-container').innerHTML='<div class="card"><div class="empty-state">No requests yet.</div></div>';document.getElementById('stat-requests').textContent='0'});
     })();
+    </script>
+<script>
+    function shareRoute(){
+        var title=document.querySelector(".route-header h1").textContent;
+        var text="Check out duty-free deals on "+title+" with FlyAndEarn! 🛫 "+window.location.href;
+        if(navigator.share){navigator.share({title:"FlyAndEarn - "+title,text:text,url:window.location.href}).catch(function(){})}
+        else{navigator.clipboard.writeText(text).then(function(){alert("Link copied!")}).catch(function(){})}
+    }
     </script>
 </body>
 </html>

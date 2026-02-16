@@ -96,8 +96,7 @@
     <!-- Fonts with display=swap for non-blocking -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
 
-    <!-- Leaflet Map CSS (deferred - only needed for map section) -->
-    <link rel="stylesheet" href="leaflet.min.css" media="print" onload="this.media='all'">
+    <!-- Leaflet Map CSS (loaded only if map section exists and is near viewport) -->
     <noscript><link rel="stylesheet" href="leaflet.min.css"></noscript>
 
     <!-- Structured Data - Organization -->
@@ -2906,9 +2905,10 @@
                 <div class="section-tag" style="margin-bottom: 1.5rem;">✈️ Duty-Free Marketplace</div>
                 <h1 id="hero-title">Save <span>20–40%</span> on Duty-Free Goods</h1>
                 <p id="hero-subtitle">Connect with verified travelers to get duty-free spirits, perfume & electronics at airport prices — delivered to your city. 100% legal within EU customs allowances.</p>
-                <div class="hero-cta-buttons" style="display: flex; gap: 1rem; justify-content: flex-start; flex-wrap: wrap;">
+                <div class="hero-cta-buttons" style="display: flex; gap: 1rem; justify-content: flex-start; flex-wrap: wrap; align-items: center;">
                     <a href="#requests" class="btn btn-primary btn-large" id="btn-see-requests">Browse Available Items →</a>
                     <button class="btn btn-outline btn-large" id="btn-start-earning" onclick="openAuthModal('signup')">Start Earning as a Traveler →</button>
+                    <button class="btn btn-outline" onclick="shareFlyAndEarn()" style="padding: 0.6rem 1rem; font-size: 0.85rem;" title="Share FlyAndEarn">📤 Share</button>
                 </div>
             </div>
             <div class="hero-preview">
@@ -3211,10 +3211,32 @@
             <div id="flyandearn-calculator"></div>
         </div>
     </section>
-    <script src="flyandearn-calculator.js?v=20260118c" defer></script>
+    <script>
+    // Lazy-load calculator only when section is visible
+    (function() {
+        var calcSection = document.getElementById('savings');
+        if (!calcSection) return;
+        var loaded = false;
+        var observer = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting && !loaded) {
+                loaded = true;
+                observer.disconnect();
+                var cb = function() {
+                    var s = document.createElement('script');
+                    s.src = 'flyandearn-calculator.js?v=20260118c';
+                    document.body.appendChild(s);
+                };
+                if ('requestIdleCallback' in window) { requestIdleCallback(cb); } else { setTimeout(cb, 100); }
+            }
+        }, { rootMargin: '200px' });
+        observer.observe(calcSection);
+    })();
+    </script>
 
     <!-- Trust, Safety & Legal Compliance -->
-    <section class="section" id="trust-legal">
+    <section class="section" id="trust-legal" data-anchor-id="trust">
+        <a id="trust"></a>
+        <a id="about"></a>
         <div class="section-header">
             <div class="section-tag" data-i18n="section.trust.tag">✅ Trust, Safety & Legal</div>
             <h2 class="section-title" data-i18n="section.trust.title">Shop with Confidence — 100% Legal</h2>
@@ -3309,22 +3331,22 @@
                 <h4 data-i18n="footer.product">Product</h4>
                 <a href="#how-it-works" data-i18n="nav.howItWorks">How It Works</a>
                 <a href="#requests" data-i18n="nav.browse">Browse Requests</a>
-                <a href="#" data-i18n="btn.addTrip">Add Trip</a>
-                <a href="#" data-i18n="footer.pricing">Pricing</a>
+                <a href="/dashboard#add-trip" data-i18n="btn.addTrip">Add Trip</a>
+                <a href="/pricing" data-i18n="footer.pricing">Pricing</a>
             </div>
             <div class="footer-column">
                 <h4 data-i18n="footer.company">Company</h4>
-                <a href="#" data-i18n="footer.aboutUs">About Us</a>
-                <a href="#" data-i18n="footer.careers">Careers</a>
-                <a href="#" data-i18n="footer.press">Press</a>
-                <a href="#" data-i18n="footer.blog">Blog</a>
+                <a href="/#about" data-i18n="footer.aboutUs">About Us</a>
+                <a href="/contact" data-i18n="footer.careers">Careers</a>
+                <a href="/contact" data-i18n="footer.press">Press</a>
+                <a href="#" onclick="showToast('Blog coming soon!', 'info'); return false;" data-i18n="footer.blog">Blog</a>
             </div>
             <div class="footer-column">
                 <h4 data-i18n="footer.support">Support</h4>
-                <a href="#" data-i18n="footer.helpCenter">Help Center</a>
-                <a href="#" data-i18n="footer.safety">Safety</a>
-                <a href="#" data-i18n="footer.trustVerification">Trust & Verification</a>
-                <a href="#" data-i18n="footer.contact">Contact</a>
+                <a href="/faq" data-i18n="footer.helpCenter">Help Center</a>
+                <a href="/#trust" data-i18n="footer.safety">Safety</a>
+                <a href="/#trust" data-i18n="footer.trustVerification">Trust & Verification</a>
+                <a href="/contact" data-i18n="footer.contact">Contact</a>
             </div>
             <div class="footer-column">
                 <h4 data-i18n="footer.legalTitle">Legal</h4>
@@ -3344,10 +3366,10 @@
                 <span style="font-size: 0.8rem; color: var(--text-muted);">🇪🇺 EU Consumer Rights | 14-day withdrawal | ODR: <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener" style="color: var(--accent-gold);">ec.europa.eu/consumers/odr</a></span>
                 <span style="font-size: 0.8rem; color: var(--text-muted);">IOD/DPO: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="791d0916390d0b1609160a570915">[email&#160;protected]</a></span>
                 <div class="social-links">
-                    <a href="#" class="social-link">𝕏</a>
-                    <a href="#" class="social-link">in</a>
-                    <a href="#" class="social-link">📸</a>
-                    <a href="#" class="social-link">▶</a>
+                    <a href="#" class="social-link" onclick="showToast('Social media coming soon!', 'info'); return false;">𝕏</a>
+                    <a href="#" class="social-link" onclick="showToast('Social media coming soon!', 'info'); return false;">in</a>
+                    <a href="#" class="social-link" onclick="showToast('Social media coming soon!', 'info'); return false;">📸</a>
+                    <a href="#" class="social-link" onclick="showToast('Social media coming soon!', 'info'); return false;">▶</a>
                 </div>
                 <a href="/admin" class="admin-footer-link" aria-label="Admin login" style="font-size: 0.7rem; color: var(--text-muted); opacity: 0.5; margin-left: 1rem; text-decoration: none; transition: opacity 0.2s;">Admin</a>
             </div>
@@ -3625,6 +3647,22 @@
             window.location.href = '/';
         } else {
             alert(data.error || 'Failed to delete account');
+        }
+    }
+    </script>
+
+    <!-- Share Functionality -->
+    <script>
+    function shareFlyAndEarn(customText) {
+        var text = customText || 'Save 20-40% on duty-free goods with FlyAndEarn! 🛫 https://flyandearn.eu';
+        if (navigator.share) {
+            navigator.share({ title: 'FlyAndEarn', text: text, url: 'https://flyandearn.eu' }).catch(function(){});
+        } else {
+            navigator.clipboard.writeText(text).then(function() {
+                if (typeof showToast === 'function') showToast('Link copied to clipboard!', 'success');
+            }).catch(function() {
+                if (typeof showToast === 'function') showToast('Could not copy link', 'error');
+            });
         }
     }
     </script>
