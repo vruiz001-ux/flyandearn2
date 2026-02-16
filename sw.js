@@ -1,5 +1,5 @@
 // FlyAndEarn Service Worker
-const CACHE_NAME = 'flyandearn-v1';
+const CACHE_NAME = 'flyandearn-v2';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
