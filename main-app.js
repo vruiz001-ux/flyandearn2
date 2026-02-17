@@ -3046,4 +3046,5 @@
         window.toggleRole = toggleRole;
         window.updatePasswordStrength = updatePasswordStrength;
         window.logout = logout;
+        window.toggleMobileMenu = toggleMobileMenu;
         window.closeMobileMenu = closeMobileMenu;
