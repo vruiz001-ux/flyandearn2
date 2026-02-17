@@ -661,6 +661,28 @@
             pointer-events: none;
         }
 
+        /* Inline cross-links styling */
+        .cross-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s ease;
+            padding: 0 0.125rem;
+        }
+
+        .cross-link:hover,
+        .cross-link:focus {
+            color: var(--accent-gold-light);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .cross-link:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+            border-radius: 3px;
+        }
+
         /* Back Button */
         .back-button {
             position: fixed;
@@ -817,9 +839,12 @@
     </nav>
 
     <div id="mainContent" role="main">
+        <!-- Breadcrumbs -->
+        <div id="breadcrumbs"></div>
+        
         <section class="pricing-hero">
             <h1>Choose Your Plan</h1>
-            <p>Start for free or unlock unlimited savings with our annual subscription plans. No commitment required.</p>
+            <p>Start for free or unlock unlimited savings with our annual subscription plans. No commitment required. Questions? Check our <a href="/faq" class="cross-link">FAQ</a> or <a href="/contact" class="cross-link">contact our team</a>.</p>
         </section>
 
         <div class="currency-toggle">
@@ -1032,10 +1057,13 @@
             <div class="faq-item">
                 <div class="faq-question">Is there a refund policy?</div>
                 <div class="faq-answer">
-                    Yes, we offer pro-rated refunds within 30 days of purchase. If you're not satisfied with your subscription, contact us and we'll refund the unused portion of your plan.
+                    Yes, we offer pro-rated refunds within 30 days of purchase. If you're not satisfied with your subscription, <a href="/contact.html" class="cross-link">contact us</a> and we'll refund the unused portion of your plan. For more detailed information, visit our <a href="/faq.html" class="cross-link">FAQ page</a>.
                 </div>
             </div>
         </section>
+        
+        <!-- Related Pages Section -->
+        <div id="related-pages"></div>
     </div>
 
     <footer>
@@ -1223,6 +1251,8 @@
     <!-- Navigation JavaScript -->
     <script src="i18n.js"></script>
     <script src="language-selector.js"></script>
+    <link rel="stylesheet" href="smooth-navigation.css">
+    <script src="smooth-navigation.js" defer></script>
     <script src="nav.js"></script>
 </body>
 </html>

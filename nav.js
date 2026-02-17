@@ -595,6 +595,219 @@
     }
 
     // ========================================
+    // BREADCRUMBS
+    // ========================================
+
+    function initBreadcrumbs() {
+        const currentPath = window.location.pathname;
+        const siteHeader = document.querySelector('.site-header');
+        
+        // Don't add breadcrumbs to home page
+        if (currentPath === '/' || currentPath === '/index.html') return;
+        
+        // Check if breadcrumbs already exist
+        if (document.querySelector('.breadcrumb-nav')) return;
+        
+        const pathSegments = currentPath.split('/').filter(segment => segment);
+        const breadcrumbData = getBreadcrumbData(currentPath);
+        
+        if (!breadcrumbData) return;
+        
+        const breadcrumbNav = document.createElement('nav');
+        breadcrumbNav.className = 'breadcrumb-nav';
+        breadcrumbNav.setAttribute('aria-label', 'Breadcrumb');
+        
+        const container = document.createElement('div');
+        container.className = 'breadcrumb-container';
+        
+        const ol = document.createElement('ol');
+        ol.className = 'breadcrumb-list';
+        
+        // Home link
+        const homeLi = document.createElement('li');
+        homeLi.className = 'breadcrumb-item';
+        
+        const homeLink = document.createElement('a');
+        homeLink.href = '/';
+        homeLink.className = 'breadcrumb-link';
+        homeLink.innerHTML = `
+            <svg class="breadcrumb-home-icon" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+            </svg>
+            Home
+        `;
+        
+        homeLi.appendChild(homeLink);
+        ol.appendChild(homeLi);
+        
+        // Add separator and current page
+        const separatorLi = document.createElement('li');
+        separatorLi.className = 'breadcrumb-item';
+        separatorLi.innerHTML = '<span class="breadcrumb-separator">›</span>';
+        ol.appendChild(separatorLi);
+        
+        const currentLi = document.createElement('li');
+        currentLi.className = 'breadcrumb-item';
+        
+        const currentSpan = document.createElement('span');
+        currentSpan.className = 'breadcrumb-current';
+        currentSpan.textContent = breadcrumbData.title;
+        currentSpan.setAttribute('aria-current', 'page');
+        
+        currentLi.appendChild(currentSpan);
+        ol.appendChild(currentLi);
+        
+        container.appendChild(ol);
+        breadcrumbNav.appendChild(container);
+        
+        // Insert after header
+        if (siteHeader && siteHeader.nextSibling) {
+            siteHeader.parentNode.insertBefore(breadcrumbNav, siteHeader.nextSibling);
+        }
+    }
+
+    function getBreadcrumbData(path) {
+        const breadcrumbs = {
+            '/about.html': { title: 'About Us' },
+            '/about': { title: 'About Us' },
+            '/pricing.html': { title: 'Pricing' },
+            '/pricing': { title: 'Pricing' },
+            '/faq.html': { title: 'FAQ' },
+            '/faq': { title: 'FAQ' },
+            '/contact.html': { title: 'Contact' },
+            '/contact': { title: 'Contact' },
+            '/routes.html': { title: 'Routes' },
+            '/routes': { title: 'Routes' },
+            '/map.html': { title: 'Map' },
+            '/map': { title: 'Map' },
+            '/dashboard.html': { title: 'Dashboard' },
+            '/dashboard': { title: 'Dashboard' },
+            '/wallet.html': { title: 'Wallet' },
+            '/wallet': { title: 'Wallet' },
+            '/privacy.html': { title: 'Privacy Policy' },
+            '/privacy': { title: 'Privacy Policy' },
+            '/terms.html': { title: 'Terms of Service' },
+            '/terms': { title: 'Terms of Service' }
+        };
+        
+        // Check for route pages
+        if (path.includes('/routes/')) {
+            const routeName = path.split('/routes/')[1].replace('.html', '').replace('-', ' ');
+            return { 
+                title: routeName.split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+                    .join(' ') + ' Route'
+            };
+        }
+        
+        return breadcrumbs[path] || breadcrumbs[path.replace('.html', '')];
+    }
+
+    // ========================================
+    // RELATED PAGES
+    // ========================================
+
+    function initRelatedPages() {
+        const currentPath = window.location.pathname;
+        
+        // Don't add to home page
+        if (currentPath === '/' || currentPath === '/index.html') return;
+        
+        // Check if already exists
+        if (document.querySelector('.related-pages')) return;
+        
+        const relatedData = getRelatedPagesData(currentPath);
+        if (!relatedData || !relatedData.length) return;
+        
+        const section = document.createElement('section');
+        section.className = 'related-pages';
+        
+        section.innerHTML = `
+            <div class="related-pages-container">
+                <h2 class="related-pages-title">Discover More</h2>
+                <p class="related-pages-subtitle">Explore other pages that might interest you</p>
+                <div class="related-pages-grid">
+                    ${relatedData.map(page => `
+                        <a href="${page.href}" class="related-page-card">
+                            <div class="related-page-icon">${page.icon}</div>
+                            <h3 class="related-page-title">${page.title}</h3>
+                            <p class="related-page-description">${page.description}</p>
+                        </a>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+        
+        // Add before footer or at end of main content
+        const main = document.querySelector('main') || document.querySelector('#mainContent') || document.body;
+        main.appendChild(section);
+    }
+
+    function getRelatedPagesData(path) {
+        const allPages = {
+            about: {
+                title: 'About Us',
+                href: '/about.html',
+                icon: '👥',
+                description: 'Learn about our mission to connect travelers and buyers worldwide'
+            },
+            pricing: {
+                title: 'Pricing',
+                href: '/pricing.html',
+                icon: '💰',
+                description: 'See our competitive rates and transparent fee structure'
+            },
+            faq: {
+                title: 'FAQ',
+                href: '/faq.html',
+                icon: '❓',
+                description: 'Get answers to frequently asked questions about our platform'
+            },
+            contact: {
+                title: 'Contact',
+                href: '/contact.html',
+                icon: '📧',
+                description: 'Get in touch with our support team for assistance'
+            },
+            routes: {
+                title: 'Routes',
+                href: '/routes.html',
+                icon: '✈️',
+                description: 'Browse popular travel routes and available services'
+            },
+            map: {
+                title: 'Map',
+                href: '/map.html',
+                icon: '🗺️',
+                description: 'Explore destinations and find services on our interactive map'
+            }
+        };
+        
+        const pageRelations = {
+            '/about.html': ['pricing', 'faq', 'contact'],
+            '/about': ['pricing', 'faq', 'contact'],
+            '/pricing.html': ['faq', 'about', 'routes'],
+            '/pricing': ['faq', 'about', 'routes'],
+            '/faq.html': ['contact', 'pricing', 'about'],
+            '/faq': ['contact', 'pricing', 'about'],
+            '/contact.html': ['faq', 'about', 'pricing'],
+            '/contact': ['faq', 'about', 'pricing'],
+            '/routes.html': ['map', 'pricing', 'faq'],
+            '/routes': ['map', 'pricing', 'faq'],
+            '/map.html': ['routes', 'about', 'pricing'],
+            '/map': ['routes', 'about', 'pricing']
+        };
+        
+        // Handle route pages
+        if (path.includes('/routes/')) {
+            return ['routes', 'pricing', 'map'].map(key => allPages[key]);
+        }
+        
+        const related = pageRelations[path] || pageRelations[path.replace('.html', '')];
+        return related ? related.map(key => allPages[key]) : null;
+    }
+
+    // ========================================
     // INITIALIZATION
     // ========================================
 
@@ -605,6 +818,8 @@
         initSmoothScroll();
         initStickyHeader();
         initBackToTop();
+        initBreadcrumbs();
+        initRelatedPages();
         setActiveStates();
 
         // Update active states on hash change

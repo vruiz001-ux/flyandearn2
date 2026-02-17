@@ -67,6 +67,28 @@
         .btn-primary { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-light)); color: #000; }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 20px rgba(212, 168, 83, 0.3); }
 
+        /* Inline cross-links styling */
+        .cross-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s ease;
+            padding: 0 0.125rem;
+        }
+
+        .cross-link:hover,
+        .cross-link:focus {
+            color: var(--accent-gold-light);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .cross-link:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+            border-radius: 3px;
+        }
+
         footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem; border-top: 1px solid var(--border); }
         footer a { color: var(--accent-gold); text-decoration: underline; }
         footer a:hover { text-decoration: none; }
@@ -229,10 +251,13 @@
         </div>
     </nav>
 
-    <main>
+    <main id="main-content">
+        <!-- Breadcrumbs -->
+        <div id="breadcrumbs"></div>
+        
         <div class="page-header">
             <h1 class="page-title" data-i18n="faq.title">Frequently Asked Questions</h1>
-            <p class="page-subtitle" data-i18n="faq.subtitle">Everything you need to know about FlyAndEarn</p>
+            <p class="page-subtitle" data-i18n="faq.subtitle">Everything you need to know about FlyAndEarn. For more details about costs, check our <a href="/pricing" class="cross-link">pricing plans</a>.</p>
         </div>
 
         <section class="faq-section">
@@ -337,7 +362,7 @@
             <div class="faq-item">
                 <div class="faq-question" data-i18n="faq.q12">How much can I earn?</div>
                 <div class="faq-answer" data-i18n="faq.a12">
-                    Earnings vary based on the products you deliver and your service fee. Many travelers earn between 10-20% of the product value as their fee. High-demand items and premium service can command higher rates.
+                    Earnings vary based on the products you deliver and your service fee. Many travelers earn between 10-20% of the product value as their fee. High-demand items and premium service can command higher rates. Check our <a href="/pricing.html" class="cross-link">pricing page</a> for detailed fee structure information.
                 </div>
             </div>
 
@@ -354,6 +379,9 @@
             <p data-i18n="faq.supportHelp">Our support team is here to help you.</p>
             <a href="/contact" class="btn btn-primary" data-i18n="faq.contactUs">Contact Us</a>
         </div>
+        
+        <!-- Related Pages Section -->
+        <div id="related-pages"></div>
     </main>
 
     <footer>
@@ -362,6 +390,8 @@
 
     <script src="i18n.js"></script>
     <script src="language-selector.js"></script>
+    <link rel="stylesheet" href="smooth-navigation.css">
+    <script src="smooth-navigation.js" defer></script>
     <script>
         // Language selector
         function setLang(lang) {

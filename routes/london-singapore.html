@@ -36,6 +36,8 @@
     </script>
     <script src="../i18n.js"></script>
     <script src="../language-selector.js"></script>
+    <link rel="stylesheet" href="../smooth-navigation.css">
+    <script src="../smooth-navigation.js" defer></script>
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{--bg:#0a0a0b;--card:#18181b;--border:#27272a;--gold:#d4a853;--text:#fafafa;--text-secondary:#a1a1aa}
@@ -66,6 +68,8 @@
         .benefit p{color:var(--text-secondary);font-size:.85rem}
         .empty-state{text-align:center;padding:2rem;color:var(--text-secondary)}
         .btn-share{display:inline-block;margin-top:1rem;padding:.5rem 1.25rem;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .2s}.btn-share:hover{border-color:var(--gold);color:var(--gold)}
+        .cross-link{color:var(--gold);text-decoration:none;font-weight:500;border-bottom:1px solid transparent;transition:border-color 0.2s ease,color 0.2s ease;padding:0 0.125rem}.cross-link:hover,.cross-link:focus{color:#e8c878;border-bottom-color:var(--gold)}.cross-link:focus{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
+        .cross-link{color:var(--gold);text-decoration:none;font-weight:500;border-bottom:1px solid transparent;transition:border-color 0.2s ease,color 0.2s ease;padding:0 0.125rem}.cross-link:hover,.cross-link:focus{color:#e8c878;border-bottom-color:var(--gold)}.cross-link:focus{outline:2px solid var(--gold);outline-offset:2px;border-radius:3px}
         @media(max-width:640px){.route-header h1{font-size:1.5rem}.stats{grid-template-columns:1fr}.btn-outline{margin-left:0;margin-top:.5rem}}
         /* Back Button */
         .back-button{position:fixed;top:20px;left:20px;z-index:1000;display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;background:rgba(26,26,27,0.95);border:1px solid #d4a853;border-radius:8px;color:#fff;font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s ease;backdrop-filter:blur(10px)}.back-button:hover{background:rgba(212,168,83,0.1);border-color:#f0d78c;transform:translateX(-2px)}.back-button:focus{outline:none;box-shadow:0 0 0 2px rgba(212,168,83,0.5)}.back-button svg{width:18px;height:18px}@media(max-width:768px){.back-button{top:15px;left:15px;padding:0.6rem 0.8rem;font-size:0.85rem}.back-button span{display:none}}
@@ -83,6 +87,10 @@
     <div class="container">
         <!-- Language Selector -->
         <div id="locale-selector-nav" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
+        
+        <!-- Breadcrumbs -->
+        <div id="breadcrumbs"></div>
+        
         <div class="route-header">
             <div class="badge">✈️ Premium long-haul route</div>
             <h1><span>London</span> → <span>Singapore</span></h1>
@@ -139,6 +147,9 @@
                 <p><strong>4.</strong> Meet up and save 20-40% compared to retail prices</p>
             </div>
         </div>
+        
+        <!-- Related Pages Section -->
+        <div id="related-pages"></div>
     </div>
 
     <script>

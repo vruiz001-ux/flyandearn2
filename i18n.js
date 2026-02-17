@@ -2629,6 +2629,160 @@ const T = {
             pl: 'Jak to działa',
             fr: 'Comment ça marche',
             de: 'Wie es funktioniert'
+        },
+
+        // ==========================================
+        // RELATED PAGES SECTION
+        // ==========================================
+        'related.title': {
+            en: 'You might also like',
+            pl: 'Może Cię też zainteresować',
+            fr: 'Vous pourriez aussi aimer',
+            de: 'Das könnte Sie auch interessieren'
+        },
+        'related.pricing.title': {
+            en: 'Pricing',
+            pl: 'Cennik',
+            fr: 'Tarifs',
+            de: 'Preise'
+        },
+        'related.pricing.desc': {
+            en: 'See our transparent fee structure and subscription plans.',
+            pl: 'Zobacz naszą przejrzystą strukturę opłat i plany subskrypcji.',
+            fr: 'Découvrez notre structure tarifaire transparente et nos plans d\'abonnement.',
+            de: 'Sehen Sie unsere transparente Gebührenstruktur und Abonnement-Pläne.'
+        },
+        'related.pricing.cta': {
+            en: 'View Pricing',
+            pl: 'Zobacz cennik',
+            fr: 'Voir les tarifs',
+            de: 'Preise ansehen'
+        },
+        'related.faq.title': {
+            en: 'FAQ',
+            pl: 'Często zadawane pytania',
+            fr: 'FAQ',
+            de: 'Häufige Fragen'
+        },
+        'related.faq.desc': {
+            en: 'Get answers to common questions about our service.',
+            pl: 'Uzyskaj odpowiedzi na często zadawane pytania o naszą usługę.',
+            fr: 'Obtenez des réponses aux questions courantes sur notre service.',
+            de: 'Erhalten Sie Antworten auf häufige Fragen zu unserem Service.'
+        },
+        'related.faq.cta': {
+            en: 'Read FAQ',
+            pl: 'Przeczytaj FAQ',
+            fr: 'Lire la FAQ',
+            de: 'FAQ lesen'
+        },
+        'related.dashboard.title': {
+            en: 'Get Started',
+            pl: 'Zacznij',
+            fr: 'Commencer',
+            de: 'Loslegen'
+        },
+        'related.dashboard.desc': {
+            en: 'Join thousands of travelers and buyers already saving money.',
+            pl: 'Dołącz do tysięcy podróżnych i kupujących już oszczędzających pieniądze.',
+            fr: 'Rejoignez des milliers de voyageurs et d\'acheteurs qui économisent déjà de l\'argent.',
+            de: 'Schließen Sie sich Tausenden von Reisenden und Käufern an, die bereits Geld sparen.'
+        },
+        'related.dashboard.cta': {
+            en: 'Start Now',
+            pl: 'Zacznij teraz',
+            fr: 'Commencer maintenant',
+            de: 'Jetzt starten'
+        },
+        'related.contact.title': {
+            en: 'Contact Us',
+            pl: 'Skontaktuj się',
+            fr: 'Nous contacter',
+            de: 'Kontaktieren Sie uns'
+        },
+        'related.contact.desc': {
+            en: 'Have questions? Our team is here to help.',
+            pl: 'Masz pytania? Nasz zespół jest tutaj, aby pomóc.',
+            fr: 'Vous avez des questions ? Notre équipe est là pour vous aider.',
+            de: 'Haben Sie Fragen? Unser Team ist da, um zu helfen.'
+        },
+        'related.contact.cta': {
+            en: 'Get in Touch',
+            pl: 'Skontaktuj się',
+            fr: 'Prenez contact',
+            de: 'Kontakt aufnehmen'
+        },
+        'related.earn.title': {
+            en: 'Start Earning',
+            pl: 'Zacznij zarabiać',
+            fr: 'Commencer à gagner',
+            de: 'Verdienen beginnen'
+        },
+        'related.earn.desc': {
+            en: 'Ready to start? Create your first trip or request.',
+            pl: 'Gotowy na start? Utwórz swoją pierwszą podróż lub zapytanie.',
+            fr: 'Prêt à commencer ? Créez votre premier voyage ou votre première demande.',
+            de: 'Bereit anzufangen? Erstellen Sie Ihre erste Reise oder Anfrage.'
+        },
+        'related.earn.cta': {
+            en: 'Join Now',
+            pl: 'Dołącz teraz',
+            fr: 'Rejoignez maintenant',
+            de: 'Jetzt beitreten'
+        },
+        'related.about.title': {
+            en: 'About Us',
+            pl: 'O nas',
+            fr: 'À propos',
+            de: 'Über uns'
+        },
+        'related.about.desc': {
+            en: 'Learn about our mission and company story.',
+            pl: 'Poznaj naszą misję i historię firmy.',
+            fr: 'Découvrez notre mission et l\'histoire de notre entreprise.',
+            de: 'Erfahren Sie mehr über unsere Mission und Firmengeschichte.'
+        },
+        'related.about.cta': {
+            en: 'Our Story',
+            pl: 'Nasza historia',
+            fr: 'Notre histoire',
+            de: 'Unsere Geschichte'
+        },
+        'related.support.title': {
+            en: 'Contact Support',
+            pl: 'Skontaktuj się z pomocą',
+            fr: 'Contacter le support',
+            de: 'Support kontaktieren'
+        },
+        'related.support.desc': {
+            en: 'Still have questions? Reach out to our team.',
+            pl: 'Wciąż masz pytania? Skontaktuj się z naszym zespołem.',
+            fr: 'Vous avez encore des questions ? Contactez notre équipe.',
+            de: 'Haben Sie noch Fragen? Wenden Sie sich an unser Team.'
+        },
+        'related.support.cta': {
+            en: 'Contact Us',
+            pl: 'Skontaktuj się',
+            fr: 'Nous contacter',
+            de: 'Kontakt'
+        },
+        'related.start.title': {
+            en: 'Get Started',
+            pl: 'Zacznij',
+            fr: 'Commencer',
+            de: 'Loslegen'
+        },
+        'related.start.desc': {
+            en: 'Ready to begin? Join our marketplace today.',
+            pl: 'Gotowy zacząć? Dołącz do naszego marketplace już dziś.',
+            fr: 'Prêt à commencer ? Rejoignez notre marketplace aujourd\'hui.',
+            de: 'Bereit anzufangen? Treten Sie noch heute unserem Marktplatz bei.'
+        },
+        'related.start.cta': {
+            en: 'Start Now',
+            pl: 'Zacznij teraz',
+            fr: 'Commencer maintenant',
+            de: 'Jetzt starten'
         }
     },
 

@@ -110,6 +110,28 @@
             .lang-selector { margin-left: 0; padding-left: 0; border-left: none; }
         }
 
+        /* Inline cross-links styling */
+        .cross-link {
+            color: var(--accent-gold);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s ease, color 0.2s ease;
+            padding: 0 0.125rem;
+        }
+
+        .cross-link:hover,
+        .cross-link:focus {
+            color: var(--accent-gold-light);
+            border-bottom-color: var(--accent-gold);
+        }
+
+        .cross-link:focus {
+            outline: 2px solid var(--accent-gold);
+            outline-offset: 2px;
+            border-radius: 3px;
+        }
+
         /* Back Button */
         .back-button {
             position: fixed;
@@ -261,10 +283,13 @@
         </div>
     </nav>
 
-    <main>
+    <main id="main-content">
+        <!-- Breadcrumbs -->
+        <div id="breadcrumbs"></div>
+        
         <div class="page-header">
             <h1 class="page-title" data-i18n="contact.title">Contact Us</h1>
-            <p class="page-subtitle" data-i18n="contact.subtitle">Have questions or need help? We're here for you. Fill out the form and we'll get back to you as soon as possible.</p>
+            <p class="page-subtitle" data-i18n="contact.subtitle">Have questions or need help? We're here for you. Check our <a href="/faq" class="cross-link">FAQ section</a> for quick answers or fill out the form below and we'll get back to you as soon as possible.</p>
         </div>
 
         <div class="contact-grid">
@@ -390,6 +415,9 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Related Pages Section -->
+        <div id="related-pages"></div>
     </main>
 
     <footer>
@@ -398,6 +426,8 @@
 
     <script src="i18n.js"></script>
     <script src="language-selector.js"></script>
+    <link rel="stylesheet" href="smooth-navigation.css">
+    <script src="smooth-navigation.js" defer></script>
     <script>
         // Language selector
         function setLang(lang) {
