@@ -38,8 +38,7 @@
     z-index: 999999;
     padding: 1rem 2rem;
     background: rgba(10, 10, 11, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10, 10, 11, 0.95);
     border-bottom: 1px solid var(--border, #27272a);
 }
 

@@ -349,8 +349,8 @@
             z-index: 99999;
             padding: 1rem 2rem;
             background: rgba(10, 10, 11, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            -*-no-blur: none;
+            -webkit--*-no-blur: none;
             border-bottom: 1px solid var(--border);
         }
 
@@ -1600,7 +1600,7 @@
             padding: 1.25rem;
             z-index: 9999;
             display: none;
-            backdrop-filter: blur(20px);
+            -*-no-blur: none;
             box-shadow: 0 8px 32px rgba(0,0,0,0.4);
         }
 
@@ -2619,7 +2619,7 @@
     </style>
     <!-- Vite Entry Point (bundles i18n, navigation, data modules) -->
     <!-- Vite entry disabled: i18n.js + main-app.js handle everything -->
-    <script src="i18n.js?v=1771298428" defer></script>
+    <script src="i18n.js?v=1771298574" defer></script>
     <style>
         .map-toggle-btn { background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 8px; color: var(--text-primary); cursor: pointer; transition: all 0.2s; }
         .map-toggle-btn:hover { background: var(--bg-card); }
@@ -2636,6 +2636,11 @@
         .map-link:hover { background: var(--accent-gold); color: #000; }
         /* Custom map markers - override default leaflet-div-icon */
         .return-marker, .test-marker { background: transparent !important; border: none !important; }
+        @media (max-width: 768px) {
+            .preview-card { animation: none !important; }
+            .hero-preview { animation: none !important; }
+            * { -webkit-backdrop-filter: none !important; backdrop-filter: none !important; }
+        }
         .leaflet-div-icon { background: transparent !important; border: none !important; }
     </style>
     <!-- Navigation CSS -->
@@ -3783,7 +3788,7 @@
     </script>
 
     <!-- Main App Logic (kept separate for compatibility) -->
-    <script src="main-app.js?v=1771298428" defer></script>
+    <script src="main-app.js?v=1771298574" defer></script>
 
     <!-- Service Worker Registration -->
     <script>

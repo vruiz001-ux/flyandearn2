@@ -471,6 +471,26 @@
             document.body.style.overflow = '';
         }
         
+        // Wire up mobile menu toggle button
+        const mobileToggleBtn = document.getElementById('mobileMenuToggle');
+        if (mobileToggleBtn) {
+            mobileToggleBtn.addEventListener('click', toggleMobileMenu);
+        }
+        // Wire up mobile nav close button
+        const mobileCloseBtn = document.querySelector('.mobile-nav-close');
+        if (mobileCloseBtn) {
+            mobileCloseBtn.addEventListener('click', closeMobileMenu);
+        }
+        // Wire up overlay click to close
+        const mobileOverlay = document.getElementById('mobileNavOverlay');
+        if (mobileOverlay) {
+            mobileOverlay.addEventListener('click', closeMobileMenu);
+        }
+        // Close mobile nav on link click
+        document.querySelectorAll('#mobileNav a').forEach(function(link) {
+            link.addEventListener('click', function() { setTimeout(closeMobileMenu, 100); });
+        });
+
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) closeMobileMenu();
         });
