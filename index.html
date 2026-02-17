@@ -2618,7 +2618,8 @@
         .request-modal-content .btn-full { width:100%;margin-top:0.5rem; }
     </style>
     <!-- Vite Entry Point (bundles i18n, navigation, data modules) -->
-    <script type="module" src="/src/entry.js"></script>
+    <!-- Vite entry disabled: i18n.js + main-app.js handle everything -->
+    <script src="i18n.js?v=1771298428" defer></script>
     <style>
         .map-toggle-btn { background: var(--bg-secondary); border: 1px solid var(--border); padding: 0.5rem 1rem; border-radius: 8px; color: var(--text-primary); cursor: pointer; transition: all 0.2s; }
         .map-toggle-btn:hover { background: var(--bg-card); }
@@ -3782,7 +3783,7 @@
     </script>
 
     <!-- Main App Logic (kept separate for compatibility) -->
-    <script src="main-app.js?v=1771261659" defer></script>
+    <script src="main-app.js?v=1771298428" defer></script>
 
     <!-- Service Worker Registration -->
     <script>
