@@ -9,22 +9,22 @@ export const TRANSLATIONS =
         // LANDING PAGE - HERO
         // ==========================================
         'hero.title': {
-            en: 'Turn Your <span>Duty-Free Allowance</span> Into Cash',
-            pl: 'Zamień Swój <span>Limit Duty-Free</span> na Gotówkę',
-            fr: 'Transformez Votre <span>Franchise Duty-Free</span> en Argent',
-            de: 'Verwandeln Sie Ihr <span>Duty-Free-Kontingent</span> in Bargeld'
+            en: 'Your Personal Shopper <span>Abroad</span>',
+            pl: 'Twój Osobisty Kupujący <span>Za Granicą</span>',
+            fr: 'Votre Personal Shopper <span>à l\'Étranger</span>',
+            de: 'Ihr Persönlicher Einkäufer <span>im Ausland</span>'
         },
         'hero.tagline': {
-            en: 'Get your shopping done abroad by travellers',
-            pl: 'Zrób zakupy za granicą przez podróżnych',
-            fr: "Faites faire vos achats à l'étranger par des voyageurs",
-            de: 'Lassen Sie Ihre Einkäufe im Ausland von Reisenden erledigen'
+            en: 'Duty-Free & Personal Shopping Platform',
+            pl: 'Platforma Duty-Free i Zakupów Za Granicą',
+            fr: 'Plateforme Duty-Free et Shopping à l\'Étranger',
+            de: 'Duty-Free & Personal Shopping Plattform'
         },
         'hero.subtitle': {
-            en: 'Traveling somewhere? Earn money by purchasing duty-free goods for local buyers. Use your unused customs allowance and collect a service fee on every delivery.',
-            pl: 'Podróżujesz? Zarabiaj kupując produkty duty-free dla lokalnych kupujących. Wykorzystaj swój niewykorzystany limit celny i odbierz opłatę za usługę przy każdej dostawie.',
-            fr: 'Vous voyagez ? Gagnez de l\'argent en achetant des produits duty-free pour les acheteurs locaux. Utilisez votre franchise douanière et percevez des frais de service à chaque livraison.',
-            de: 'Sie reisen? Verdienen Sie Geld, indem Sie Duty-Free-Waren für lokale Käufer kaufen. Nutzen Sie Ihr Zollkontingent und kassieren Sie bei jeder Lieferung eine Servicegebühr.'
+            en: 'Need duty-free goods at airport prices? Want something from a store abroad? Our travelers buy and deliver for you — or travel yourself and earn money shopping for others. Two services, one platform.',
+            pl: 'Potrzebujesz produktów duty-free w cenach lotniskowych? Chcesz coś ze sklepu za granicą? Nasi podróżni kupią i dostarczą — lub podróżuj sam i zarabiaj robiąc zakupy dla innych. Dwie usługi, jedna platforma.',
+            fr: 'Besoin de produits duty-free à prix aéroport ? Envie d\'un article d\'un magasin à l\'étranger ? Nos voyageurs achètent et livrent pour vous — ou voyagez vous-même et gagnez de l\'argent. Deux services, une plateforme.',
+            de: 'Duty-Free-Waren zu Flughafenpreisen? Etwas aus einem Laden im Ausland? Unsere Reisenden kaufen und liefern für Sie — oder reisen Sie selbst und verdienen Sie Geld. Zwei Services, eine Plattform.'
         },
         'hero.legal': {
             en: '100% Legal: All transactions stay within EU personal import allowances. Travelers simply use their own duty-free quota — we only charge a service fee for connecting buyers with travelers. No commercial import, no resale license required.',
