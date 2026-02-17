@@ -718,6 +718,12 @@ const T = {
             fr: 'Annuler',
             de: 'Abbrechen'
         },
+        'btn.back': {
+            en: 'Back',
+            pl: 'Powrót',
+            fr: 'Retour',
+            de: 'Zurück'
+        },
         'btn.save': {
             en: 'Save Changes',
             pl: 'Zapisz zmiany',
@@ -2613,6 +2619,16 @@ const T = {
             pl: 'Nie podano tokena resetującego',
             fr: 'Aucun jeton de réinitialisation fourni',
             de: 'Kein Reset-Token angegeben'
+        },
+
+        // ==========================================
+        // ROUTE PAGES
+        // ==========================================
+        'route.howItWorks': {
+            en: 'How It Works',
+            pl: 'Jak to działa',
+            fr: 'Comment ça marche',
+            de: 'Wie es funktioniert'
         }
     },
 

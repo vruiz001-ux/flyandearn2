@@ -34,6 +34,8 @@
       "serviceType": "Duty-Free Personal Shopping"
     }
     </script>
+    <script src="../i18n.js"></script>
+    <script src="../language-selector.js"></script>
     <style>
         *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
         :root{--bg:#0a0a0b;--card:#18181b;--border:#27272a;--gold:#d4a853;--text:#fafafa;--text-secondary:#a1a1aa}
@@ -65,11 +67,22 @@
         .empty-state{text-align:center;padding:2rem;color:var(--text-secondary)}
         .btn-share{display:inline-block;margin-top:1rem;padding:.5rem 1.25rem;background:transparent;border:1px solid var(--border);color:var(--text);border-radius:8px;font-size:.85rem;cursor:pointer;font-family:inherit;transition:all .2s}.btn-share:hover{border-color:var(--gold);color:var(--gold)}
         @media(max-width:640px){.route-header h1{font-size:1.5rem}.stats{grid-template-columns:1fr}.btn-outline{margin-left:0;margin-top:.5rem}}
+        /* Back Button */
+        .back-button{position:fixed;top:20px;left:20px;z-index:1000;display:flex;align-items:center;gap:0.5rem;padding:0.75rem 1rem;background:rgba(26,26,27,0.95);border:1px solid #d4a853;border-radius:8px;color:#fff;font-size:0.9rem;font-weight:500;cursor:pointer;transition:all 0.2s ease;backdrop-filter:blur(10px)}.back-button:hover{background:rgba(212,168,83,0.1);border-color:#f0d78c;transform:translateX(-2px)}.back-button:focus{outline:none;box-shadow:0 0 0 2px rgba(212,168,83,0.5)}.back-button svg{width:18px;height:18px}@media(max-width:768px){.back-button{top:15px;left:15px;padding:0.6rem 0.8rem;font-size:0.85rem}.back-button span{display:none}}
     </style>
 </head>
 <body>
+    <!-- Back Button -->
+    <button class="back-button" onclick="history.back()" aria-label="Go back to previous page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+        </svg>
+        <span data-i18n="btn.back">Back</span>
+    </button>
+
     <div class="container">
-        <a href="/" class="back-link">← Back to FlyAndEarn</a>
+        <!-- Language Selector -->
+        <div id="locale-selector-nav" style="position: fixed; top: 20px; right: 20px; z-index: 1000;"></div>
         <div class="route-header">
             <div class="badge">✈️ Growing EU-Turkey corridor</div>
             <h1><span>Warsaw</span> → <span>Istanbul</span></h1>
