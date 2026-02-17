@@ -150,6 +150,12 @@ function initMobileNav() {
     }
   });
 
+  // Close button
+  const closeBtn = mobileNav.querySelector('.mobile-nav-close');
+  if (closeBtn) {
+    closeBtn.addEventListener('click', closeMobileNav);
+  }
+
   // Close when clicking mobile nav links
   mobileNav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {

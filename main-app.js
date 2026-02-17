@@ -449,23 +449,25 @@
         
         function toggleMobileMenu() {
             const mobileNav = document.getElementById('mobileNav');
-            const menuBtn = document.getElementById('mobileMenuBtn');
+            const menuBtn = document.getElementById('mobileMenuToggle');
+            if (!mobileNav) return;
             const isOpen = mobileNav.classList.contains('show');
             
             if (isOpen) {
                 closeMobileMenu();
             } else {
                 mobileNav.classList.add('show');
-                menuBtn.textContent = '✕';
+                if (menuBtn) menuBtn.setAttribute('aria-expanded', 'true');
                 document.body.style.overflow = 'hidden';
             }
         }
         
         function closeMobileMenu() {
             const mobileNav = document.getElementById('mobileNav');
-            const menuBtn = document.getElementById('mobileMenuBtn');
+            const menuBtn = document.getElementById('mobileMenuToggle');
+            if (!mobileNav) return;
             mobileNav.classList.remove('show');
-            menuBtn.textContent = '☰';
+            if (menuBtn) menuBtn.setAttribute('aria-expanded', 'false');
             document.body.style.overflow = '';
         }
         
