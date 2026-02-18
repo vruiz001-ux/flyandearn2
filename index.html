@@ -273,31 +273,29 @@
     
     <!-- LANGUAGE SELECTOR INLINE FIX -->
     <style>
-    /* Language Selector Fix - Make Visible & Override Responsive Hiding */
-    .nav-cta {
+    /* URGENT LANGUAGE SELECTOR FIX - FORCE VISIBILITY */
+    html .nav-cta {
         display: flex !important;
         align-items: center;
         gap: 0.75rem;
         margin-left: 0.5rem;
     }
-    .lang-selector {
-        position: relative;
+    html #langDropdown,
+    html .lang-selector {
+        position: relative !important;
         display: flex !important;
-        align-items: center;
-        margin-right: 1rem;
-        z-index: 1001;
+        align-items: center !important;
+        margin-right: 1rem !important;
+        z-index: 1001 !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
-    /* Responsive: Show language selector on desktop, hide nav-cta on mobile but show mobile lang section */
-    @media (max-width: 900px) {
-        .nav-cta .btn { display: none !important; }
-        .nav-cta #locale-selector-nav { display: none !important; }
-        .lang-selector { display: none !important; }
-        .mobile-lang-section { display: block !important; }
+    /* Force show on all screen sizes for debugging */
+    html .lang-selector {
+        display: flex !important;
     }
-    @media (min-width: 901px) {
-        .mobile-lang-section { display: none !important; }
-        .nav-cta { display: flex !important; }
-        .lang-selector { display: flex !important; }
+    html .mobile-lang-section {
+        display: block !important;
     }
     .lang-btn-trigger {
         display: flex;
