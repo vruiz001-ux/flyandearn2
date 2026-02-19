@@ -1,0 +1,203 @@
+# Artillery load testing configuration for FlyAndEarn
+config:
+  target: 'http://localhost:8888'  # Netlify dev server
+  phases:
+    # Warm-up phase
+    - duration: 60
+      arrivalRate: 1
+      name: "Warm up"
+    # Normal load
+    - duration: 300
+      arrivalRate: 10
+      name: "Normal load"
+    # Spike test
+    - duration: 60
+      arrivalRate: 50
+      name: "Spike test"
+    # Sustained load
+    - duration: 600
+      arrivalRate: 20
+      name: "Sustained load"
+  
+  # Performance thresholds
+  thresholds:
+    http_req_failed: ['rate<0.01']    # Less than 1% failures
+    http_req_duration: ['p(95)<2000'] # 95% under 2s
+    http_req_duration: ['p(99)<5000'] # 99% under 5s
+
+  variables:
+    apiKey: "test-api-key"
+    userAgent: "Artillery/Performance-Test"
+
+  # Custom metrics
+  metrics:
+    - name: 'page_load_time'
+      unit: 'milliseconds'
+    - name: 'bundle_size'
+      unit: 'bytes'
+    - name: 'core_web_vitals'
+      unit: 'score'
+
+# Test scenarios
+scenarios:
+  # Homepage performance
+  - name: "Homepage Load Test"
+    weight: 30
+    flow:
+      - get:
+          url: "/"
+          headers:
+            User-Agent: "{{ userAgent }}"
+          capture:
+            - json: "$.loadTime"
+              as: "pageLoadTime"
+          think: 2
+      - get:
+          url: "/assets/critical.css"
+      - get:
+          url: "/main.js"
+
+  # Calculator page performance  
+  - name: "Calculator Performance"
+    weight: 25
+    flow:
+      - get:
+          url: "/calculator"
+          headers:
+            User-Agent: "{{ userAgent }}"
+          think: 1
+      - post:
+          url: "/.netlify/functions/calculate"
+          json:
+            from: "JFK"
+            to: "LAX"
+            departure: "2024-12-01"
+            weight: 5
+            value: 100
+          think: 3
+
+  # Browse page with filters
+  - name: "Browse Listings"
+    weight: 20
+    flow:
+      - get:
+          url: "/browse"
+          think: 1
+      - get:
+          url: "/.netlify/functions/browse-optimized"
+          qs:
+            page: 1
+            limit: 10
+            category: "electronics"
+          think: 2
+      - get:
+          url: "/.netlify/functions/browse-optimized"
+          qs:
+            page: 2
+            limit: 10
+            from: "New York"
+            to: "London"
+
+  # API performance tests
+  - name: "API Endpoints"
+    weight: 15
+    flow:
+      - get:
+          url: "/.netlify/functions/health"
+          expect:
+            - statusCode: 200
+            - hasProperty: "status"
+      - get:
+          url: "/.netlify/functions/stats"
+          think: 1
+      - get:
+          url: "/.netlify/functions/airports"
+          expect:
+            - statusCode: 200
+            - contentType: "application/json"
+
+  # Authentication flow
+  - name: "User Authentication"
+    weight: 10
+    flow:
+      - post:
+          url: "/.netlify/functions/login"
+          json:
+            email: "test@example.com"
+            password: "testpass123"
+          capture:
+            - json: "$.token"
+              as: "authToken"
+          think: 1
+      - get:
+          url: "/.netlify/functions/me"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+          think: 2
+      - post:
+          url: "/.netlify/functions/logout"
+          headers:
+            Authorization: "Bearer {{ authToken }}"
+
+# Custom functions for advanced testing
+config:
+  # Plugin configuration
+  plugins:
+    expect: {}
+    metrics-by-endpoint: {}
+    
+  # Custom JavaScript for advanced scenarios
+  beforeRequest: |
+    function(requestParams, context, ee, next) {
+      // Add performance timing
+      requestParams.startTime = Date.now();
+      return next();
+    }
+  
+  afterResponse: |
+    function(requestParams, response, context, ee, next) {
+      // Calculate response time
+      const responseTime = Date.now() - requestParams.startTime;
+      
+      // Custom metrics based on response
+      if (response.headers['x-response-time']) {
+        ee.emit('histogram', 'server_response_time', 
+               parseInt(response.headers['x-response-time']));
+      }
+      
+      // Track cache hits/misses
+      if (response.headers['x-cache']) {
+        ee.emit('counter', `cache_${response.headers['x-cache'].toLowerCase()}`, 1);
+      }
+      
+      return next();
+    }
+
+# Different test profiles
+profiles:
+  # Quick performance check
+  quick:
+    phases:
+      - duration: 30
+        arrivalRate: 5
+    thresholds:
+      http_req_duration: ['p(95)<1500']
+  
+  # Mobile network simulation
+  mobile:
+    phases:
+      - duration: 120
+        arrivalRate: 3
+    variables:
+      userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15"
+    
+  # Heavy load test
+  stress:
+    phases:
+      - duration: 300
+        arrivalRate: 100
+      - duration: 120
+        arrivalRate: 200
+    thresholds:
+      http_req_failed: ['rate<0.05']
+      http_req_duration: ['p(95)<5000']

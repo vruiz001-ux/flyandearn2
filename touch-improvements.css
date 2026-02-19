@@ -1,0 +1,338 @@
+/* TOUCH INTERFACE IMPROVEMENTS */
+
+/* Ensure all touch targets are minimum 44px */
+.btn,
+button,
+.nav-link,
+.mobile-nav-link,
+.category-card,
+.lang-option,
+.mobile-lang-btn,
+input[type="checkbox"],
+input[type="radio"],
+.cookie-btn,
+.quick-action {
+    min-height: 44px;
+    min-width: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Enhanced button touch feedback */
+.btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+    pointer-events: none;
+}
+
+.btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Touch-optimized navigation links */
+.nav-link,
+.mobile-nav-link {
+    padding: 0.875rem 1rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.mobile-nav-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(212, 168, 83, 0.1), 
+        transparent);
+    transition: left 0.5s;
+}
+
+.mobile-nav-link:active::before {
+    left: 100%;
+}
+
+/* Enhanced card touch interactions */
+.category-card,
+.request-card,
+.traveler-card {
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    /* Touch device specific styles */
+    
+    .category-card:active,
+    .request-card:active,
+    .traveler-card:active {
+        transform: scale(0.98);
+        background: var(--bg-card-hover, #1f1f23);
+        border-color: var(--accent-gold);
+    }
+    
+    /* Remove hover effects on touch devices */
+    .btn:hover,
+    .category-card:hover,
+    .request-card:hover,
+    .nav-link:hover {
+        transform: none;
+        box-shadow: none;
+    }
+    
+    /* Add active states for touch feedback */
+    .btn:active {
+        transform: scale(0.97);
+    }
+}
+
+/* Swipe gesture optimization */
+.requests-grid,
+.categories-grid,
+.travelers-grid {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+}
+
+/* Horizontal scrollable cards for mobile */
+@media (max-width: 768px) {
+    .categories-scroll {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 1rem;
+        padding: 0 1rem;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+    
+    .categories-scroll::-webkit-scrollbar {
+        display: none;
+    }
+    
+    .category-card-scroll {
+        flex: 0 0 140px;
+        scroll-snap-align: center;
+        min-height: 120px;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+    }
+    
+    /* Scroll indicators */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 0.25rem;
+        z-index: 1;
+    }
+    
+    .scroll-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border);
+        transition: background-color 0.2s;
+    }
+    
+    .scroll-dot.active {
+        background: var(--accent-gold);
+    }
+}
+
+/* Enhanced touch feedback for form elements */
+input,
+select,
+textarea {
+    transition: all 0.2s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    transform: scale(1.01);
+    box-shadow: 
+        0 0 0 3px rgba(212, 168, 83, 0.2),
+        0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom checkbox and radio buttons for better touch */
+.custom-checkbox,
+.custom-radio {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.5rem;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.custom-checkbox input,
+.custom-radio input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.custom-checkbox .checkmark,
+.custom-radio .checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 4px;
+    margin-right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.custom-radio .checkmark {
+    border-radius: 50%;
+}
+
+.custom-checkbox input:checked + .checkmark,
+.custom-radio input:checked + .checkmark {
+    background: var(--accent-gold);
+    border-color: var(--accent-gold);
+}
+
+.custom-checkbox input:checked + .checkmark::after {
+    content: '✓';
+    color: #000;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.custom-radio input:checked + .checkmark::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #000;
+}
+
+/* Pull-to-refresh indicator */
+.pull-to-refresh {
+    position: relative;
+    padding-top: 0;
+    transition: padding-top 0.2s ease;
+}
+
+.pull-indicator {
+    position: absolute;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-gold);
+    border-radius: 50%;
+    opacity: 0;
+    transition: all 0.2s ease;
+}
+
+.pull-to-refresh.pulling {
+    padding-top: 60px;
+}
+
+.pull-to-refresh.pulling .pull-indicator {
+    opacity: 1;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: translateX(-50%) rotate(0deg); }
+    to { transform: translateX(-50%) rotate(360deg); }
+}
+
+/* Long press menu */
+.long-press-menu {
+    position: absolute;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.5rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    opacity: 0;
+    transform: scale(0.9);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.long-press-menu.show {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.long-press-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--text-primary);
+    text-decoration: none;
+    min-height: 44px;
+    transition: background-color 0.15s;
+    white-space: nowrap;
+}
+
+.long-press-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+/* Gesture feedback */
+.gesture-feedback {
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(212, 168, 83, 0.3);
+    border: 2px solid var(--accent-gold);
+    transform: scale(0);
+    transition: transform 0.2s ease;
+}
+
+.gesture-feedback.active {
+    transform: scale(1);
+}

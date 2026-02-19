@@ -11,6 +11,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="i18n.js"></script>
+    <script src="language-selector.js"></script>
+    <link rel="stylesheet" href="smooth-navigation.css">
+    <script src="smooth-navigation.js" defer></script>
+    
     <style>
         :root {
             --bg: #0a0a0b;
@@ -170,14 +175,29 @@
     </style>
 </head>
 <body>
-    <header id="site-header">
+    <!-- Skip Link for Accessibility -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    <!-- Back Button -->
+    <button class="back-button" onclick="history.back()" aria-label="Go back to previous page">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m15 18-6-6 6-6"/>
+        </svg>
+        <span data-i18n="btn.back">Back</span>
+    </button>
+
+    <header id="site-header" class="site-header">
         <div class="header-content">
             <a href="/" class="logo">Fly<span>&</span>Earn</a>
-            <a href="/" class="back-link">Back to Home</a>
+            <!-- Language Selector -->
+            <div id="locale-selector-nav"></div>
         </div>
     </header>
 
-    <div class="container">
+    <div class="container" id="main-content">
+        <!-- Breadcrumbs -->
+        <div id="breadcrumbs"></div>
+        
         <h1>Privacy Policy</h1>
         <p class="last-updated">Last updated: January 16, 2025</p>
 
@@ -193,7 +213,7 @@
 
         <h2>1. Introduction</h2>
         <p>FlyAndEarn.eu ("we", "us", "our") is committed to protecting your personal data in accordance with the General Data Protection Regulation (EU) 2016/679 ("GDPR") and Polish data protection laws, including the Act of 10 May 2018 on Personal Data Protection.</p>
-        <p>This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services.</p>
+        <p>This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website and services. Please also review our <a href="/terms" class="cross-link">Terms of Service</a> for additional information about your rights and obligations when using our platform.</p>
 
         <h2>2. Data We Collect</h2>
 
@@ -385,6 +405,9 @@
             <strong>Address:</strong> Tropos Sp. z o.o., ul. Stanislawa Moniuszki 16, 65-409 Zielona Gora, Poland<br>
             <strong>Complaints:</strong> <a href="mailto:reklamacje@tropos.pl">reklamacje@tropos.pl</a></p>
         </div>
+        
+        <!-- Related Pages Section -->
+        <div id="related-pages"></div>
     </div>
 
     <footer>
