@@ -413,7 +413,50 @@
         const savedLang = localStorage.getItem('fae_language') || 'en';
         document.documentElement.lang = savedLang;
         console.log('Language selector initialized with:', savedLang);
+        highlightActiveLanguage(savedLang);
     });
+    
+    // Simple language switcher for prominent selector
+    function setLanguageSimple(lang) {
+        console.log('Switching to language:', lang);
+        localStorage.setItem('fae_language', lang);
+        document.documentElement.lang = lang;
+        
+        // Use existing i18n systems if available
+        if (typeof T !== 'undefined' && T.setLanguage) {
+            T.setLanguage(lang);
+            if (T.updatePage) T.updatePage();
+        }
+        if (typeof window.i18n !== 'undefined' && window.i18n.setLang) {
+            window.i18n.setLang(lang);
+        }
+        
+        // Highlight active button
+        highlightActiveLanguage(lang);
+        
+        // Show success message
+        alert('Language changed to ' + getLanguageName(lang) + '! Some text will update immediately, full page refresh may be needed for complete translation.');
+    }
+    
+    function highlightActiveLanguage(lang) {
+        const buttons = document.querySelectorAll('#prominentLangSelector button');
+        buttons.forEach(btn => {
+            if (btn.getAttribute('onclick').includes("'" + lang + "'")) {
+                btn.style.background = 'rgba(0,0,0,0.3)';
+                btn.style.borderColor = 'rgba(0,0,0,0.5)';
+                btn.style.transform = 'scale(1.05)';
+            } else {
+                btn.style.background = 'rgba(0,0,0,0.1)';
+                btn.style.borderColor = 'rgba(0,0,0,0.2)';
+                btn.style.transform = 'scale(1)';
+            }
+        });
+    }
+    
+    function getLanguageName(lang) {
+        const names = { en: 'English', pl: 'Polski', fr: 'Français', de: 'Deutsch' };
+        return names[lang] || lang;
+    }
     </script>
     
     <!-- Navigation CSS -->
@@ -825,6 +868,27 @@
             </div>
         </div>
     </section>
+
+    <!-- PROMINENT LANGUAGE SELECTOR -->
+    <div style="background: linear-gradient(135deg, #d4a853, #f0d78c); padding: 1rem 0; text-align: center; border-bottom: 2px solid #d4a853;">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <span style="color: #000; font-weight: 600; font-size: 1rem;">🌐 Choose Language:</span>
+            <div id="prominentLangSelector" style="display: flex; gap: 0.5rem; align-items: center;">
+                <button onclick="setLanguageSimple('en')" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">
+                    🇬🇧 English
+                </button>
+                <button onclick="setLanguageSimple('pl')" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">
+                    🇵🇱 Polski
+                </button>
+                <button onclick="setLanguageSimple('fr')" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">
+                    🇫🇷 Français
+                </button>
+                <button onclick="setLanguageSimple('de')" style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; background: rgba(0,0,0,0.1); border: 1px solid rgba(0,0,0,0.2); border-radius: 8px; color: #000; font-weight: 600; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(0,0,0,0.2)'" onmouseout="this.style.background='rgba(0,0,0,0.1)'">
+                    🇩🇪 Deutsch
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Two Services Section -->
     <section class="section" style="padding: 4rem 2rem; background: var(--bg-secondary); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);">
